@@ -1,0 +1,28 @@
+---
+import styles from "./styles.module.css";
+import type { NavLink } from "./types";
+
+type Props = {
+  prev?: NavLink;
+  next?: NavLink;
+};
+
+const { prev, next } = Astro.props;
+---
+
+{(prev || next) && (
+  <nav class={styles.nav} aria-label="Page navigation">
+    {prev && (
+      <a href={prev.href} class={styles.link}>
+        <span class={styles.label}>Previous</span>
+        <span class={styles.title}>&larr; {prev.title}</span>
+      </a>
+    )}
+    {next && (
+      <a href={next.href} class:list={[styles.link, styles.next]}>
+        <span class={styles.label}>Next</span>
+        <span class={styles.title}>{next.title} &rarr;</span>
+      </a>
+    )}
+  </nav>
+)}

@@ -1,0 +1,29 @@
+---
+import { Code } from "astro:components";
+import Tabs from "../Tabs/Tabs.astro";
+import Tab from "../Tabs/Tab.astro";
+import styles from "./styles.module.css";
+import type { CodeLanguage } from "astro";
+
+type Item = { id: string; content: string };
+
+type Props = {
+  items: Item[];
+  defaultValue: string;
+  lang: CodeLanguage;
+  shikiThemes?: { light: string; dark: string };
+};
+
+const { items, defaultValue, lang, shikiThemes = { light: "catppuccin-latte", dark: "catppuccin-mocha" } } = Astro.props;
+---
+
+<Tabs value={defaultValue} class={styles.tabs} data-ref="tabs">
+  {items.map(({ id }) => (
+    <Tab value={id} class={styles.tab}>{id}</Tab>
+  ))}
+</Tabs>
+{items.map(({ id, content }, i) => (
+  <div class={styles.panel} data-value={id} hidden={i !== 0}>
+    <Code code={content} lang={lang} themes={shikiThemes} />
+  </div>
+))}

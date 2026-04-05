@@ -1,0 +1,24 @@
+---
+import Icon from "../Icon/Icon.astro";
+import styles from "./styles.module.css";
+
+type Props = {
+  title: string;
+  href: string;
+};
+
+const { title, href } = Astro.props;
+---
+
+<div class={styles.headingRow}>
+  <h1>{title}</h1>
+  <a
+    href={href}
+    target="_blank"
+    rel="noreferrer"
+    class={styles.mdLink}
+    aria-label="View as Markdown"
+  >
+    <Icon name="markdown" size={32} />
+  </a>
+</div>

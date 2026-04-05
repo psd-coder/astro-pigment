@@ -1,0 +1,122 @@
+---
+import { ClientRouter } from "astro:transitions";
+import { Font } from "astro:assets";
+import Footer from "../Footer/Footer.astro";
+import Icon from "../Icon/Icon.astro";
+import { siteConfig, githubUrl, iconPath } from "virtual:theme-integration-config";
+import "../../styles/index.css";
+import { getHref, isActiveHref } from "../../utils/urls";
+import styles from "./styles.module.css";
+import { ThemeScript, ThemeToggle } from "../ThemeToggle";
+import CodeBlockWrapper from "../CodeBlockWrapper/CodeBlockWrapper.astro";
+import type { NavItem } from "../../types";
+
+type Props = {
+  title: string;
+  navItems?: NavItem[];
+};
+
+const { title, navItems } = Astro.props;
+
+function getAuthorIcon(): "x" | "custom" {
+  if (siteConfig.author.icon) return siteConfig.author.icon as "x" | "custom";
+  if (siteConfig.author.url.includes("x.com")) return "x";
+  return "custom";
+}
+
+const authorIcon = getAuthorIcon();
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href={getHref("")} />
+  {iconPath && (
+    <>
+      <link rel="icon" type="image/svg+xml" href={getHref("favicon.svg")} />
+      <link rel="icon" type="image/png" href={getHref("favicon-96x96.png")} sizes="96x96" />
+      <link rel="shortcut icon" href={getHref("favicon.ico")} />
+      <link rel="apple-touch-icon" sizes="180x180" href={getHref("apple-touch-icon.png")} />
+      <link rel="manifest" href={getHref("site.webmanifest")} />
+    </>
+  )}
+  <link rel="sitemap" href={getHref("sitemap-index.xml")} />
+  <Font cssVariable="--font-sans" preload />
+  <Font cssVariable="--font-mono" preload />
+  <title>{title} | {siteConfig.project.name}</title>
+  <meta name="description" content={siteConfig.project.description} />
+  <ClientRouter />
+  <ThemeScript />
+  <slot name="head-extra" />
+</head>
+<body class={styles.container}>
+  <x-sticky-header role="header">
+    <nav class:list={styles.nav}>
+      <a href={getHref("")} class={styles.logo}>
+        <slot name="logo">
+          <span class={styles.logoText}>{siteConfig.project.name}</span>
+        </slot>
+      </a>
+      {navItems && navItems.length > 0 && (
+        <div class:list={[styles.links, styles.primaryNav]}>
+          {navItems.map((item) => (
+            <a
+              href={getHref(item.href)}
+              class:list={[styles.link, isActiveHref(Astro, item.href) && styles.active]}
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+      )}
+      <div class:list={[styles.links, styles.extraNav]}>
+        <ThemeToggle />
+        {authorIcon === "x" ? (
+          <a href={siteConfig.author.url} class:list={[styles.link, styles.square]} aria-label={siteConfig.author.name}>
+            <Icon name="x" />
+          </a>
+        ) : (
+          <a href={siteConfig.author.url} class:list={[styles.link, styles.square]} aria-label={siteConfig.author.name}>
+            <slot name="author-icon">
+              <Icon name="github" />
+            </slot>
+          </a>
+        )}
+        <a href={githubUrl} class:list={[styles.link, styles.square]} aria-label="GitHub">
+          <Icon name="github" />
+        </a>
+      </div>
+    </nav>
+  </x-sticky-header>
+  <div class={styles.main}>
+    {Astro.slots.has("sidebar") && (
+      <aside class={styles.sidebar}>
+        <slot name="sidebar" />
+      </aside>
+    )}
+    <main class={styles.content}>
+      <slot />
+    </main>
+  </div>
+  <Footer class={styles.footer}>
+    <slot name="footer-extra" slot="extra" />
+  </Footer>
+  <CodeBlockWrapper />
+</body>
+</html>
+<script>
+  import { define } from "nanotags";
+  import { atom } from "nanostores";
+  import styles from "./styles.module.css";
+
+  define("x-sticky-header", (ctx) => {
+    const $scrolled = atom(window.scrollY > 0);
+
+    ctx.on(window, "scroll", () => $scrolled.set(window.scrollY > 0), { passive: true });
+    ctx.effect($scrolled, (scrolled) => {
+      ctx.host.classList.toggle(styles.scrolled, scrolled);
+    });
+  });
+</script>
