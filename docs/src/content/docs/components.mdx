@@ -1,0 +1,241 @@
+---
+title: "Components"
+description: Core layout components and interactive playground components.
+order: 3
+---
+
+## Core
+
+Import from `@psd-coder/astro-docs-theme/components`:
+
+### Layout
+
+Main page shell. Renders sticky header with navigation, sidebar slot, content area, footer, and code copy buttons. Includes ThemeToggle, ThemeScript, and CodeBlockWrapper automatically.
+
+```astro
+---
+import { Layout } from "@psd-coder/astro-docs-theme/components";
+---
+<Layout
+  title="Page Title"
+  navItems={[{ href: "", label: "Home" }, { href: "api", label: "API" }]}
+>
+  <MyLogo slot="logo" />
+  <meta slot="head-extra" name="robots" content="noindex" />
+  <TableOfContents slot="sidebar" headings={headings} itemsSelector=".prose :is(h2, h3)[id]" />
+  <article class="prose"><slot /></article>
+  <span slot="footer-extra">& Additional Credit</span>
+</Layout>
+```
+
+Props: `title` (required), `navItems?` (array of `{ href, label }`).
+Slots: `default`, `sidebar`, `logo`, `head-extra`, `footer-extra`, `author-icon`.
+
+### TableOfContents
+
+Desktop sidebar with scroll-spy highlighting + mobile popover trigger. Both rendered from a single component.
+
+```astro
+---
+import { TableOfContents } from "@psd-coder/astro-docs-theme/components";
+const headings = await getHeadings(); // from Astro content render
+---
+<TableOfContents
+  slot="sidebar"
+  headings={headings}
+  itemsSelector="[data-content] :is(h2, h3)[id]"
+/>
+```
+
+### Button
+
+Styled `<button>` with an optional `square` prop for icon-only buttons.
+
+```astro
+---
+import { Button } from "@psd-coder/astro-docs-theme/components";
+---
+<Button>Click me</Button>
+<Button square aria-label="Settings"><Icon name="list" /></Button>
+```
+
+### Icon
+
+Built-in SVG icons: `check`, `chevron-left`, `copy`, `github`, `list`, `markdown`, `x`. Use `name="custom"` with a slot for your own SVG.
+
+```astro
+---
+import { Icon } from "@psd-coder/astro-docs-theme/components";
+---
+<Icon name="github" />
+<Icon name="github" size={32} />
+<Icon name="custom" label="Mastodon">
+  <svg viewBox="0 0 24 24"><path d="..." /></svg>
+</Icon>
+```
+
+### Footer
+
+Site footer with license, GitHub, and author links. Read from the virtual config automatically. Renders `credits` from config as `& Name` links after the author. Has an `extra` slot for additional content beyond config-driven credits. Included in Layout by default.
+
+```astro
+---
+import { Footer } from "@psd-coder/astro-docs-theme/components";
+---
+<Footer />
+```
+
+### ThemeToggle
+
+Three-state theme switcher (auto/light/dark) with sun/moon/split icons.
+
+```astro
+---
+import { ThemeToggle } from "@psd-coder/astro-docs-theme/components";
+---
+<ThemeToggle />
+```
+
+### ThemeScript
+
+Inline script that prevents FOUC by setting `data-theme` before first paint. Included in Layout automatically.
+
+### CodeBlockWrapper
+
+Adds copy-to-clipboard buttons to all `.prose pre` blocks. Included in Layout automatically.
+
+### InstallPackage
+
+Tabbed package manager switcher (pnpm/npm/yarn/bun). Selection persists to localStorage.
+
+```astro
+---
+import { InstallPackage } from "@psd-coder/astro-docs-theme/components";
+---
+<InstallPackage pkg="nanotags nanostores" />
+<InstallPackage pkg="typescript" dev />
+```
+
+### PrevNextNav
+
+Previous/next page navigation links.
+
+```astro
+---
+import { PrevNextNav } from "@psd-coder/astro-docs-theme/components";
+---
+<PrevNextNav
+  prev={{ title: "Getting Started", href: "/getting-started" }}
+  next={{ title: "API Reference", href: "/api" }}
+/>
+```
+
+### PageHeading
+
+Heading row with a "view as markdown" icon link.
+
+```astro
+---
+import { PageHeading } from "@psd-coder/astro-docs-theme/components";
+---
+<PageHeading title="API Reference" href="/api.md" />
+```
+
+## Playground
+
+Import from `@psd-coder/astro-docs-theme/components/playground`:
+
+### CodeEditor
+
+CodeMirror 6 editor with Catppuccin themes that sync with dark mode. Supports JavaScript, HTML, CSS, and JSON.
+
+```astro
+---
+import { CodeEditor } from "@psd-coder/astro-docs-theme/components/playground";
+---
+<CodeEditor lang="javascript" />
+```
+
+### LivePreview
+
+Sandboxed iframe execution. Captures console output and posts it back to the parent.
+
+```astro
+---
+import { LivePreview } from "@psd-coder/astro-docs-theme/components/playground";
+---
+<LivePreview />
+```
+
+### CodeExample
+
+Full interactive playground: tabbed editor + live preview + collapsible logs.
+
+```astro
+---
+import { CodeExample } from "@psd-coder/astro-docs-theme/components/playground";
+const files = [
+  { name: "index.html", type: "html", lang: "html", content: "<h1>Hello</h1>" },
+  { name: "app.js", type: "javascript", lang: "javascript", content: "console.log('hi')" },
+];
+---
+<CodeExample files={files} />
+```
+
+### CodePanels
+
+Multiple code snippets with Shiki highlighting and tab switching.
+
+```astro
+---
+import { CodePanels } from "@psd-coder/astro-docs-theme/components/playground/CodePanels";
+const items = [
+  { id: "pnpm", content: "pnpm add my-lib" },
+  { id: "npm", content: "npm install my-lib" },
+];
+---
+<CodePanels items={items} defaultValue="pnpm" lang="shellscript" />
+```
+
+### ResizablePanes / ResizablePane
+
+Draggable split-pane layout with keyboard support. Supports horizontal and vertical directions.
+
+```astro
+---
+import { ResizablePanes, ResizablePane } from "@psd-coder/astro-docs-theme/components/playground";
+---
+<ResizablePanes direction="horizontal">
+  <ResizablePane>Left content</ResizablePane>
+  <ResizablePane>Right content</ResizablePane>
+</ResizablePanes>
+```
+
+### CollapsiblePane
+
+Expandable/collapsible section with an optional resize handle.
+
+```astro
+---
+import { CollapsiblePane } from "@psd-coder/astro-docs-theme/components/playground";
+---
+<CollapsiblePane expanded expandedSize={30}>
+  <span slot="header">Details</span>
+  <p>Collapsible content here</p>
+</CollapsiblePane>
+```
+
+### Tabs / Tab
+
+Accessible tabs with roving focus, scroll arrows for overflow, and keyboard navigation.
+
+```astro
+---
+import { Tabs, Tab } from "@psd-coder/astro-docs-theme/components/playground";
+---
+<Tabs value="one">
+  <Tab value="one">First</Tab>
+  <Tab value="two">Second</Tab>
+  <Tab value="three">Third</Tab>
+</Tabs>
+```

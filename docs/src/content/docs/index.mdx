@@ -1,0 +1,102 @@
+---
+title: "Overview"
+description: Astro 6 documentation theme with dark mode, interactive playgrounds, and SEO endpoints.
+order: 1
+---
+
+An [Astro 6](https://astro.build/) documentation theme with dark mode, interactive playgrounds, and SEO endpoints.
+One integration call gives you a complete docs site: layout, navigation, table of contents, code highlighting,
+LLM-friendly endpoints, and a library of interactive components.
+
+- **Single integration**: rehype plugins, PostCSS, Shiki themes, sitemap, and SEO routes configured automatically
+- **Dark mode**: three-state toggle (auto/light/dark) with View Transitions, no FOUC
+- **CSS variable theming**: override `--theme-hue-override` or `--layout-width-override` in plain CSS
+- **Interactive playgrounds**: CodeMirror editor + sandboxed live preview with console capture
+- **LLM endpoints**: `/llms.txt` and `/llms-full.txt` auto-generated from your markdown content
+- **Bundled fonts**: optional Martian Grotesk + Martian Mono via `fonts()` helper
+- **Accessible**: roving focus, ARIA attributes, keyboard navigation throughout
+- **Zero build step**: Astro resolves `.astro`/`.ts` source directly from the package
+
+## Installation
+
+Add the theme as a GitHub dependency along with its peer dependencies:
+
+```json
+// package.json
+{
+  "dependencies": {
+    "@psd-coder/astro-docs-theme": "github:psd-coder/astro-docs-theme",
+    "astro": "^6.0.0",
+    "nanotags": "^0.14.0",
+    "nanostores": "^1.0.0"
+  }
+}
+```
+
+Then install:
+
+```bash
+pnpm install
+```
+
+## Quick Start
+
+### 1. Configure the integration
+
+```js
+// astro.config.mjs
+import { defineConfig } from "astro/config";
+import docsTheme, { fonts } from "@psd-coder/astro-docs-theme";
+
+export default defineConfig({
+  integrations: [
+    docsTheme({
+      github: { user: "your-name", repository: "your-repo" },
+      project: {
+        name: "my-project",
+        description: "A short description of your project",
+        license: {
+          name: "MIT",
+          url: "https://github.com/your-name/your-repo/blob/main/LICENSE",
+        },
+      },
+      author: { name: "Your Name", url: "https://x.com/your_handle" },
+      icon: "src/assets/icon.svg",
+      docs: { directory: "src/content/docs" },
+    }),
+  ],
+  fonts: fonts(),
+});
+```
+
+### 2. Create a page
+
+```astro
+---
+// src/pages/[...slug].astro
+import { getCollection, render } from "astro:content";
+import { Layout, TableOfContents, PageHeading }
+  from "@psd-coder/astro-docs-theme/components";
+import { getHref } from "@psd-coder/astro-docs-theme/utils/urls";
+
+export async function getStaticPaths() {
+  const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.order);
+  return docs.map((doc) => ({
+    params: { slug: doc.id === "index" ? undefined : doc.id },
+    props: { doc },
+  }));
+}
+
+const { doc } = Astro.props;
+const { Content, headings } = await render(doc);
+---
+<Layout title={doc.data.title}>
+  <TableOfContents slot="sidebar" headings={headings} itemsSelector=".prose :is(h2, h3)[id]" />
+  <article class="prose">
+    <PageHeading title={doc.data.title} href={getHref(`${doc.id}.md`)} />
+    <Content />
+  </article>
+</Layout>
+```
+
+Dark mode, sticky header, sidebar + mobile TOC, code copy buttons, favicons, webmanifest, sitemap, LLM endpoints, and footer are all wired up automatically.

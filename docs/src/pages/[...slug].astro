@@ -1,0 +1,44 @@
+---
+import { getCollection, render } from "astro:content";
+import { Layout, TableOfContents, PageHeading, PrevNextNav } from "@psd-coder/astro-docs-theme/components";
+import { getHref } from "@psd-coder/astro-docs-theme/utils/urls";
+import type { NavItem } from "@psd-coder/astro-docs-theme/types";
+
+const navItems: NavItem[] = [
+  { href: "", label: "Overview" },
+  { href: "api", label: "API" },
+  { href: "components", label: "Components" },
+];
+
+export async function getStaticPaths() {
+  const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.order);
+  return docs.map((doc, i) => {
+    const prev = docs[i - 1];
+    const next = docs[i + 1];
+    return {
+      params: { slug: doc.id === "index" ? undefined : doc.id },
+      props: {
+        doc,
+        prev: prev ? { title: prev.data.title, href: getHref(prev.id === "index" ? "" : prev.id) } : undefined,
+        next: next ? { title: next.data.title, href: getHref(next.id === "index" ? "" : next.id) } : undefined,
+      },
+    };
+  });
+}
+
+const { doc, prev, next } = Astro.props;
+const { Content, headings } = await render(doc);
+---
+
+<Layout title={doc.data.title} navItems={navItems}>
+  <TableOfContents
+    slot="sidebar"
+    headings={headings}
+    itemsSelector=".prose :is(h2, h3)[id]"
+  />
+  <article class="prose">
+    <PageHeading title={doc.data.title} href={getHref(`${doc.id === "index" ? "index" : doc.id}.md`)} />
+    <Content />
+    <PrevNextNav prev={prev} next={next} />
+  </article>
+</Layout>
