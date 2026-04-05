@@ -1,0 +1,22 @@
+name: "Setup runner"
+description: "It setups node, install pnpm packages and caches them"
+runs:
+  using: composite
+  steps:
+    - name: Install Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: 24
+    - name: Enable Corepack and pnpm
+      shell: bash
+      run: |
+        corepack enable
+        corepack install
+    - name: Enable pnpm cache
+      uses: actions/setup-node@v6
+      with:
+        node-version: 24
+        cache: pnpm
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
