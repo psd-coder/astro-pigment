@@ -1,6 +1,6 @@
-@layer reset, theme, globals, utilities;
+@layer docs-theme;
 
-@import url("reset.css") layer(reset);
-@import url("theme.css") layer(theme);
-@import url("globals.css") layer(globals);
-@import url("utilities.css") layer(utilities);
+@import url("reset.css") layer(docs-theme.reset);
+@import url("theme.css") layer(docs-theme.theme);
+@import url("globals.css") layer(docs-theme.globals);
+@import url("utilities.css") layer(docs-theme.utilities);

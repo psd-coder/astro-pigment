@@ -1,45 +1,47 @@
-.button {
-  cursor: pointer;
+@layer docs-theme {
+  .button {
+    cursor: pointer;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  padding: var(--spacing);
-  border: none;
+    padding: var(--spacing);
+    border: none;
 
-  font-size: var(--text-sm);
-  font-weight: 700;
-  color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-text-secondary);
 
-  background: none;
+    background: none;
 
-  transition: color 0.15s;
+    transition: color 0.15s;
 
-  &:hover {
-    color: var(--color-accent);
-    background: var(--color-surface-3);
+    &:hover {
+      color: var(--color-accent);
+      background: var(--color-surface-3);
+    }
+
+    &:active {
+      color: var(--color-accent-dark);
+    }
   }
 
-  &:active {
-    color: var(--color-accent-dark);
+  .iconSun,
+  .iconMoon,
+  .iconAuto {
+    display: none;
   }
-}
 
-.iconSun,
-.iconMoon,
-.iconAuto {
-  display: none;
-}
+  :global([data-theme-setting="light"]) .iconSun {
+    display: block;
+  }
 
-:global([data-theme-setting="light"]) .iconSun {
-  display: block;
-}
+  :global([data-theme-setting="dark"]) .iconMoon {
+    display: block;
+  }
 
-:global([data-theme-setting="dark"]) .iconMoon {
-  display: block;
-}
-
-:global([data-theme-setting="auto"]) .iconAuto {
-  display: block;
+  :global([data-theme-setting="auto"]) .iconAuto {
+    display: block;
+  }
 }

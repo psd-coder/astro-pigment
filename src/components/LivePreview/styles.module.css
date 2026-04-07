@@ -1,12 +1,14 @@
-.host {
-  display: contents;
-}
+@layer docs-theme {
+  .host {
+    display: contents;
+  }
 
-.frame {
-  display: block;
-  flex: 1;
+  .frame {
+    display: block;
+    flex: 1;
 
-  width: 100%;
-  min-height: 0;
-  border: none;
+    width: 100%;
+    min-height: 0;
+    border: none;
+  }
 }
