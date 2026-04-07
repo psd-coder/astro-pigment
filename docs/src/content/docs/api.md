@@ -43,7 +43,11 @@ docsTheme({
   // Generates favicons, apple-touch-icon, webmanifest automatically
   icon: "src/assets/icon.svg",
 
-  // Optional: syntax highlighting themes
+  // Optional: show hue slider in header to pick a theme hue.
+  // Use it to find the right value, then set --theme-hue-override and remove this.
+  hueSlider: true,
+
+  // Optional: syntax highlighting themes (overrides adaptive hue-based theme)
   shikiThemes: { light: "github-light", dark: "github-dark" },
 
   // Optional: enable SEO/LLM endpoints
@@ -77,7 +81,19 @@ The theme uses CSS variables with fallback defaults. Override them in your own C
 }
 ```
 
-All color tokens derive from `--theme-hue` using OKLch, so changing the hue recolors the entire site.
+All color tokens derive from `--theme-hue` using OKLch, so changing the hue recolors the entire site, including syntax highlighting in code blocks.
+
+### Picking a hue
+
+Enable `hueSlider: true` in the integration config to show a hue slider in the header. Drag it to find the right value, then hardcode it with `--theme-hue-override` and remove `hueSlider`:
+
+```css
+:root {
+  --theme-hue-override: 135;
+}
+```
+
+The slider persists its value to `localStorage`, so you can test across page loads. Once you've settled on a hue, turn it off: the slider is a setup tool, not a production feature.
 
 ### Color tokens
 

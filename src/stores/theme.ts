@@ -6,6 +6,9 @@ import { $prefersDarkScheme, $prefersReducedMotion } from "./media";
 export type ThemeSetting = "auto" | "light" | "dark";
 export type ResolvedTheme = "light" | "dark";
 
+export const DEFAULT_HUE = "180";
+export const $hue = persistentAtom<string>("theme-hue", DEFAULT_HUE);
+
 const CYCLE: ThemeSetting[] = ["auto", "light", "dark"];
 
 export const $themeSetting = persistentAtom<ThemeSetting>("theme", "auto");

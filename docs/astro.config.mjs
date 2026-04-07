@@ -19,6 +19,7 @@ export default defineConfig({
       },
       author: { name: "Pavel Grinchenko", url: "https://x.com/psd_coder" },
       icon: "src/assets/icon.svg",
+      hueSlider: true,
       docs: { directory: "src/content/docs" },
     }),
   ],

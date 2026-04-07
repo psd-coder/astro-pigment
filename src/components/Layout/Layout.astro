@@ -3,11 +3,13 @@ import { ClientRouter } from "astro:transitions";
 import { Font } from "astro:assets";
 import Footer from "../Footer/Footer.astro";
 import Icon from "../Icon/Icon.astro";
-import { siteConfig, githubUrl, iconPath } from "virtual:theme-integration-config";
+import { siteConfig, githubUrl, iconPath, hueSlider } from "virtual:theme-integration-config";
 import "../../styles/index.css";
 import { getHref, isActiveHref } from "../../utils/urls";
 import styles from "./styles.module.css";
 import { ThemeScript, ThemeToggle } from "../ThemeToggle";
+import HueSlider from "../HueSlider/HueSlider.astro";
+import HueScript from "../HueSlider/HueScript.astro";
 import CodeBlockWrapper from "../CodeBlockWrapper/CodeBlockWrapper.astro";
 import type { NavItem } from "../../types";
 
@@ -49,6 +51,7 @@ const authorIcon = getAuthorIcon();
   <meta name="description" content={siteConfig.project.description} />
   <ClientRouter />
   <ThemeScript />
+  {hueSlider && <HueScript />}
   <slot name="head-extra" />
 </head>
 <body class={styles.container}>
@@ -72,6 +75,7 @@ const authorIcon = getAuthorIcon();
         </div>
       )}
       <div class:list={[styles.links, styles.extraNav]}>
+        {hueSlider && <HueSlider />}
         <ThemeToggle />
         {authorIcon === "x" ? (
           <a href={siteConfig.author.url} class:list={[styles.link, styles.square]} aria-label={siteConfig.author.name}>

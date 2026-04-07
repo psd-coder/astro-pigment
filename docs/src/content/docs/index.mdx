@@ -100,3 +100,22 @@ const { Content, headings } = await render(doc);
 ```
 
 Dark mode, sticky header, sidebar + mobile TOC, code copy buttons, favicons, webmanifest, sitemap, LLM endpoints, and footer are all wired up automatically.
+
+### 3. Pick a theme hue (optional)
+
+Temporarily enable the hue slider to find the right color for your site:
+
+```js
+docsTheme({
+  // ...your config
+  hueSlider: true, // shows a color slider in the header
+})
+```
+
+Drag the slider, pick a hue you like, then hardcode it in CSS and remove `hueSlider`:
+
+```css
+:root {
+  --theme-hue-override: 135; /* the value you picked */
+}
+```

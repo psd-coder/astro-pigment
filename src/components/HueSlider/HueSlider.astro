@@ -1,0 +1,50 @@
+---
+import styles from "./styles.module.css";
+---
+<x-hue-slider class={styles.host}>
+  <input
+    data-ref="input"
+    class={styles.input}
+    type="range"
+    min="0"
+    max="360"
+    value="180"
+    aria-label="Theme hue"
+  />
+  <script is:inline>
+    // Hydrate the input value from localStorage on page load
+    var hue = localStorage.getItem("theme-hue");
+    document.querySelectorAll('x-hue-slider input[type="range"]').forEach((input) => {
+      if (hue) {
+        input.value = hue;
+      }
+    });
+  </script>
+</x-hue-slider>
+<script>
+  import { define } from "nanotags";
+  import { $hue } from "../../stores/theme";
+
+  define("x-hue-slider")
+    .withRefs(({ one }) => ({ input: one<HTMLInputElement>("input") }))
+    .setup((ctx) => {
+      ctx.refs.input.value = $hue.get();
+
+      function applyHue(hue: string) {
+        document.documentElement.style.setProperty("--theme-hue-override", hue);
+      }
+
+      ctx.on(ctx.refs.input, "input", () => {
+        const val = ctx.refs.input.value;
+        $hue.set(val);
+        applyHue(val);
+      });
+
+      ctx.onCleanup(
+        $hue.listen((val) => {
+          ctx.refs.input.value = val;
+          applyHue(val);
+        }),
+      );
+    });
+</script>

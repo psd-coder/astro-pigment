@@ -1,0 +1,11 @@
+<script is:inline>
+  function applyCurrentHue() {
+    var hue = localStorage.getItem("theme-hue");
+
+    if (hue) {
+      document.documentElement.style.setProperty("--theme-hue-override", hue);
+    }
+  }
+  applyCurrentHue();
+  document.addEventListener("astro:after-swap", applyCurrentHue);
+</script>

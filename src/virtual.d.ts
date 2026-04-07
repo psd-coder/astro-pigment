@@ -29,4 +29,5 @@ declare module "virtual:theme-integration-config" {
     deepSections: string[];
   } | null;
   export const iconPath: string | null;
+  export const hueSlider: boolean;
 }

@@ -39,6 +39,8 @@ export type DocsThemeConfig = SiteConfig & {
   site?: string;
   /** Path to a 512x512 PNG or SVG icon. Generates favicons, apple-touch-icon, webmanifest icons. */
   icon?: string;
+  /** Show hue slider in header for interactive theme color customization. */
+  hueSlider?: boolean;
   shikiThemes?: {
     light: string;
     dark: string;

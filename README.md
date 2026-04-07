@@ -90,6 +90,27 @@ const { Content, headings } = await render(doc);
 
 Dark mode, sticky header, sidebar + mobile TOC, code copy buttons, favicons, webmanifest, sitemap, LLM endpoints, and footer are all wired up automatically.
 
+### Pick a theme hue (optional)
+
+Temporarily enable the hue slider to find the right color for your site:
+
+```js
+docsTheme({
+  // ...your config
+  hueSlider: true, // shows a color slider in the header
+})
+```
+
+Drag the slider, pick a hue you like, then hardcode it in CSS and remove `hueSlider`:
+
+```css
+:root {
+  --theme-hue-override: 135; /* the value you picked */
+}
+```
+
+All UI and code syntax highlighting colors derive from this hue via OKLch.
+
 ## Integration Config
 
 ```ts
@@ -115,6 +136,7 @@ type DocsThemeConfig = {
   links?: Array<{ label: string; url: string; icon?: IconName }>;
   site?: string;            // default: auto GitHub Pages URL
   icon?: string;            // path to 512x512 PNG or SVG, generates favicons + webmanifest
+  hueSlider?: boolean;      // show hue slider in header for initial theme setup
   shikiThemes?: {           // default: catppuccin-latte / catppuccin-mocha
     light: string;
     dark: string;
