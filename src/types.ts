@@ -41,6 +41,8 @@ export type DocsThemeConfig = SiteConfig & {
   icon?: string;
   /** Show hue slider in header for interactive theme color customization. */
   hueSlider?: boolean;
+  /** Enable Astro View Transitions via ClientRouter. Default: true. */
+  clientRouter?: boolean;
   shikiThemes?: {
     light: string;
     dark: string;

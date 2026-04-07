@@ -3,7 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import { Font } from "astro:assets";
 import Footer from "../Footer/Footer.astro";
 import Icon from "../Icon/Icon.astro";
-import { siteConfig, githubUrl, iconPath, hueSlider } from "virtual:theme-integration-config";
+import { siteConfig, githubUrl, iconPath, hueSlider, clientRouter } from "virtual:theme-integration-config";
 import "../../styles/index.css";
 import { getHref, isActiveHref } from "../../utils/urls";
 import styles from "./styles.module.css";
@@ -49,7 +49,7 @@ const authorIcon = getAuthorIcon();
   <Font cssVariable="--font-mono" preload />
   <title>{title} | {siteConfig.project.name}</title>
   <meta name="description" content={siteConfig.project.description} />
-  <ClientRouter />
+  {clientRouter && <ClientRouter />}
   <ThemeScript />
   {hueSlider && <HueScript />}
   <slot name="head-extra" />

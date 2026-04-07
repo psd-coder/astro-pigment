@@ -40,6 +40,7 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
   const iconPath = config.icon ? path.resolve(config.icon) : null;
 
   const hueSlider = config.hueSlider ?? false;
+  const clientRouter = config.clientRouter ?? true;
 
   const virtualModuleCode = `
 export const siteConfig = ${JSON.stringify(siteConfig)};
@@ -47,6 +48,7 @@ export const githubUrl = ${JSON.stringify(githubUrl)};
 export const docsConfig = ${JSON.stringify(docsConfig)};
 export const iconPath = ${JSON.stringify(iconPath)};
 export const hueSlider = ${JSON.stringify(hueSlider)};
+export const clientRouter = ${JSON.stringify(clientRouter)};
 `;
 
   return {

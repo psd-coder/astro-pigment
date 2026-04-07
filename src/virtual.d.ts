@@ -30,4 +30,5 @@ declare module "virtual:theme-integration-config" {
   } | null;
   export const iconPath: string | null;
   export const hueSlider: boolean;
+  export const clientRouter: boolean;
 }
