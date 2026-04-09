@@ -57,12 +57,24 @@ export function attachRovingFocus(
     const list = items();
     if (list.length === 0) return;
 
-    let next = activeIndex + delta;
-    if (wrap) {
-      next = ((next % list.length) + list.length) % list.length;
+    // Check if current focus is in the list
+    const currentFocus = document.activeElement as HTMLElement;
+    const currentIndex = list.indexOf(currentFocus);
+
+    let next: number;
+    if (currentIndex !== -1) {
+      // Focus is in the list, move by delta
+      next = currentIndex + delta;
+      if (wrap) {
+        next = ((next % list.length) + list.length) % list.length;
+      } else {
+        next = Math.max(0, Math.min(next, list.length - 1));
+      }
     } else {
-      next = Math.max(0, Math.min(next, list.length - 1));
+      // Focus is not in the list, go to first or last
+      next = delta > 0 ? 0 : list.length - 1;
     }
+
     activate(next);
   }
 
