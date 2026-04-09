@@ -2,7 +2,7 @@
 import type { HTMLAttributes } from "astro/types";
 
 type Props = HTMLAttributes<"svg"> & {
-  name?: "check" | "chevron-left" | "copy" | "github" | "list" | "markdown" | "search" | "x";
+  name?: "check" | "chevron-left" | "close" | "copy" | "github" | "list" | "markdown" | "search" | "twitter";
   size?: number;
   label?: string;
 };
@@ -45,9 +45,14 @@ const { name, size = 20, label, ...restProps } = Astro.props;
     <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
   </svg>
 )}
-{name === "x" && (
+{name === "twitter" && (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" {...restProps}>
     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+)}
+{name === "close" && (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" {...restProps}>
+    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
   </svg>
 )}
 {Astro.slots.has('default') && (

@@ -2,20 +2,76 @@
   .host {
     display: flex;
     align-items: center;
+    justify-content: center;
+    width: calc(var(--spacing) * 20);
+    height: calc(var(--spacing) * 20);
+
+    pointer-events: none;
   }
 
-  .input {
-    width: 80px;
-    height: 4px;
-    margin: 0;
+  .trigger {
+    width: calc(var(--spacing) * 6);
+    height: calc(var(--spacing) * 6);
+    padding: 0;
 
     cursor: pointer;
     appearance: none;
+    pointer-events: auto;
 
-    border-radius: 2px;
+    border: 2px solid var(--color-border);
+    border-radius: 50%;
 
-    background: linear-gradient(
-      to right,
+    background: oklch(65% 0.15 var(--hue, var(--theme-hue)));
+
+    transition:
+      transform 0.15s,
+      box-shadow 0.15s,
+      opacity 0.2s;
+
+    &:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 0 2px var(--color-border);
+    }
+  }
+
+  .host[data-open] .trigger {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    pointer-events: auto;
+
+    opacity: 0;
+    visibility: hidden;
+    scale: 0.3;
+
+    transition:
+      opacity 0.2s ease-out,
+      scale 0.2s ease-out,
+      visibility 0.2s;
+  }
+
+  .host[data-open] .panel {
+    opacity: 1;
+    visibility: visible;
+    scale: 1;
+  }
+
+  .ring {
+    position: relative;
+    width: calc(var(--spacing) * 20);
+    height: calc(var(--spacing) * 20);
+
+    border-radius: 50%;
+
+    background: conic-gradient(
+      from 0deg,
       oklch(65% 0.15 0),
       oklch(65% 0.15 60),
       oklch(65% 0.15 120),
@@ -25,29 +81,81 @@
       oklch(65% 0.15 360)
     );
 
-    &::-webkit-slider-thumb {
-      appearance: none;
-      width: 14px;
-      height: 14px;
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50%;
+      height: 50%;
 
-      border: 2px solid var(--color-surface-1);
-      border-radius: 50%;
+      border-radius: 60%;
 
-      background: var(--color-accent);
+      background: var(--color-surface-1);
+    }
+  }
 
-      box-shadow: 0 0 0 1px var(--color-border);
+  .handle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    width: calc(var(--spacing) * 6);
+    height: calc(var(--spacing) * 6);
+
+    cursor: grab;
+    touch-action: none;
+
+    border: 2px solid white;
+    border-radius: 50%;
+
+    background: oklch(65% 0.15 var(--hue, var(--theme-hue)));
+
+    box-shadow: 0 0 4px oklch(0% 0 0 / 30%);
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  .close {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+
+    cursor: pointer;
+    appearance: none;
+
+    border: none;
+    border-radius: 50%;
+
+    background: none;
+
+    color: var(--color-text-tertiary);
+
+    transition: color 0.15s;
+
+    &:hover {
+      color: var(--color-text-primary);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .panel {
+      transition: none;
     }
 
-    &::-moz-range-thumb {
-      width: 14px;
-      height: 14px;
-
-      border: 2px solid var(--color-surface-1);
-      border-radius: 50%;
-
-      background: var(--color-accent);
-
-      box-shadow: 0 0 0 1px var(--color-border);
+    .trigger {
+      transition: none;
     }
   }
 }

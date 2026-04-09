@@ -1,50 +1,214 @@
 ---
+import type { HTMLAttributes } from "astro/types";
+import Icon from "../Icon/Icon.astro";
 import styles from "./styles.module.css";
+
+type Props = HTMLAttributes<"div">;
+
+const { class: className, ...rest } = Astro.props;
 ---
-<x-hue-slider class={styles.host}>
-  <input
-    data-ref="input"
-    class={styles.input}
-    type="range"
-    min="0"
-    max="360"
-    value="180"
-    aria-label="Theme hue"
+<x-hue-picker class:list={[styles.host, className]} {...rest}>
+  <button
+    data-ref="trigger"
+    class={styles.trigger}
+    type="button"
+    aria-label="Open hue picker"
+    aria-expanded="false"
   />
+  <div class={styles.panel}>
+    <div data-ref="ring" class={styles.ring}>
+      <div
+        data-ref="handle"
+        class={styles.handle}
+        role="slider"
+        tabindex="-1"
+        aria-label="Theme hue"
+        aria-valuemin="0"
+        aria-valuemax="360"
+        aria-valuenow="180"
+      />
+    </div>
+    <button data-ref="close" class={styles.close} type="button" aria-label="Close hue picker">
+      <Icon name="close" size={16} />
+    </button>
+  </div>
   <script is:inline>
-    // Hydrate the input value from localStorage on page load
     var hue = localStorage.getItem("theme-hue");
-    document.querySelectorAll('x-hue-slider input[type="range"]').forEach((input) => {
-      if (hue) {
-        input.value = hue;
-      }
-    });
+    if (hue) {
+      document.querySelectorAll("x-hue-picker [data-ref='trigger']").forEach(function(el) {
+        el.style.setProperty("--hue", hue);
+      });
+    }
   </script>
-</x-hue-slider>
+</x-hue-picker>
 <script>
   import { define } from "nanotags";
+  import { atom } from "nanostores";
   import { $hue } from "../../stores/theme";
 
-  define("x-hue-slider")
-    .withRefs(({ one }) => ({ input: one<HTMLInputElement>("input") }))
+  const RING_SIZE = 80;
+  const RING_RADIUS = RING_SIZE / 2;
+  // Handle orbits at midpoint of the ring band (band spans ~65%-100% of radius)
+  const ORBIT_RADIUS = RING_RADIUS * 0.75;
+
+  function hueToXY(hue: number): { x: number; y: number } {
+    // conic-gradient starts at top (0deg), clockwise
+    // convert to math angle: subtract 90°, negate for CW
+    const rad = ((hue - 90) * Math.PI) / 180;
+    return {
+      x: Math.cos(rad) * ORBIT_RADIUS,
+      y: Math.sin(rad) * ORBIT_RADIUS,
+    };
+  }
+
+  function xyToHue(clientX: number, clientY: number, cx: number, cy: number): number {
+    // atan2(dx, -dy) gives clockwise-from-top angle
+    const rad = Math.atan2(clientX - cx, -(clientY - cy));
+    return Math.round(((rad * 180) / Math.PI + 360) % 360);
+  }
+
+  define("x-hue-picker")
+    .withRefs(({ one }) => ({
+      trigger: one<HTMLButtonElement>("[data-ref='trigger']"),
+      ring: one<HTMLDivElement>("[data-ref='ring']"),
+      handle: one<HTMLDivElement>("[data-ref='handle']"),
+      close: one<HTMLButtonElement>("[data-ref='close']"),
+    }))
     .setup((ctx) => {
-      ctx.refs.input.value = $hue.get();
+      const { trigger, ring, handle, close } = ctx.refs;
+      const $open = atom(false);
+
+      function updateHandle(hue: number) {
+        const { x, y } = hueToXY(hue);
+        handle.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+        handle.setAttribute("aria-valuenow", String(hue));
+      }
 
       function applyHue(hue: string) {
         document.documentElement.style.setProperty("--theme-hue-override", hue);
+        trigger.style.setProperty("--hue", hue);
       }
 
-      ctx.on(ctx.refs.input, "input", () => {
-        const val = ctx.refs.input.value;
+      function setHue(hue: number) {
+        const val = String(hue);
         $hue.set(val);
         applyHue(val);
+        updateHandle(hue);
+      }
+
+      // Open / close
+      ctx.effect($open, (isOpen) => {
+        if (isOpen) {
+          ctx.host.dataset["open"] = "";
+          trigger.setAttribute("aria-expanded", "true");
+          handle.tabIndex = 0;
+          handle.focus();
+        } else {
+          delete ctx.host.dataset["open"];
+          trigger.setAttribute("aria-expanded", "false");
+          handle.tabIndex = -1;
+        }
       });
 
+      ctx.on(trigger, "click", () => $open.set(true));
+      ctx.on(close, "click", () => {
+        $open.set(false);
+        trigger.focus();
+      });
+
+      // Click outside
+      function onDocumentClick(ev: MouseEvent) {
+        if ($open.get() && !ctx.host.contains(ev.target as Node)) {
+          $open.set(false);
+        }
+      }
+      document.addEventListener("click", onDocumentClick);
+      ctx.onCleanup(() => document.removeEventListener("click", onDocumentClick));
+
+      // Keyboard
+      ctx.on(handle, "keydown", (ev: KeyboardEvent) => {
+        if (ev.key === "Escape") {
+          $open.set(false);
+          trigger.focus();
+          return;
+        }
+
+        const current = Number($hue.get());
+        const step = ev.shiftKey ? 10 : 1;
+        let next: number | null = null;
+
+        switch (ev.key) {
+          case "ArrowRight":
+          case "ArrowUp":
+            next = (current + step) % 360;
+            break;
+          case "ArrowLeft":
+          case "ArrowDown":
+            next = (current - step + 360) % 360;
+            break;
+          case "Home":
+            next = 0;
+            break;
+          case "End":
+            next = 359;
+            break;
+          default:
+            return;
+        }
+
+        ev.preventDefault();
+        setHue(next);
+      });
+
+      // Drag
+      function onPointerMove(ev: PointerEvent) {
+        const rect = ring.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        setHue(xyToHue(ev.clientX, ev.clientY, cx, cy));
+      }
+
+      function onPointerUp() {
+        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("pointerup", onPointerUp);
+        handle.style.cursor = "";
+      }
+
+      function startDrag(ev: PointerEvent) {
+        ev.preventDefault();
+        handle.style.cursor = "grabbing";
+        window.addEventListener("pointermove", onPointerMove);
+        window.addEventListener("pointerup", onPointerUp);
+      }
+
+      ctx.on(handle, "pointerdown", startDrag);
+
+      // Click on ring to jump + start drag
+      ctx.on(ring, "pointerdown", (ev: PointerEvent) => {
+        if (ev.target === handle || close.contains(ev.target as Node)) return;
+        const rect = ring.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        setHue(xyToHue(ev.clientX, ev.clientY, cx, cy));
+        startDrag(ev);
+      });
+
+      ctx.onCleanup(() => {
+        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("pointerup", onPointerUp);
+      });
+
+      // Sync with store
       ctx.onCleanup(
         $hue.listen((val) => {
-          ctx.refs.input.value = val;
           applyHue(val);
+          updateHandle(Number(val));
         }),
       );
+
+      // Init
+      const initial = Number($hue.get());
+      applyHue(String(initial));
+      updateHandle(initial);
     });
 </script>

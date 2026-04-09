@@ -77,12 +77,11 @@ const authorIcon = getAuthorIcon();
         </div>
       )}
       <div class:list={[styles.links, styles.extraNav]}>
-        {hueSlider && <HueSlider />}
         {search && <Search />}
         <ThemeToggle />
         {authorIcon === "x" ? (
           <a href={siteConfig.author.url} class:list={[styles.link, styles.square]} aria-label={siteConfig.author.name}>
-            <Icon name="x" />
+            <Icon name="twitter" />
           </a>
         ) : (
           <a href={siteConfig.author.url} class:list={[styles.link, styles.square]} aria-label={siteConfig.author.name}>
@@ -111,6 +110,7 @@ const authorIcon = getAuthorIcon();
     <slot name="footer-extra" slot="extra" />
   </Footer>
   <CodeBlockWrapper />
+  {hueSlider && <HueSlider class={styles.huePicker} />}
 </body>
 </html>
 <script>
