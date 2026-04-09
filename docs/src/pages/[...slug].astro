@@ -1,8 +1,9 @@
 ---
-import { getCollection, render } from "astro:content";
-import { Layout, TableOfContents, PageHeading, PrevNextNav } from "@psd-coder/astro-docs-theme/components";
-import { getHref } from "@psd-coder/astro-docs-theme/utils/urls";
+import { Layout, PageHeading, PrevNextNav, TableOfContents } from "@psd-coder/astro-docs-theme/components";
 import type { NavItem } from "@psd-coder/astro-docs-theme/types";
+import { getDocsCollection } from "@psd-coder/astro-docs-theme/utils/content";
+import { getHref } from "@psd-coder/astro-docs-theme/utils/urls";
+import { render } from "astro:content";
 
 const navItems: NavItem[] = [
   { href: "", label: "Overview" },
@@ -12,7 +13,8 @@ const navItems: NavItem[] = [
 ];
 
 export async function getStaticPaths() {
-  const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.order);
+   const docs = await getDocsCollection();
+
   return docs.map((doc, i) => {
     const prev = docs[i - 1];
     const next = docs[i + 1];

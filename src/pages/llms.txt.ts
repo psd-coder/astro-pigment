@@ -1,16 +1,15 @@
 import type { APIRoute } from "astro";
-import { getCollection } from "astro:content";
-import { siteConfig, docsConfig } from "virtual:theme-integration-config";
+import { docsConfig, siteConfig } from "virtual:theme-integration-config";
+import { getDocsCollection } from "../utils/content";
 import { extractSections, formatSections } from "../utils/markdown";
+import { markdownResponse } from "../utils/response";
 
 const base = import.meta.env.BASE_URL;
 
 const DEEP_SLUGS = new Set(docsConfig?.deepSections ?? []);
 
 export const GET: APIRoute = async () => {
-  const docs = (await getCollection("docs")).sort(
-    (a: { data: { order: number } }, b: { data: { order: number } }) => a.data.order - b.data.order,
-  );
+  const docs = await getDocsCollection();
 
   const sections = docs.map((doc: { id: string; data: { title: string; description: string } }) => {
     const headings = extractSections(docsConfig!.directory, doc.id);
@@ -33,7 +32,5 @@ export const GET: APIRoute = async () => {
     "",
   ];
 
-  return new Response(lines.join("\n"), {
-    headers: { "Content-Type": "text/markdown; charset=utf-8" },
-  });
+  return markdownResponse(lines.join("\n"));
 };

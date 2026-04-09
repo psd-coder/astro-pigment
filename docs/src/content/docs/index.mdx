@@ -77,10 +77,11 @@ export default defineConfig({
 import { getCollection, render } from "astro:content";
 import { Layout, TableOfContents, PageHeading }
   from "@psd-coder/astro-docs-theme/components";
+import { getDocsCollection } from "@psd-coder/astro-docs-theme/utils/content";
 import { getHref } from "@psd-coder/astro-docs-theme/utils/urls";
 
 export async function getStaticPaths() {
-  const docs = (await getCollection("docs")).sort((a, b) => a.data.order - b.data.order);
+  const docs = await getDocsCollection();
   return docs.map((doc) => ({
     params: { slug: doc.id === "index" ? undefined : doc.id },
     props: { doc },
