@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@types/mdast": "^4.0.4",
-    "astro": "^6.0.8",
+    "astro": "^6.1.5",
     "nanostores": "^1.0.0",
     "nanotags": "^0.14.0",
     "oxfmt": "^0.35.0",
