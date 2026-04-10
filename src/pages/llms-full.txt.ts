@@ -6,10 +6,18 @@ import { markdownResponse } from "../utils/response";
 
 export const GET: APIRoute = async () => {
   const docs = await getDocsCollection();
-  const parts = docs.map(
-    (doc) => `# ${doc.data.title}\n\n${stringifyCleanMarkdown(doc.body ?? "")}`,
-  );
-  const content = `# ${siteConfig.project.name}\n\n${siteConfig.project.description}\n\n${parts.join("\n\n")}`;
 
-  return markdownResponse(content);
+  const sections = docs.map((doc) =>
+    [`# ${doc.data.title}`, "", stringifyCleanMarkdown(doc.body ?? "")].join("\n"),
+  );
+
+  const lines = [
+    `# ${siteConfig.project.name}`,
+    "",
+    siteConfig.project.description,
+    "",
+    ...sections,
+  ];
+
+  return markdownResponse(lines.join("\n"));
 };
