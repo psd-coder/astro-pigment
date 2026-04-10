@@ -46,11 +46,11 @@ import docsTheme, { fonts } from "@psd-coder/astro-pigment";
 export default defineConfig({
   integrations: [
     docsTheme({
-      github: { user: "your-name", repository: "your-repo" },
       project: {
         name: "my-project",
         description: "A short description of your project",
         license: { name: "MIT", url: "https://github.com/your-name/your-repo/blob/main/LICENSE" },
+        github: { user: "your-name", repository: "your-repo" },
       },
       author: { name: "Your Name", url: "https://x.com/your_handle" },
       icon: "src/assets/icon.svg",

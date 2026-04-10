@@ -17,7 +17,6 @@ const RESOLVED_VIRTUAL_MODULE_ID = `\0${VIRTUAL_MODULE_ID}`;
 
 function extractSiteConfig(config: DocsThemeConfig): SiteConfig {
   return {
-    github: config.github,
     project: config.project,
     author: config.author,
     credits: config.credits,
@@ -25,7 +24,7 @@ function extractSiteConfig(config: DocsThemeConfig): SiteConfig {
 }
 
 export function createIntegration(config: DocsThemeConfig): AstroIntegration {
-  const githubUrl = getGithubUrl(config.github);
+  const githubUrl = getGithubUrl(config.project.github);
   const siteConfig = extractSiteConfig(config);
   const docsConfig = config.docs
     ? {
@@ -58,8 +57,8 @@ export const search = ${JSON.stringify(search)};
     name: "@psd-coder/astro-pigment",
     hooks: {
       "astro:config:setup": ({ config: astroConfig, updateConfig, injectRoute }) => {
-        const site = config.site ?? deriveGitHubPagesSite(config.github);
-        const base = config.site ? "/" : deriveBase(config.github);
+        const site = config.site ?? deriveGitHubPagesSite(config.project.github);
+        const base = config.site ? "/" : deriveBase(config.project.github);
 
         const integrations: AstroIntegration[] = [];
 

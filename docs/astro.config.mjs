@@ -5,7 +5,6 @@ import docsTheme, { fonts } from "@psd-coder/astro-pigment";
 export default defineConfig({
   integrations: [
     docsTheme({
-      github: { user: "psd-coder", repository: "astro-pigment" },
       project: {
         name: "Pigment",
         description:
@@ -14,6 +13,7 @@ export default defineConfig({
           name: "MIT",
           url: "https://github.com/psd-coder/astro-pigment/blob/main/LICENSE",
         },
+        github: { user: "psd-coder", repository: "astro-pigment" },
       },
       author: { name: "Pavel Grinchenko", url: "https://x.com/psd_coder" },
       icon: "src/assets/icon.svg",

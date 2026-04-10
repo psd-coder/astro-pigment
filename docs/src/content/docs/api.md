@@ -10,18 +10,17 @@ The integration accepts a single config object combining site metadata and optio
 
 ```ts
 docsTheme({
-  // Required: GitHub repo info. Used to derive site URL and GitHub link.
-  github: {
-    user: "psd-coder",       // one of user/organization required
-    // organization: "my-org",
-    repository: "my-project",
-  },
-
   // Required: project metadata shown in header/footer
   project: {
     name: "my-project",
     description: "What it does",
     license: { name: "MIT", url: "https://..." },
+    // GitHub repo info. Used to derive site URL and GitHub link.
+    github: {
+      user: "psd-coder",       // one of user/organization required
+      // organization: "my-org",
+      repository: "my-project",
+    },
   },
 
   // Required: author link in header/footer

@@ -15,15 +15,15 @@ export type NavItem = {
 };
 
 export type SiteConfig = {
-  github: {
-    user?: string;
-    organization?: string;
-    repository: string;
-  };
   project: {
     name: string;
     description: string;
     license: { name: string; url: string };
+    github: {
+      user?: string;
+      organization?: string;
+      repository: string;
+    };
   };
   author: {
     name: string;
