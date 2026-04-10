@@ -40,11 +40,11 @@ if (typeof window !== "undefined") {
       applyTheme(themeSetting, resolvedTheme);
     } else {
       document.documentElement.dataset.themeSwitching = "";
-      document.startViewTransition(() =>
-        applyTheme(themeSetting, resolvedTheme),
-      ).finished.then(() => {
-        delete document.documentElement.dataset.themeSwitching;
-      });
+      document
+        .startViewTransition(() => applyTheme(themeSetting, resolvedTheme))
+        .finished.then(() => {
+          delete document.documentElement.dataset.themeSwitching;
+        });
     }
   });
 }

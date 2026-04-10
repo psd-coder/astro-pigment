@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { siteConfig } from "virtual:theme-integration-config";
+import { jsonResponse } from "../utils/response";
 
 const base = import.meta.env.BASE_URL;
 
@@ -26,7 +27,5 @@ export const GET: APIRoute = () => {
     display: "standalone",
   };
 
-  return new Response(JSON.stringify(manifest, null, 2), {
-    headers: { "Content-Type": "application/manifest+json" },
-  });
+  return jsonResponse(manifest);
 };
