@@ -1,7 +1,7 @@
 ---
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
-import { clientRouter, faviconPath, githubUrl, huePicker, logo, manifestIconPath, search, siteConfig } from "virtual:theme-integration-config";
+import { clientRouter, faviconPath, githubUrl, huePicker, lang, logo, mainPageTitle, manifestIconPath, search, siteConfig, titleSuffix } from "virtual:theme-integration-config";
 import "../../styles/index.css";
 import type { NavItem } from "../../types";
 import { getHref, isActiveHref } from "../../utils/urls";
@@ -16,16 +16,24 @@ import styles from "./styles.module.css";
 
 type Props = {
   title: string;
+  description?: string;
   navItems?: NavItem[];
 };
 
-const { title, navItems } = Astro.props;
+const { title, description, navItems } = Astro.props;
 
 const author = siteConfig.author;
+const isMainPage = Astro.url.pathname === getHref("");
+const resolvedTitle = isMainPage
+  ? mainPageTitle
+  : titleSuffix
+    ? `${title} | ${titleSuffix}`
+    : title;
+const resolvedDescription = description ?? siteConfig.project.description;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang={lang}>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -46,8 +54,14 @@ const author = siteConfig.author;
   <link rel="sitemap" href={getHref("sitemap-index.xml")} />
   <Font cssVariable="--font-sans" preload />
   <Font cssVariable="--font-mono" preload />
-  <title>{title} | {siteConfig.project.name}</title>
-  <meta name="description" content={siteConfig.project.description} />
+  <title>{resolvedTitle}</title>
+  <meta name="description" content={resolvedDescription} />
+  <link rel="canonical" href={Astro.url.href} />
+  <meta property="og:title" content={resolvedTitle} />
+  <meta property="og:description" content={resolvedDescription} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={Astro.url.href} />
+  <meta property="og:site_name" content={siteConfig.project.name} />
   {clientRouter && <ClientRouter />}
   <ThemeScript />
   {huePicker && <HueScript />}

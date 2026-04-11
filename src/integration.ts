@@ -74,6 +74,10 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
   const clientRouter = config.clientRouter ?? true;
   const search = config.search ?? true;
   const logo = config.logo ? readSvg(config.logo) : null;
+  const lang = config.meta?.lang ?? "en";
+  const titleSuffix =
+    config.meta?.titleSuffix !== undefined ? config.meta.titleSuffix : siteConfig.project.name;
+  const mainPageTitle = config.meta?.mainPageTitle ?? `${siteConfig.project.name} Documentation`;
 
   const virtualModuleCode = `
 export const siteConfig = ${JSON.stringify(siteConfig)};
@@ -87,6 +91,9 @@ export const search = ${JSON.stringify(search)};
 export const navLinks = ${JSON.stringify(navLinks)};
 export const tocItemsSelector = ${JSON.stringify(tocItemsSelector)};
 export const logo = ${JSON.stringify(logo)};
+export const lang = ${JSON.stringify(lang)};
+export const titleSuffix = ${JSON.stringify(titleSuffix)};
+export const mainPageTitle = ${JSON.stringify(mainPageTitle)};
 `;
 
   return {

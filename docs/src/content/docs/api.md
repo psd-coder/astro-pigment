@@ -54,6 +54,21 @@ docsTheme({
   // Replaces the default project name text. The logo slot in Layout still overrides this.
   // logo: "src/assets/logo.svg",
 
+  // Optional: SEO / meta settings
+  meta: {
+    // HTML lang attribute. Default: "en".
+    // lang: "fr",
+
+    // Appended as " | {suffix}" to every sub-page <title>. false = no suffix.
+    // Default: project.name.
+    // titleSuffix: "My Project — Docs",
+    // titleSuffix: false,
+
+    // Full <title> for the root/index page, bypassing the normal "{page} | {suffix}" pattern.
+    // Default: "{project.name} Documentation".
+    // mainPageTitle: "My Project — Fast & Simple",
+  },
+
   // Optional: show hue slider in header to pick a theme hue.
   // Use it to find the right value, then set --theme-hue-override and remove this.
   huePicker: true,

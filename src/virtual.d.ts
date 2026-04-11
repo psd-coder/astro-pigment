@@ -40,4 +40,7 @@ declare module "virtual:theme-integration-config" {
   export const navLinks: NavItem[];
   export const tocItemsSelector: string;
   export const logo: string | null;
+  export const lang: string;
+  export const titleSuffix: string | false;
+  export const mainPageTitle: string;
 }

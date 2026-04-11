@@ -14,7 +14,7 @@ const { doc, prev, next } = Astro.props;
 const { Content, headings } = await render(doc);
 ---
 
-<Layout title={doc.data.title} navItems={navLinks}>
+<Layout title={doc.data.title} description={doc.data.description} navItems={navLinks}>
   <TableOfContents
     slot="sidebar"
     headings={headings}

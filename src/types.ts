@@ -74,6 +74,14 @@ export type DocsThemeConfig = SiteConfig & {
     /** TOC active-item selector used by the default page. Default: ".prose :is(h2, h3)[id]". */
     tocItemsSelector?: string;
   };
+  meta?: {
+    /** HTML lang attribute. Default: "en". */
+    lang?: string;
+    /** Appended as " | {suffix}" to sub-page titles. false = no suffix. Default: project.name. */
+    titleSuffix?: string | false;
+    /** Full <title> for the root/index page. Default: "{project.name} Documentation". */
+    mainPageTitle?: string;
+  };
 };
 
 export type FileEntry = {
