@@ -56,7 +56,7 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
   const manifestIconPath = manifestIconSource ? path.resolve(manifestIconSource) : null;
   const hasIcon = faviconPath !== null || manifestIconPath !== null;
 
-  const hueSlider = config.hueSlider ?? false;
+  const huePicker = config.huePicker ?? false;
   const clientRouter = config.clientRouter ?? true;
   const search = config.search ?? true;
 
@@ -66,7 +66,7 @@ export const githubUrl = ${JSON.stringify(githubUrl)};
 export const docsConfig = ${JSON.stringify(docsConfig)};
 export const faviconPath = ${JSON.stringify(faviconPath)};
 export const manifestIconPath = ${JSON.stringify(manifestIconPath)};
-export const hueSlider = ${JSON.stringify(hueSlider)};
+export const huePicker = ${JSON.stringify(huePicker)};
 export const clientRouter = ${JSON.stringify(clientRouter)};
 export const search = ${JSON.stringify(search)};
 export const navLinks = ${JSON.stringify(navLinks)};

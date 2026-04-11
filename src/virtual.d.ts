@@ -34,7 +34,7 @@ declare module "virtual:theme-integration-config" {
   };
   export const faviconPath: string | null;
   export const manifestIconPath: string | null;
-  export const hueSlider: boolean;
+  export const huePicker: boolean;
   export const clientRouter: boolean;
   export const search: boolean;
   export const navLinks: NavItem[];

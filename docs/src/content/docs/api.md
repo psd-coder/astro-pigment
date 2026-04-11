@@ -52,7 +52,7 @@ docsTheme({
 
   // Optional: show hue slider in header to pick a theme hue.
   // Use it to find the right value, then set --theme-hue-override and remove this.
-  hueSlider: true,
+  huePicker: true,
 
   // Optional: syntax highlighting themes (overrides adaptive hue-based theme)
   shikiThemes: { light: "github-light", dark: "github-dark" },
@@ -108,7 +108,7 @@ All color tokens derive from `--theme-hue` using OKLch, so changing the hue reco
 
 ### Picking a hue
 
-Enable `hueSlider: true` in the integration config to show a hue slider in the header. Drag it to find the right value, then hardcode it with `--theme-hue-override` and remove `hueSlider`:
+Enable `huePicker: true` in the integration config to show a hue slider in the header. Drag it to find the right value, then hardcode it with `--theme-hue-override` and remove `huePicker`:
 
 ```css
 :root {

@@ -1,14 +1,14 @@
 ---
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
-import { clientRouter, faviconPath, githubUrl, hueSlider, manifestIconPath, search, siteConfig } from "virtual:theme-integration-config";
+import { clientRouter, faviconPath, githubUrl, huePicker, manifestIconPath, search, siteConfig } from "virtual:theme-integration-config";
 import "../../styles/index.css";
 import type { NavItem } from "../../types";
 import { getHref, isActiveHref } from "../../utils/urls";
 import CodeBlockWrapper from "../CodeBlockWrapper/CodeBlockWrapper.astro";
 import Footer from "../Footer/Footer.astro";
-import HueScript from "../HueSlider/HueScript.astro";
-import HueSlider from "../HueSlider/HueSlider.astro";
+import HueScript from "../HuePicker/HueScript.astro";
+import HuePicker from "../HuePicker/HuePicker.astro";
 import Icon from "../Icon/Icon.astro";
 import { Search } from "../Search";
 import { ThemeScript, ThemeToggle } from "../ThemeToggle";
@@ -50,7 +50,7 @@ const author = siteConfig.author;
   <meta name="description" content={siteConfig.project.description} />
   {clientRouter && <ClientRouter />}
   <ThemeScript />
-  {hueSlider && <HueScript />}
+  {huePicker && <HueScript />}
   <script src="./scripts.ts" />
   <slot name="head-extra" />
 </head>
@@ -108,7 +108,7 @@ const author = siteConfig.author;
     <slot name="footer-extra" slot="extra" />
   </Footer>
   <CodeBlockWrapper />
-  {hueSlider && <HueSlider class={styles.huePicker} />}
+  {huePicker && <HuePicker class={styles.huePicker} />}
 </body>
 </html>
 <script>

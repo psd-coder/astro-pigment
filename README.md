@@ -81,11 +81,11 @@ Temporarily enable the hue slider to find the right color for your site:
 ```js
 docsTheme({
   // ...your config
-  hueSlider: true, // shows a color slider in the header
+  huePicker: true, // shows a color slider in the header
 })
 ```
 
-Drag the slider, pick a hue you like, then hardcode it in CSS and remove `hueSlider`:
+Drag the slider, pick a hue you like, then hardcode it in CSS and remove `huePicker`:
 
 ```css
 :root {
@@ -120,7 +120,7 @@ type DocsThemeConfig = {
   links?: Array<{ label: string; url: string; icon?: IconName }>;
   site?: string;            // default: auto GitHub Pages URL
   icon?: string;            // path to 512x512 PNG or SVG, generates favicons + webmanifest
-  hueSlider?: boolean;      // show hue slider in header for initial theme setup
+  huePicker?: boolean;      // show hue slider in header for initial theme setup
   shikiThemes?: {           // overrides adaptive hue-based theme
     light: string;
     dark: string;

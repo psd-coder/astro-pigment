@@ -47,8 +47,8 @@ export type DocsThemeConfig = SiteConfig & {
    * `manifest` for 96px and up (apple-touch, web-app-manifest).
    */
   icon?: string | { favicon: string; manifest: string };
-  /** Show hue slider in header for interactive theme color customization. */
-  hueSlider?: boolean;
+  /** Show hue picker in header for interactive theme color customization. */
+  huePicker?: boolean;
   /** Enable Astro View Transitions via ClientRouter. Default: true. */
   clientRouter?: boolean;
   shikiThemes?: {

@@ -3,7 +3,7 @@ export { Icon } from "./Icon";
 export { Layout } from "./Layout";
 export { Footer } from "./Footer";
 export { ThemeToggle, ThemeScript } from "./ThemeToggle";
-export { HueSlider, HueScript } from "./HueSlider";
+export { HuePicker, HueScript } from "./HuePicker";
 export { TableOfContents } from "./TableOfContents";
 export { CodeBlockWrapper } from "./CodeBlockWrapper";
 export { InstallPackage } from "./InstallPackage";
