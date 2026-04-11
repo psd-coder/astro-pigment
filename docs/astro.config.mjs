@@ -16,6 +16,7 @@ export default defineConfig({
         github: { user: "psd-coder", repository: "astro-pigment" },
       },
       author: { name: "Pavel Grinchenko", url: "https://x.com/psd_coder" },
+      credits: [{ name: "Evil Martians", url: "https://evilmartians.com/" }],
       icon: {
         favicon: "src/assets/astro-pigment-favicon.svg",
         manifest: "src/assets/astro-pigment.svg",
