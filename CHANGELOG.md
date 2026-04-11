@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.1
+
+### Fixed
+
+- Added missing `repository` field to `package.json`, required for npm sigstore provenance verification.
+
 ## 0.10.0
 
 ### Added
