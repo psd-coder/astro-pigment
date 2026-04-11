@@ -1,7 +1,7 @@
 ---
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
-import { clientRouter, faviconPath, githubUrl, huePicker, lang, logo, mainPageTitle, manifestIconPath, search, siteConfig, titleSuffix } from "virtual:theme-integration-config";
+import { clientRouter, faviconPath, githubUrl, huePicker, lang, logo, mainPageTitle, manifestIconPath, navLinks as configNavLinks, search, siteConfig, titleSuffix } from "virtual:theme-integration-config";
 import "../../styles/index.css";
 import type { NavItem } from "../../types";
 import { getHref, isActiveHref } from "../../utils/urls";
@@ -17,10 +17,10 @@ import styles from "./styles.module.css";
 type Props = {
   title: string;
   description?: string;
-  navItems?: NavItem[];
+  navLinks?: NavItem[];
 };
 
-const { title, description, navItems } = Astro.props;
+const { title, description, navLinks = configNavLinks } = Astro.props;
 
 const author = siteConfig.author;
 const isMainPage = Astro.url.pathname === getHref("");
@@ -81,9 +81,9 @@ const resolvedDescription = description ?? siteConfig.project.description;
           )}
         </slot>
       </a>
-      {navItems && navItems.length > 0 && (
+      {navLinks.length > 0 && (
         <div class:list={[styles.links, styles.primaryNav]} role="menubar" focusgroup="wrap">
-          {navItems.map((item) => (
+          {navLinks.map((item) => (
             <a
               role="menuitem"
               href={getHref(item.href)}

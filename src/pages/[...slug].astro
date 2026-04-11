@@ -1,6 +1,6 @@
 ---
 import { render } from "astro:content";
-import { navLinks, tocItemsSelector } from "virtual:theme-integration-config";
+import { tocItemsSelector } from "virtual:theme-integration-config";
 import Layout from "../components/Layout/Layout.astro";
 import PageHeading from "../components/PageHeading/PageHeading.astro";
 import PrevNextNav from "../components/PrevNextNav/PrevNextNav.astro";
@@ -14,7 +14,7 @@ const { doc, prev, next } = Astro.props;
 const { Content, headings } = await render(doc);
 ---
 
-<Layout title={doc.data.title} description={doc.data.description} navItems={navLinks}>
+<Layout title={doc.data.title} description={doc.data.description}>
   <TableOfContents
     slot="sidebar"
     headings={headings}
