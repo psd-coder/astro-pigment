@@ -110,6 +110,10 @@ export const mainPageTitle = ${JSON.stringify(mainPageTitle)};
         integrations.push(sitemap());
 
         injectRoute({
+          pattern: "/404",
+          entrypoint: path.resolve(__dirname, "pages/404.astro"),
+        });
+        injectRoute({
           pattern: "/llms.txt",
           entrypoint: path.resolve(__dirname, "pages/llms.txt.ts"),
         });

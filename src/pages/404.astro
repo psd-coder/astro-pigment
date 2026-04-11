@@ -1,0 +1,13 @@
+---
+import Layout from "../components/Layout/Layout.astro";
+import { getHref } from "../utils/urls";
+import styles from "./404.module.css";
+---
+
+<Layout title="Page not found">
+  <div class={styles.container}>
+    <p class={styles.code}>404</p>
+    <p class={styles.message}>The page you're looking for doesn't exist or has been moved.</p>
+    <a href={getHref("")} class={styles.link}>Go home</a>
+  </div>
+</Layout>
