@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "packageManager": "pnpm@10.33.0",
   "type": "module",
+  "files": ["src", "stylelint.config.js", ".browserslistrc", "README.md"],
   "scripts": {
+    "bump": "bash scripts/bump.sh",
     "typecheck": "tsc --noEmit",
     "lint": "oxlint --fix --fix-suggestions",
     "format": "oxfmt --write src/"
