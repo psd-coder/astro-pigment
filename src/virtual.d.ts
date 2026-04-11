@@ -30,7 +30,6 @@ declare module "virtual:theme-integration-config" {
   export const githubUrl: string;
   export const docsConfig: {
     directory: string;
-    pattern: string;
     deepSections: string[];
   };
   export const faviconPath: string | null;

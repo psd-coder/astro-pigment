@@ -53,7 +53,7 @@ export type DocsThemeConfig = SiteConfig & {
     light: string;
     dark: string;
   };
-  /** Enable full-text search. Requires `docs` config. Default: false. */
+  /** Enable full-text search. Default: true. */
   search?: boolean;
   /** Inject bundled Martian Grotesk + Mono fonts. Set false to opt out. Default: true. */
   fonts?: boolean;
@@ -62,7 +62,6 @@ export type DocsThemeConfig = SiteConfig & {
   docs?: {
     /** Default: "src/content/docs". */
     directory?: string;
-    pattern?: string;
     deepSections?: string[];
     /** Auto-inject the default [...slug] page. Default: true. */
     renderDefaultPage?: boolean;

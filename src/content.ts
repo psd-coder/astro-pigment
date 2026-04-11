@@ -1,18 +1,14 @@
 import { glob } from "astro/loaders";
 import { defineCollection } from "astro:content";
+import { docsConfig } from "virtual:theme-integration-config";
 import { docEntryDataSchema } from "./utils/schemas";
 
-type Options = {
-  directory?: string;
-  pattern?: string;
-};
-
-export function defineDocsCollections(options: Options = {}) {
+export function defineDocsCollections() {
   return {
     docs: defineCollection({
       loader: glob({
-        pattern: options.pattern ?? "**/*.{md,mdx}",
-        base: options.directory ?? "src/content/docs",
+        pattern: "**/*.{md,mdx}",
+        base: docsConfig.directory,
       }),
       schema: docEntryDataSchema,
     }),

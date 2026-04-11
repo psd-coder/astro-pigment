@@ -61,10 +61,15 @@ docsTheme({
     { href: "/api", label: "API" },
   ],
 
+  // Optional: enable Astro ViewTransitions. Default: true.
+  // clientRouter: false,
+
+  // Optional: enable full-text search UI in header. Default: true.
+  // search: false,
+
   // Optional: docs collection settings (all fields optional, sensible defaults applied)
   docs: {
-    directory: "src/content/docs", // default
-    pattern: "**/*.{md,mdx}",      // default
+    directory: "src/content/docs", // default; also controls defineDocsCollections() glob base
     deepSections: ["api"],
     renderDefaultPage: true,       // default; set false to ship your own [...slug].astro
     tocItemsSelector: ".prose :is(h2, h3)[id]", // default
@@ -81,7 +86,9 @@ docsTheme({
 5. Injects **PostCSS preset-env** (nesting, custom-media, media-query-ranges)
 6. Injects **sitemap** + `llms.txt`, `llms-full.txt`, `[slug].md` routes
 7. Injects `/[...slug]` page that renders docs from the content collection (opt out with `docs.renderDefaultPage: false`)
-8. When `icon` is configured: generates **favicons** (svg, ico, 96x96 png), **apple-touch-icon**, **webmanifest** + manifest icons (192x192, 512x512)
+8. When `search: true` (default): injects `/search-index.json` and renders a search input in the Layout header
+9. When `clientRouter: true` (default): enables Astro View Transitions via `<ClientRouter />`
+10. When `icon` is configured: generates **favicons** (svg, ico, 96x96 png), **apple-touch-icon**, **webmanifest** + manifest icons (192x192, 512x512)
 
 ## CSS Customization
 
@@ -207,6 +214,22 @@ When `docs` is configured in the integration, four endpoints are auto-generated:
 
 Docs are sorted by the `order` field in frontmatter. Frontmatter and import statements are stripped from the output.
 
+## Search
+
+Full-text search is enabled by default (`search: true`). When enabled:
+
+- Injects a `/search-index.json` endpoint built from all docs at build time
+- Renders a search input in the Layout header that queries the index client-side
+
+To disable:
+
+```ts
+docsTheme({
+  search: false,
+  // ...
+})
+```
+
 ## Favicon and Webmanifest
 
 `icon` accepts either a single source path or an object with two sources:
@@ -242,6 +265,8 @@ For sites with interactive code examples, import the content collection loader:
 
 ```ts
 // content.config.ts
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 import { examplesLoader } from "astro-pigment/loaders/examples";
 
 const examples = defineCollection({
