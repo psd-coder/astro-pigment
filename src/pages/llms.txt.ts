@@ -1,12 +1,10 @@
 import type { APIRoute } from "astro";
-import { docsConfig, siteConfig } from "virtual:theme-integration-config";
+import { siteConfig } from "virtual:theme-integration-config";
 import { getDocsCollection } from "../utils/content";
 import { extractSections, formatSections } from "../utils/markdown";
 import { markdownResponse } from "../utils/response";
 
 const base = import.meta.env.BASE_URL;
-
-const DEEP_SLUGS = new Set(docsConfig.deepSections);
 
 export const GET: APIRoute = async () => {
   const docs = await getDocsCollection();
@@ -17,7 +15,7 @@ export const GET: APIRoute = async () => {
       `## ${doc.data.title}`,
       "",
       `- [${doc.data.title}](${base}${doc.id}.md): ${doc.data.description}`,
-      ...formatSections(headings, DEEP_SLUGS.has(doc.id)),
+      ...formatSections(headings, true),
     ].join("\n");
   });
 

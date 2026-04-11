@@ -55,7 +55,6 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
   };
   const docsConfig = {
     directory: config.docs?.directory ?? "src/content/docs",
-    deepSections: config.docs?.deepSections ?? [],
   };
   const renderDefaultPage = config.docs?.renderDefaultPage ?? true;
   const tocItemsSelector = config.docs?.tocItemsSelector ?? ".prose :is(h2, h3)[id]";

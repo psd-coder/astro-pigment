@@ -68,7 +68,6 @@ export type DocsThemeConfig = SiteConfig & {
   docs?: {
     /** Default: "src/content/docs". */
     directory?: string;
-    deepSections?: string[];
     /** Auto-inject the default [...slug] page. Default: true. */
     renderDefaultPage?: boolean;
     /** TOC active-item selector used by the default page. Default: ".prose :is(h2, h3)[id]". */
