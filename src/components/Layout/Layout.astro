@@ -1,7 +1,7 @@
 ---
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
-import { clientRouter, faviconPath, githubUrl, huePicker, manifestIconPath, search, siteConfig } from "virtual:theme-integration-config";
+import { clientRouter, faviconPath, githubUrl, huePicker, logo, manifestIconPath, search, siteConfig } from "virtual:theme-integration-config";
 import "../../styles/index.css";
 import type { NavItem } from "../../types";
 import { getHref, isActiveHref } from "../../utils/urls";
@@ -60,7 +60,11 @@ const author = siteConfig.author;
     <nav class:list={styles.nav}>
       <a href={getHref("")} class={styles.logo}>
         <slot name="logo">
-          <span class={styles.logoText}>{siteConfig.project.name}</span>
+          {logo ? (
+            <Fragment set:html={logo} />
+          ) : (
+            <span class={styles.logoText}>{siteConfig.project.name}</span>
+          )}
         </slot>
       </a>
       {navItems && navItems.length > 0 && (

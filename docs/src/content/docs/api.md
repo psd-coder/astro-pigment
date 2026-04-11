@@ -27,9 +27,9 @@ docsTheme({
   author: {
     name: "Your Name",
     url: "https://x.com/your_handle",
-    // icon: raw SVG markup rendered inline. Overrides the x.com auto-icon
+    // icon: path to SVG file rendered inline. Overrides the x.com auto-icon
     // when set, and is required when url is not an x.com URL.
-    // icon: '<svg width="20" height="20" viewBox="0 0 24 24"><path d="..." /></svg>',
+    // icon: "src/assets/author.svg",
   },
 
   // Optional: additional credits rendered as "& Name" after author in footer
@@ -49,6 +49,10 @@ docsTheme({
   //   favicon: "src/assets/favicon.svg",
   //   manifest: "src/assets/icon-detailed.svg",
   // },
+
+  // Optional: path to SVG file rendered as the header logo.
+  // Replaces the default project name text. The logo slot in Layout still overrides this.
+  // logo: "src/assets/logo.svg",
 
   // Optional: show hue slider in header to pick a theme hue.
   // Use it to find the right value, then set --theme-hue-override and remove this.

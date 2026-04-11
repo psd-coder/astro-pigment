@@ -39,4 +39,5 @@ declare module "virtual:theme-integration-config" {
   export const search: boolean;
   export const navLinks: NavItem[];
   export const tocItemsSelector: string;
+  export const logo: string | null;
 }

@@ -1,15 +1,16 @@
-import { fileURLToPath } from "node:url";
-import path from "node:path";
-import type { AstroIntegration } from "astro";
-import rehypeSlug from "rehype-slug";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import postcssPresetEnv from "postcss-preset-env";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
+import type { AstroIntegration } from "astro";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import postcssPresetEnv from "postcss-preset-env";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeSlug from "rehype-slug";
+import { adaptiveCodeTheme } from "./themes/adaptive-code-theme";
 import type { DocsThemeConfig, SiteConfig } from "./types";
 import { fonts } from "./utils/fonts";
 import { deriveBase, deriveGitHubPagesSite, getGithubUrl } from "./utils/github";
-import { adaptiveCodeTheme } from "./themes/adaptive-code-theme";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -35,10 +36,23 @@ function extractSiteConfig(config: DocsThemeConfig): SiteConfig {
   };
 }
 
+function readSvg(filePath: string): string {
+  return readFileSync(path.resolve(filePath), "utf-8");
+}
+
 export function createIntegration(config: DocsThemeConfig): AstroIntegration {
   validateAuthor(config.author);
   const githubUrl = getGithubUrl(config.project.github);
-  const siteConfig = extractSiteConfig(config);
+  const rawSiteConfig = extractSiteConfig(config);
+  const siteConfig: SiteConfig = {
+    ...rawSiteConfig,
+    author: rawSiteConfig.author
+      ? {
+          ...rawSiteConfig.author,
+          ...(rawSiteConfig.author.icon && { icon: readSvg(rawSiteConfig.author.icon) }),
+        }
+      : undefined,
+  };
   const docsConfig = {
     directory: config.docs?.directory ?? "src/content/docs",
     deepSections: config.docs?.deepSections ?? [],
@@ -59,6 +73,7 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
   const huePicker = config.huePicker ?? false;
   const clientRouter = config.clientRouter ?? true;
   const search = config.search ?? true;
+  const logo = config.logo ? readSvg(config.logo) : null;
 
   const virtualModuleCode = `
 export const siteConfig = ${JSON.stringify(siteConfig)};
@@ -71,6 +86,7 @@ export const clientRouter = ${JSON.stringify(clientRouter)};
 export const search = ${JSON.stringify(search)};
 export const navLinks = ${JSON.stringify(navLinks)};
 export const tocItemsSelector = ${JSON.stringify(tocItemsSelector)};
+export const logo = ${JSON.stringify(logo)};
 `;
 
   return {

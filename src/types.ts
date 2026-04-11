@@ -29,7 +29,7 @@ export type SiteConfig = {
   author?: {
     name: string;
     url: string;
-    /** Required when url is not an x.com URL. Raw SVG markup rendered inline. */
+    /** Required when url is not an x.com URL. Path to SVG file rendered inline in the header. */
     icon?: string;
   };
   credits?: Array<{
@@ -47,6 +47,8 @@ export type DocsThemeConfig = SiteConfig & {
    * `manifest` for 96px and up (apple-touch, web-app-manifest).
    */
   icon?: string | { favicon: string; manifest: string };
+  /** Path to SVG file rendered as the header logo. Replaces the default project name text. */
+  logo?: string;
   /** Show hue picker in header for interactive theme color customization. */
   huePicker?: boolean;
   /** Enable Astro View Transitions via ClientRouter. Default: true. */
