@@ -13,10 +13,11 @@ const currentPath = Astro.url.pathname;
 ---
 <div class={className}>
   <span class={styles.title}>On this page</span>
-  <ul class={styles.list}>
+  <ul class={styles.list} role="menu" focusgroup="block">
     {filtered.map((heading) => (
-      <li>
+      <li role="none">
         <a
+          role="menuitem"
           href={`${currentPath}#${heading.slug}`}
           class:list={[styles.link, heading.depth === 3 && styles.nested]}
         >

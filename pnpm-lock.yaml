@@ -53,6 +53,9 @@ importers:
       github-slugger:
         specifier: ^2.0.0
         version: 2.0.0
+      keyux:
+        specifier: ^0.11.3
+        version: 0.11.3
       linkedom:
         specifier: ^0.18.12
         version: 0.18.12
@@ -1780,6 +1783,10 @@ packages:
   js-yaml@4.1.1:
     resolution: {integrity: sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==}
     hasBin: true
+
+  keyux@0.11.3:
+    resolution: {integrity: sha512-IzS9emdl1gazLhGvCcwy066WYeOJtoxuncDVIsKvvyZZXRmPwUusHuvvOd4bjT9qiN+kBc9ntP6CaKYM16qzPA==}
+    engines: {node: ^18.0.0 || >=20.0.0}
 
   linkedom@0.18.12:
     resolution: {integrity: sha512-jalJsOwIKuQJSeTvsgzPe9iJzyfVaEJiEXl+25EkKevsULHvMJzpNqwvj1jOESWdmgKDiXObyjOYwlUqG7wo1Q==}
@@ -4320,6 +4327,8 @@ snapshots:
   js-yaml@4.1.1:
     dependencies:
       argparse: 2.0.1
+
+  keyux@0.11.3: {}
 
   linkedom@0.18.12:
     dependencies:

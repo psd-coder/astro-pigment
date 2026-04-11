@@ -47,6 +47,7 @@
     "es-toolkit": "^1.45.1",
     "fuse.js": "7.4.0-beta.1",
     "github-slugger": "^2.0.0",
+    "keyux": "^0.11.3",
     "linkedom": "^0.18.12",
     "mdast-util-to-string": "^4.0.0",
     "nanoid": "^5.1.7",

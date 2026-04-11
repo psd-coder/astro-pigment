@@ -57,6 +57,7 @@ const authorIcon = getAuthorIcon();
   {clientRouter && <ClientRouter />}
   <ThemeScript />
   {hueSlider && <HueScript />}
+  <script src="./scripts.ts" />
   <slot name="head-extra" />
 </head>
 <body class={styles.container}>
@@ -69,9 +70,10 @@ const authorIcon = getAuthorIcon();
         </slot>
       </a>
       {navItems && navItems.length > 0 && (
-        <div class:list={[styles.links, styles.primaryNav]}>
+        <div class:list={[styles.links, styles.primaryNav]} role="menubar" focusgroup="wrap">
           {navItems.map((item) => (
             <a
+              role="menuitem"
               href={getHref(item.href)}
               class:list={[styles.link, isActiveHref(Astro, item.href) && styles.active]}
             >
@@ -80,21 +82,21 @@ const authorIcon = getAuthorIcon();
           ))}
         </div>
       )}
-      <div class:list={[styles.links, styles.extraNav]}>
+      <div class:list={[styles.links, styles.extraNav]} role="menubar" focusgroup="wrap">
         {search && <Search />}
-        <ThemeToggle />
+        <ThemeToggle role="menuitem" />
         {authorIcon === "x" ? (
-          <a href={siteConfig.author.url} class:list={[styles.link, styles.square]} aria-label={siteConfig.author.name}>
+          <a href={siteConfig.author.url} class:list={[styles.link, styles.square]} aria-label={siteConfig.author.name} role="menuitem">
             <Icon name="twitter" />
           </a>
         ) : (
-          <a href={siteConfig.author.url} class:list={[styles.link, styles.square]} aria-label={siteConfig.author.name}>
+          <a href={siteConfig.author.url} class:list={[styles.link, styles.square]} aria-label={siteConfig.author.name} role="menuitem">
             <slot name="author-icon">
               <Icon name="github" />
             </slot>
           </a>
         )}
-        <a href={githubUrl} class:list={[styles.link, styles.square]} aria-label="GitHub">
+        <a href={githubUrl} class:list={[styles.link, styles.square]} aria-label="GitHub" role="menuitem">
           <Icon name="github" />
         </a>
       </div>
