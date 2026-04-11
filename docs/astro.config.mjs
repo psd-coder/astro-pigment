@@ -6,7 +6,7 @@ export default defineConfig({
   integrations: [
     docsTheme({
       project: {
-        name: "Pigment",
+        name: "astro-pigment",
         description:
           "Astro 6 documentation theme with dark mode, interactive playgrounds, and SEO endpoints.",
         license: {
