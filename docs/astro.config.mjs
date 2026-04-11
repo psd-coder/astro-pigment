@@ -21,7 +21,7 @@ export default defineConfig({
         favicon: "src/assets/astro-pigment-favicon.svg",
         manifest: "src/assets/astro-pigment.svg",
       },
-      hueSlider: true,
+      huePicker: true,
       search: true,
       navLinks: [
         { href: "/", label: "Overview" },
