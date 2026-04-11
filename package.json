@@ -10,6 +10,10 @@
     "documentation",
     "theme"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/psd-coder/astro-pigment"
+  },
   "files": [
     "src",
     "stylelint.config.js",
