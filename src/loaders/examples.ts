@@ -1,17 +1,22 @@
 import type { Loader } from "astro/loaders";
+import { defineCollection } from "astro:content";
 import { parseHTML } from "linkedom";
 import { promises as fs } from "node:fs";
 import { basename, join, relative } from "node:path";
+import { z } from "astro/zod";
 
-type FileEntryType = "html" | "javascript" | "css" | "importmap";
-type FileEntryLang = "html" | "javascript" | "css";
+const fileEntryTypeSchema = z.enum(["html", "javascript", "css", "importmap"]);
+const fileEntryLangSchema = z.enum(["html", "javascript", "css"]);
+const fileEntrySchema = z.object({
+  name: z.string(),
+  type: fileEntryTypeSchema,
+  lang: fileEntryLangSchema,
+  content: z.string(),
+});
 
-type FileEntry = {
-  name: string;
-  type: FileEntryType;
-  lang: FileEntryLang;
-  content: string;
-};
+export type FileEntryType = z.infer<typeof fileEntryTypeSchema>;
+export type FileEntryLang = z.infer<typeof fileEntryLangSchema>;
+export type FileEntry = z.infer<typeof fileEntrySchema>;
 
 const TYPE_TO_LANG: Record<FileEntryType, FileEntryLang> = {
   html: "html",
@@ -80,7 +85,13 @@ function parseExampleHtml(raw: string) {
   return { title, description, files };
 }
 
-export function examplesLoader(contentDir: string): Loader {
+export const schema = z.object({
+  title: z.string(),
+  description: z.string(),
+  files: z.array(fileEntrySchema),
+});
+
+export function loader(contentDir: string): Loader {
   return {
     name: "examples-loader",
     async load({ store, parseData, config, logger, watcher }) {
@@ -117,4 +128,11 @@ export function examplesLoader(contentDir: string): Loader {
       });
     },
   };
+}
+
+export function defineExamplesLoader(contentDir: string) {
+  return defineCollection({
+    loader: loader(contentDir),
+    schema,
+  });
 }

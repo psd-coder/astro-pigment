@@ -34,7 +34,7 @@
     "./stores/theme": "./src/stores/theme.ts",
     "./stores/media": "./src/stores/media.ts",
     "./stores/pkgManager": "./src/stores/pkgManager.ts",
-    "./loaders/examples": "./src/loaders/examples-loader.ts",
+    "./loaders/examples": "./src/loaders/examples.ts",
     "./utils/content": "./src/utils/content.ts",
     "./utils/urls": "./src/utils/urls.ts",
     "./utils/schemas": "./src/utils/schemas.ts",
