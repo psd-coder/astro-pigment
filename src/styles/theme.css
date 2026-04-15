@@ -3,7 +3,7 @@
   --color-surface-1: oklch(99% 0.01 var(--theme-hue));
   --color-surface-2: oklch(98% 0.01 var(--theme-hue));
   --color-surface-3: oklch(96% 0.012 var(--theme-hue));
-  --color-surface-4: oklch(99.5% 0.01 var(--theme-hue));
+  --color-surface-4: oklch(99.9% 0.01 var(--theme-hue));
   --color-text-primary: oklch(15% 0.025 var(--theme-hue));
   --color-text-secondary: oklch(40% 0.02 var(--theme-hue));
   --color-text-tertiary: oklch(75% 0.02 var(--theme-hue));

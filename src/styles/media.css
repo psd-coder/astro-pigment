@@ -1,6 +1,6 @@
-@custom-media --mobiles (max-width: 48rem);
+@custom-media --mobiles (max-width: 48rem); /* 768px */
 @custom-media --min-mobiles (min-width: 48rem);
-@custom-media --tablets (max-width: 64rem);
+@custom-media --tablets (max-width: 64rem); /* 1024px */
 @custom-media --min-tablets (min-width: 64rem);
-@custom-media --laptops (max-width: 80rem);
+@custom-media --laptops (max-width: 80rem); /* 1280px */
 @custom-media --min-laptops (min-width: 80rem);
