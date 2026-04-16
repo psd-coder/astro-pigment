@@ -65,7 +65,7 @@ export function extractSections(body: string): Section[] {
 
 type MarkdownSection = { heading: string; level: number; body: string };
 
-export function splitMarkdownIntoSections(raw: string): MarkdownSection[] {
+export function splitMarkdownIntoSections(raw: string, pageTitle?: string): MarkdownSection[] {
   const tree = parser.parse(raw);
   stripMdxNodes(tree);
   const sections: MarkdownSection[] = [];
@@ -87,6 +87,12 @@ export function splitMarkdownIntoSections(raw: string): MarkdownSection[] {
 
   const body = nodesToPlainText(buffer);
   if (body || heading) sections.push({ heading, level, body });
+
+  if (sections.length && sections[0]!.heading === "" && pageTitle) {
+    sections[0]!.heading = pageTitle;
+    sections[0]!.level = 1;
+  }
+
   return sections;
 }
 
