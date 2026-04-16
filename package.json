@@ -23,8 +23,12 @@
   "scripts": {
     "bump": "bash scripts/bump.sh",
     "typecheck": "tsc --noEmit",
-    "lint": "oxlint --fix --fix-suggestions",
-    "format": "oxfmt --write src/"
+    "lint": "pnpm run --recursive --filter='.' /^lint:*/",
+    "lint:oxlint": "oxlint .",
+    "lint:prettier": "prettier --check . --experimental-cli",
+    "format": "pnpm run --recursive --filter='.' /^format:*/",
+    "format:oxlint": "oxlint --fix --fix-suggestions .",
+    "format:prettier": "prettier . --write --experimental-cli"
   },
   "exports": {
     ".": "./src/index.ts",
@@ -79,12 +83,14 @@
     "valibot": "^1.3.1"
   },
   "devDependencies": {
+    "@prettier/plugin-oxc": "^0.1.4",
     "@types/mdast": "^4.0.4",
     "astro": "^6.1.5",
     "nanostores": "^1.0.0",
     "nanotags": "^0.15.0",
-    "oxfmt": "^0.44.0",
     "oxlint": "^1.59.0",
+    "prettier": "^3.8.3",
+    "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.9.3"
   }
 }
