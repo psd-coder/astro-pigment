@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.11.1
+
+### Changed
+
+- Expand package.json exports from wildcard to explicit paths.
+
 ## 0.11.0
 
 ### Added
