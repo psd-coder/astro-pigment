@@ -8,83 +8,6 @@ import { CodeExample } from "astro-pigment/components/playground";
 
 Interactive playground with the adaptive code theme. Drag the hue slider in the header to see how all colors rotate together.
 
-## JavaScript
-
-<CodeExample files={[
-  {
-    name: "app.js",
-    type: "javascript",
-    lang: "javascript",
-    content: `// Adaptive theme: all syntax colors derive from --theme-hue
-const GREETING = "Hello, World!";
-const MAX_RETRIES = 3;
-
-class EventEmitter {
-#listeners = new Map();
-
-on(event, callback) {
-const list = this.#listeners.get(event) ?? [];
-list.push(callback);
-this.#listeners.set(event, list);
-return () => this.off(event, callback);
-}
-
-off(event, callback) {
-const list = this.#listeners.get(event) ?? [];
-this.#listeners.set(event, list.filter((cb) => cb !== callback));
-}
-
-emit(event, ...args) {
-for (const cb of this.#listeners.get(event) ?? []) {
-cb(...args);
-}
-}
-}
-
-async function fetchWithRetry(url, retries = MAX_RETRIES) {
-for (let i = 0; i < retries; i++) {
-try {
-const response = await fetch(url);
-if (!response.ok) throw new Error(\`HTTP \${response.status}\`);
-return await response.json();
-} catch (err) {
-if (i === retries - 1) throw err;
-console.warn(\`Attempt \${i + 1} failed, retrying...\`);
-await new Promise((r) => setTimeout(r, 1000 \* (i + 1)));
-}
-}
-}
-
-const emitter = new EventEmitter();
-emitter.on("greet", (name) => console.log(\`\${GREETING} \${name}!\`));
-emitter.emit("greet", "Theme");`,
-  },
-  {
-    name: "index.html",
-    type: "html",
-    lang: "html",
-    content: `<!DOCTYPE html>
-
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      max-width: 40ch;
-      margin: 2rem auto;
-    }
-  </style>
-</head>
-<body>
-  <h1>Theme Preview</h1>
-  <p>Check the console for output.</p>
-  <script type="module" src="app.js"><\/script>
-</body>
-</html>`,
-  },
-]} />
-
 ## CSS
 
 ```css
@@ -209,3 +132,80 @@ unsub();
   </body>
 </html>
 ```
+
+## JavaScript
+
+<CodeExample files={[
+  {
+    name: "app.js",
+    type: "javascript",
+    lang: "javascript",
+    content: `// Adaptive theme: all syntax colors derive from --theme-hue
+const GREETING = "Hello, World!";
+const MAX_RETRIES = 3;
+
+class EventEmitter {
+#listeners = new Map();
+
+on(event, callback) {
+const list = this.#listeners.get(event) ?? [];
+list.push(callback);
+this.#listeners.set(event, list);
+return () => this.off(event, callback);
+}
+
+off(event, callback) {
+const list = this.#listeners.get(event) ?? [];
+this.#listeners.set(event, list.filter((cb) => cb !== callback));
+}
+
+emit(event, ...args) {
+for (const cb of this.#listeners.get(event) ?? []) {
+cb(...args);
+}
+}
+}
+
+async function fetchWithRetry(url, retries = MAX_RETRIES) {
+for (let i = 0; i < retries; i++) {
+try {
+const response = await fetch(url);
+if (!response.ok) throw new Error(\`HTTP \${response.status}\`);
+return await response.json();
+} catch (err) {
+if (i === retries - 1) throw err;
+console.warn(\`Attempt \${i + 1} failed, retrying...\`);
+await new Promise((r) => setTimeout(r, 1000 \* (i + 1)));
+}
+}
+}
+
+const emitter = new EventEmitter();
+emitter.on("greet", (name) => console.log(\`\${GREETING} \${name}!\`));
+emitter.emit("greet", "Theme");`,
+  },
+  {
+    name: "index.html",
+    type: "html",
+    lang: "html",
+    content: `<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 40ch;
+      margin: 2rem auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Theme Preview</h1>
+  <p>Check the console for output.</p>
+  <script type="module" src="app.js"><\/script>
+</body>
+</html>`,
+  },
+]} />
