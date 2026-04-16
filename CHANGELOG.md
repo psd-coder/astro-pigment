@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.11.2
+
+### Added
+
+- Properly describe in the docs that icon & manifest features requires installed sharp package.
+
 ## 0.11.1
 
 ### Changed
