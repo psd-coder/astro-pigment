@@ -3,9 +3,9 @@ import { extraEntries } from "virtual:theme-extra-entries";
 import { siteConfig } from "virtual:theme-integration-config";
 import { getDocsCollection } from "../utils/content";
 import {
-    markdownLinkItem,
-    renderExtraEntryMarkdown,
-    stringifyCleanMarkdown,
+  markdownLinkItem,
+  renderExtraEntryMarkdown,
+  stringifyCleanMarkdown,
 } from "../utils/markdown";
 import { markdownResponse } from "../utils/response";
 import { getHref } from "../utils/urls";

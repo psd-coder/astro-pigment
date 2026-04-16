@@ -7,14 +7,14 @@ type Props = HTMLAttributes<"div">;
 
 const { class: className, ...rest } = Astro.props;
 ---
+
 <x-hue-picker class:list={[styles.host, className]} {...rest}>
   <button
     data-ref="trigger"
     class={styles.trigger}
     type="button"
     aria-label="Open hue picker"
-    aria-expanded="false"
-  />
+    aria-expanded="false"></button>
   <div class={styles.panel}>
     <div data-ref="ring" class={styles.ring}>
       <div
@@ -26,7 +26,8 @@ const { class: className, ...rest } = Astro.props;
         aria-valuemin="0"
         aria-valuemax="360"
         aria-valuenow="180"
-      />
+      >
+      </div>
     </div>
     <button data-ref="close" class={styles.close} type="button" aria-label="Close hue picker">
       <Icon name="close" size={16} />
@@ -35,7 +36,7 @@ const { class: className, ...rest } = Astro.props;
   <script is:inline>
     var hue = localStorage.getItem("theme-hue");
     if (hue) {
-      document.querySelectorAll("x-hue-picker [data-ref='trigger']").forEach(function(el) {
+      document.querySelectorAll("x-hue-picker [data-ref='trigger']").forEach(function (el) {
         el.style.setProperty("--hue", hue);
       });
     }

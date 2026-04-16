@@ -85,7 +85,13 @@ function parseExampleHtml(raw: string) {
 
   files.sort((a, b) => TYPE_ORDER[a.type] - TYPE_ORDER[b.type]);
 
-  return { title, description, descriptionHtml: descriptionHtml ?? description, files, body: raw };
+  return {
+    title,
+    description,
+    descriptionHtml: descriptionHtml ?? description,
+    files,
+    body: raw,
+  };
 }
 
 export const schema = z.object({

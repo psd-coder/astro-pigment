@@ -8,6 +8,7 @@ type Props = HTMLAttributes<"button"> & {
 
 const { class: className, square = false, ...restProps } = Astro.props;
 ---
+
 <button class:list={[styles.button, square && styles.square, className]} {...restProps}>
   <slot />
 </button>

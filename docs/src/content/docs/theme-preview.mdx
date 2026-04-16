@@ -20,39 +20,39 @@ const GREETING = "Hello, World!";
 const MAX_RETRIES = 3;
 
 class EventEmitter {
-  #listeners = new Map();
+#listeners = new Map();
 
-  on(event, callback) {
-    const list = this.#listeners.get(event) ?? [];
-    list.push(callback);
-    this.#listeners.set(event, list);
-    return () => this.off(event, callback);
-  }
+on(event, callback) {
+const list = this.#listeners.get(event) ?? [];
+list.push(callback);
+this.#listeners.set(event, list);
+return () => this.off(event, callback);
+}
 
-  off(event, callback) {
-    const list = this.#listeners.get(event) ?? [];
-    this.#listeners.set(event, list.filter((cb) => cb !== callback));
-  }
+off(event, callback) {
+const list = this.#listeners.get(event) ?? [];
+this.#listeners.set(event, list.filter((cb) => cb !== callback));
+}
 
-  emit(event, ...args) {
-    for (const cb of this.#listeners.get(event) ?? []) {
-      cb(...args);
-    }
-  }
+emit(event, ...args) {
+for (const cb of this.#listeners.get(event) ?? []) {
+cb(...args);
+}
+}
 }
 
 async function fetchWithRetry(url, retries = MAX_RETRIES) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(\`HTTP \${response.status}\`);
-      return await response.json();
-    } catch (err) {
-      if (i === retries - 1) throw err;
-      console.warn(\`Attempt \${i + 1} failed, retrying...\`);
-      await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
-    }
-  }
+for (let i = 0; i < retries; i++) {
+try {
+const response = await fetch(url);
+if (!response.ok) throw new Error(\`HTTP \${response.status}\`);
+return await response.json();
+} catch (err) {
+if (i === retries - 1) throw err;
+console.warn(\`Attempt \${i + 1} failed, retrying...\`);
+await new Promise((r) => setTimeout(r, 1000 \* (i + 1)));
+}
+}
 }
 
 const emitter = new EventEmitter();
@@ -64,6 +64,7 @@ emitter.emit("greet", "Theme");`,
     type: "html",
     lang: "html",
     content: `<!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -172,39 +173,39 @@ unsub();
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Adaptive Theme Demo</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <header class="header">
-    <nav aria-label="Main">
-      <a href="/" class="logo">My App</a>
-      <ul class="nav-links">
-        <li><a href="/docs">Docs</a></li>
-        <li><a href="/api">API</a></li>
-        <!-- More links -->
-      </ul>
-    </nav>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adaptive Theme Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <nav aria-label="Main">
+        <a href="/" class="logo">My App</a>
+        <ul class="nav-links">
+          <li><a href="/docs">Docs</a></li>
+          <li><a href="/api">API</a></li>
+          <!-- More links -->
+        </ul>
+      </nav>
+    </header>
 
-  <main>
-    <section class="hero">
-      <h1>Build something <em>great</em></h1>
-      <p>A short description of what this project does.</p>
-      <button type="button" onclick="handleClick()">Get Started</button>
-    </section>
-  </main>
+    <main>
+      <section class="hero">
+        <h1>Build something <em>great</em></h1>
+        <p>A short description of what this project does.</p>
+        <button type="button" onclick="handleClick()">Get Started</button>
+      </section>
+    </main>
 
-  <script>
-    function handleClick() {
-      const isReady = true;
-      const count = 42;
-      console.log(`Ready: ${isReady}, count: ${count}`);
-    }
-  </script>
-</body>
+    <script>
+      function handleClick() {
+        const isReady = true;
+        const count = 42;
+        console.log(`Ready: ${isReady}, count: ${count}`);
+      }
+    </script>
+  </body>
 </html>
 ```

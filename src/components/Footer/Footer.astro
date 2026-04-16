@@ -11,22 +11,33 @@ const { class: className } = Astro.props;
 
 <footer class:list={[className, styles.container]}>
   <div class={styles.block}>
-    <a class={styles.link} href={siteConfig.project.license.url}>{siteConfig.project.license.name} License</a>
+    <a class={styles.link} href={siteConfig.project.license.url}
+      >{siteConfig.project.license.name} License</a
+    >
     <span class={styles.dimmed}>&middot;</span>
     <a class={styles.link} href={githubUrl}>GitHub</a>
   </div>
   <div class={styles.block}>
-    {siteConfig.author && (
-      <>
-        <span class={styles.dimmed}>by</span> <a class={styles.link} href={siteConfig.author.url}>{siteConfig.author.name}</a>
-      </>
-    )}
-    {siteConfig.credits?.map((credit, i) => (
-      <>
-        {(siteConfig.author || i > 0) && <span class={styles.dimmed}>&amp;</span>}
-        <a class={styles.link} href={credit.url}>{credit.name}</a>
-      </>
-    ))}
+    {
+      siteConfig.author && (
+        <>
+          <span class={styles.dimmed}>by</span>{" "}
+          <a class={styles.link} href={siteConfig.author.url}>
+            {siteConfig.author.name}
+          </a>
+        </>
+      )
+    }
+    {
+      siteConfig.credits?.map((credit, i) => (
+        <>
+          {(siteConfig.author || i > 0) && <span class={styles.dimmed}>&amp;</span>}
+          <a class={styles.link} href={credit.url}>
+            {credit.name}
+          </a>
+        </>
+      ))
+    }
     <slot name="extra" />
   </div>
 </footer>

@@ -15,7 +15,7 @@ const { headings, itemsSelector = "#content :is(h2, h3)[id]" } = Astro.props;
 
 {/* Desktop sidebar */}
 <x-toc items-selector={itemsSelector} class={styles.component}>
-  <List headings={headings} class={styles.sidebar}/>
+  <List headings={headings} class={styles.sidebar} />
 </x-toc>
 
 {/* Mobile popover */}
@@ -48,7 +48,9 @@ const { headings, itemsSelector = "#content :is(h2, h3)[id]" } = Astro.props;
       const $activeSlug = atom<string | null>(null);
 
       function updateActive() {
-        const headings = [...document.querySelectorAll<HTMLElement>(ctx.props.$itemsSelector.get())];
+        const headings = [
+          ...document.querySelectorAll<HTMLElement>(ctx.props.$itemsSelector.get()),
+        ];
         if (!headings.length) return;
 
         const scrollY = window.scrollY;

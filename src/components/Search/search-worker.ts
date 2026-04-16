@@ -72,7 +72,10 @@ clientChannel.on("search", ({ query }) => {
 
   const grouped: GroupedSearchResult[] = [...groupMap.values()]
     .sort((a, b) => a.pageOrder - b.pageOrder)
-    .map(({ pageOrder: _, ...group }) => ({ ...group, blocks: group.blocks.slice(0, 5) }));
+    .map(({ pageOrder: _, ...group }) => ({
+      ...group,
+      blocks: group.blocks.slice(0, 5),
+    }));
 
   clientChannel.emit("search-results", { data: grouped });
 });

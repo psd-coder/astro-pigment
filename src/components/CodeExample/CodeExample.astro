@@ -19,20 +19,43 @@ if (!firstFile) throw new Error("No files provided");
 ---
 
 <x-code-example class={styles.host}>
-  <script type="application/json" data-prop="files" set:html={JSON.stringify(files).replaceAll("</", "<\\/")} is:inline />
-  <script type="application/json" data-prop="importOverrides" set:html={JSON.stringify(importOverrides ?? {})} is:inline />
+  <script
+    type="application/json"
+    data-prop="files"
+    set:html={JSON.stringify(files).replaceAll("</", "<\\/")}
+    is:inline
+  />
+  <script
+    type="application/json"
+    data-prop="importOverrides"
+    set:html={JSON.stringify(importOverrides ?? {})}
+    is:inline
+  />
   <ResizablePanes direction="horizontal" class={styles.panes}>
     <ResizablePane class:list={[styles.pane, styles.codePane]}>
       <Tabs value={firstFile.name} data-ref="x-code-example:tabs" class={styles.fileTabs}>
-        {files.map((f) => <Tab value={f.name} class={styles.tab}>{f.name}</Tab>)}
+        {
+          files.map((f) => (
+            <Tab value={f.name} class={styles.tab}>
+              {f.name}
+            </Tab>
+          ))
+        }
       </Tabs>
       <CodeEditor data-ref="x-code-example:editor" lang={firstFile.type} />
     </ResizablePane>
     <ResizablePane class:list={[styles.pane, styles.previewPane]}>
       <LivePreview data-ref="x-code-example:preview" />
-      <CollapsiblePane data-ref="x-code-example:logsPane" expanded expandedSize={20} class:list={[styles.pane, styles.logsPane]}>
+      <CollapsiblePane
+        data-ref="x-code-example:logsPane"
+        expanded
+        expandedSize={20}
+        class:list={[styles.pane, styles.logsPane]}
+      >
         <span slot="header" class={styles.logsLabel}>Logs</span>
-        <button slot="header" data-ref="x-code-example:logsClear" class={styles.logsClear}>Clear</button>
+        <button slot="header" data-ref="x-code-example:logsClear" class={styles.logsClear}
+          >Clear</button
+        >
         <div data-ref="x-code-example:logsContainer" class={styles.logsList}>
           <template data-ref="x-code-example:logsTemplate">
             <li data-item>
@@ -113,20 +136,23 @@ if (!firstFile) throw new Error("No files provided");
       });
 
       ctx.bind($currentTab, ctx.refs.tabs);
-      ctx.bind({
-        ...$currentFileEntryContent,
-        set: (value: string) => {
-          const currentTab = $currentTab.get();
-          if (!currentTab) return;
+      ctx.bind(
+        {
+          ...$currentFileEntryContent,
+          set: (value: string) => {
+            const currentTab = $currentTab.get();
+            if (!currentTab) return;
 
-          $files.set(
-            $files.get().map((entry) => {
-              if (entry.name !== currentTab) return entry;
-              return { ...entry, content: value };
-            }),
-          );
+            $files.set(
+              $files.get().map((entry) => {
+                if (entry.name !== currentTab) return entry;
+                return { ...entry, content: value };
+              }),
+            );
+          },
         },
-      }, ctx.refs.editor);
+        ctx.refs.editor,
+      );
 
       ctx.effect($currentTab, (currentTab) => {
         if (!currentTab) return;

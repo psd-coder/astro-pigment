@@ -10,9 +10,13 @@ const { value, class: className, ...rest } = Astro.props;
 ---
 
 <x-tabs class:list={[styles.tabs, className]} role="tablist" value={value} {...rest}>
-  <button data-ref="arrowLeft" class:list={[styles.arrow, styles.arrowLeft]} tabindex="-1">&#8249;</button>
+  <button data-ref="arrowLeft" class:list={[styles.arrow, styles.arrowLeft]} tabindex="-1"
+    >&#8249;</button
+  >
   <slot />
-  <button data-ref="arrowRight" class:list={[styles.arrow, styles.arrowRight]} tabindex="-1">&#8250;</button>
+  <button data-ref="arrowRight" class:list={[styles.arrow, styles.arrowRight]} tabindex="-1"
+    >&#8250;</button
+  >
 </x-tabs>
 <script>
   import { define, type TypedEvent } from "nanotags";

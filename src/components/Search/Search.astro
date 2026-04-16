@@ -3,6 +3,7 @@ import Kbd from "../Kbd/Kbd.astro";
 import Icon from "../Icon/Icon.astro";
 import styles from "./styles.module.css";
 ---
+
 <x-search>
   <button data-ref="trigger" class={styles.trigger} type="button" aria-label="Search docs">
     <Icon name="search" size={16} class={styles.triggerIcon} />
@@ -13,7 +14,13 @@ import styles from "./styles.module.css";
     <div class={styles.panel}>
       <div class={styles.inputWrapper}>
         <Icon name="search" class={styles.inputIcon} />
-        <input data-ref="input" class={styles.input} type="search" placeholder="Search docs..." autocomplete="off" />
+        <input
+          data-ref="input"
+          class={styles.input}
+          type="search"
+          placeholder="Search docs..."
+          autocomplete="off"
+        />
         <Kbd>Esc</Kbd>
       </div>
       <div data-ref="resultsContainer" class={styles.resultsContainer}></div>
@@ -105,7 +112,9 @@ import styles from "./styles.module.css";
     }))
     .setup((ctx) => {
       const searchWorker = new SearchWorker();
-      const searchWorkerTransport = createPostMessageTransport<WorkerMessages, ClientMessages>(searchWorker);
+      const searchWorkerTransport = createPostMessageTransport<WorkerMessages, ClientMessages>(
+        searchWorker,
+      );
       const searchWorkerChannel = createTypedChannel(searchWorkerTransport);
       const $query = atom("");
       const $debouncedQuery = createDebouncedStore($query, 300);
@@ -142,15 +151,14 @@ import styles from "./styles.module.css";
       // Dialog
       ctx.on(ctx.refs.dialog, "click", (e) => {
         const target = e.target as HTMLElement;
-        if (target === ctx.refs.dialog || target.closest('a') !== null) {
+        if (target === ctx.refs.dialog || target.closest("a") !== null) {
           close();
         }
       });
-      attachRovingFocus(
-        ctx,
-        () => Array.from(ctx.refs.resultsContainer.querySelectorAll("a")),
-        { orientation: "vertical", homeEnd: false },
-      );
+      attachRovingFocus(ctx, () => Array.from(ctx.refs.resultsContainer.querySelectorAll("a")), {
+        orientation: "vertical",
+        homeEnd: false,
+      });
       // Combobox behavior: if user starts typing when focus is on results container, move it to input
       ctx.on(ctx.refs.dialog, "keydown", (e: KeyboardEvent) => {
         if (e.key.length !== 1 && e.key !== "Backspace") return;
@@ -187,7 +195,7 @@ import styles from "./styles.module.css";
                 update: (el: HTMLAnchorElement, data) => {
                   const title = ctx.getElement(el, "[data-page-title]");
                   const blocks = ctx.getElement(el, "[data-blocks]");
-                  
+
                   title.textContent = data.pageTitle;
                   renderList(blocks, ctx.refs.resultBlockTpl, {
                     data: data.blocks,
@@ -196,18 +204,20 @@ import styles from "./styles.module.css";
                       const link = ctx.getElement(blockEl, "a");
                       const pageHref = getHref(data.pageId === "index" ? "" : data.pageId);
                       const fragment = blockData.anchor ? `#${blockData.anchor}` : "";
-                      const hl = query.trim() ? `?${QUERY_PARAM}=${encodeURIComponent(query.trim())}` : "";
+                      const hl = query.trim()
+                        ? `?${QUERY_PARAM}=${encodeURIComponent(query.trim())}`
+                        : "";
                       link.href = `${pageHref}${hl}${fragment}`;
 
                       const heading = ctx.getElement(blockEl, "[data-heading]");
                       const snippet = ctx.getElement(blockEl, "[data-snippet]");
                       heading.textContent = blockData.heading;
                       snippet.replaceChildren(highlightText(blockData.snippet, query));
-                    }
+                    },
                   });
                 },
               });
-            }
+            },
           });
         } else {
           ctx.refs.resultsContainer.innerHTML = "";

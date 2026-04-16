@@ -6,8 +6,8 @@ type Props = HTMLAttributes<"div">;
 
 const { class: className, lang, ...rest } = Astro.props;
 ---
-<x-code-editor class:list={[styles.host, className]} lang={lang} {...rest}>
-</x-code-editor>
+
+<x-code-editor class:list={[styles.host, className]} lang={lang} {...rest}> </x-code-editor>
 <script>
   import { define } from "nanotags";
   import { EditorView, basicSetup } from "codemirror";

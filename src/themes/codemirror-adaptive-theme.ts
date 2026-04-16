@@ -91,8 +91,16 @@ const highlightStyle = HighlightStyle.define([
   { tag: tags.definitionKeyword, color: "var(--code-keyword)" },
   { tag: tags.moduleKeyword, color: "var(--code-keyword)" },
 
-  { tag: tags.function(tags.variableName), color: "var(--code-function)", fontStyle: "italic" },
-  { tag: tags.function(tags.propertyName), color: "var(--code-function)", fontStyle: "italic" },
+  {
+    tag: tags.function(tags.variableName),
+    color: "var(--code-function)",
+    fontStyle: "italic",
+  },
+  {
+    tag: tags.function(tags.propertyName),
+    color: "var(--code-function)",
+    fontStyle: "italic",
+  },
 
   { tag: tags.string, color: "var(--code-string)" },
   { tag: tags.special(tags.string), color: "var(--code-string)" },
@@ -119,7 +127,11 @@ const highlightStyle = HighlightStyle.define([
   { tag: tags.variableName, color: "var(--code-text)" },
   { tag: tags.propertyName, color: "var(--code-text)" },
 
-  { tag: tags.local(tags.variableName), color: "var(--code-parameter)", fontStyle: "italic" },
+  {
+    tag: tags.local(tags.variableName),
+    color: "var(--code-parameter)",
+    fontStyle: "italic",
+  },
 
   { tag: tags.operator, color: "var(--code-operator)" },
   { tag: tags.separator, color: "var(--code-comment)" },
@@ -146,7 +158,11 @@ const highlightStyle = HighlightStyle.define([
 
   { tag: tags.emphasis, fontStyle: "italic" },
   { tag: tags.strong, fontWeight: "bold" },
-  { tag: tags.link, color: "var(--code-property)", textDecoration: "underline" },
+  {
+    tag: tags.link,
+    color: "var(--code-property)",
+    textDecoration: "underline",
+  },
   { tag: tags.heading, color: "var(--code-tag)", fontWeight: "bold" },
   { tag: tags.strikethrough, textDecoration: "line-through" },
 ]);

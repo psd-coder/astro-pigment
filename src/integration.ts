@@ -53,7 +53,9 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
     author: rawSiteConfig.author
       ? {
           ...rawSiteConfig.author,
-          ...(rawSiteConfig.author.icon && { icon: readSvg(rawSiteConfig.author.icon) }),
+          ...(rawSiteConfig.author.icon && {
+            icon: readSvg(rawSiteConfig.author.icon),
+          }),
         }
       : undefined,
   };
@@ -203,7 +205,11 @@ export const mainPageTitle = ${JSON.stringify(mainPageTitle)};
                 rehypeAutolinkHeadings,
                 {
                   behavior: "prepend",
-                  properties: { className: ["anchor"], ariaHidden: true, tabIndex: -1 },
+                  properties: {
+                    className: ["anchor"],
+                    ariaHidden: true,
+                    tabIndex: -1,
+                  },
                   content: [],
                 },
               ],
@@ -236,7 +242,10 @@ export const mainPageTitle = ${JSON.stringify(mainPageTitle)};
                   opts: { ssr?: boolean } | undefined,
                 ) {
                   if (id === "sharp" && opts?.ssr) {
-                    return { id: createRequire(import.meta.url).resolve("sharp"), external: true };
+                    return {
+                      id: createRequire(import.meta.url).resolve("sharp"),
+                      external: true,
+                    };
                   }
                   return undefined;
                 },

@@ -49,7 +49,10 @@ export default defineConfig({
       project: {
         name: "my-project",
         description: "A short description of your project",
-        license: { name: "MIT", url: "https://github.com/your-name/your-repo/blob/main/LICENSE" },
+        license: {
+          name: "MIT",
+          url: "https://github.com/your-name/your-repo/blob/main/LICENSE",
+        },
         github: { user: "your-name", repository: "your-repo" },
       },
       author: { name: "Your Name", url: "https://x.com/your_handle" },
@@ -82,7 +85,7 @@ Temporarily enable the hue slider to find the right color for your site:
 docsTheme({
   // ...your config
   huePicker: true, // shows a color slider in the header
-})
+});
 ```
 
 Drag the slider, pick a hue you like, then hardcode it in CSS and remove `huePicker`:
@@ -101,7 +104,7 @@ All UI and code syntax highlighting colors derive from this hue via OKLch.
 type DocsThemeConfig = {
   // Required
   github: {
-    user?: string;          // one of user/organization required
+    user?: string; // one of user/organization required
     organization?: string;
     repository: string;
   };
@@ -113,26 +116,27 @@ type DocsThemeConfig = {
   author: {
     name: string;
     url: string;
-    icon?: IconName;        // auto-detected: "x" for x.com URLs
+    icon?: IconName; // auto-detected: "x" for x.com URLs
   };
 
   // Optional
   links?: Array<{ label: string; url: string; icon?: IconName }>;
-  site?: string;            // default: auto GitHub Pages URL
-  icon?: string;            // path to 512x512 PNG or SVG, generates favicons + webmanifest
-  huePicker?: boolean;      // show hue slider in header for initial theme setup
-  shikiThemes?: {           // overrides adaptive hue-based theme
+  site?: string; // default: auto GitHub Pages URL
+  icon?: string; // path to 512x512 PNG or SVG, generates favicons + webmanifest
+  huePicker?: boolean; // show hue slider in header for initial theme setup
+  shikiThemes?: {
+    // overrides adaptive hue-based theme
     light: string;
     dark: string;
   };
-  customCss?: string[];     // CSS files injected into every page, paths relative to project root
-  navLinks?: NavItem[];     // header nav links; href accepts "/api" or "api"
+  customCss?: string[]; // CSS files injected into every page, paths relative to project root
+  navLinks?: NavItem[]; // header nav links; href accepts "/api" or "api"
   docs?: {
-    directory?: string;     // default: "src/content/docs"
-    pattern?: string;       // default: "**/*.{md,mdx}"
-    deepSections?: string[];// slugs where llms.txt shows ### headings
+    directory?: string; // default: "src/content/docs"
+    pattern?: string; // default: "**/*.{md,mdx}"
+    deepSections?: string[]; // slugs where llms.txt shows ### headings
     renderDefaultPage?: boolean; // default: true. set false to ship your own [...slug].astro
-    tocItemsSelector?: string;   // default: ".prose :is(h2, h3)[id]"
+    tocItemsSelector?: string; // default: ".prose :is(h2, h3)[id]"
   };
 };
 ```
@@ -157,7 +161,13 @@ Import from `astro-pigment/components`:
 **Layout** -- full page shell: sticky header, sidebar, footer, code copy buttons. Config read from virtual module. Includes ThemeToggle, ThemeScript, CodeBlockWrapper automatically.
 
 ```astro
-<Layout title="Page Title" navItems={[{ href: "", label: "Home" }, { href: "api", label: "API" }]}>
+<Layout
+  title="Page Title"
+  navItems={[
+    { href: "", label: "Home" },
+    { href: "api", label: "API" },
+  ]}
+>
   <MyLogo slot="logo" />
   <TableOfContents slot="sidebar" headings={headings} itemsSelector=".prose :is(h2, h3)[id]" />
   <article class="prose"><slot /></article>
@@ -229,10 +239,12 @@ Import from `astro-pigment/components/playground`:
 **CodeExample** -- full playground: tabbed editor + live preview + collapsible logs.
 
 ```astro
-<CodeExample files={[
-  { name: "index.html", type: "html", lang: "html", content: "<h1>Hello</h1>" },
-  { name: "app.js", type: "javascript", lang: "javascript", content: "console.log('hi')" },
-]} />
+<CodeExample
+  files={[
+    { name: "index.html", type: "html", lang: "html", content: "<h1>Hello</h1>" },
+    { name: "app.js", type: "javascript", lang: "javascript", content: "console.log('hi')" },
+  ]}
+/>
 ```
 
 **CodePanels** -- multi-file code display with Shiki highlighting and tabs.
@@ -250,14 +262,14 @@ The theme uses CSS variables with fallback defaults. Pass your CSS files via `cu
 ```js
 docsTheme({
   customCss: ["./src/styles/custom.css"],
-})
+});
 ```
 
 ```css
 /* src/styles/custom.css */
 :root {
-  --theme-hue-override: 135;         /* green instead of default cyan (180) */
-  --layout-width-override: 1280px;   /* wider layout */
+  --theme-hue-override: 135; /* green instead of default cyan (180) */
+  --layout-width-override: 1280px; /* wider layout */
   --layout-sidebar-width-override: 280px;
 }
 ```
@@ -266,15 +278,15 @@ All color tokens are derived from `--theme-hue` using OKLch, so changing the hue
 
 ### Available tokens
 
-| Token | Light | Dark |
-|-------|-------|------|
-| `--color-surface-1` | 99% lightness | 12% lightness |
-| `--color-surface-2` | 98% | 18% |
-| `--color-surface-3` | 96% | 21% |
-| `--color-accent` | 55% lightness | 65% lightness |
-| `--color-text-primary` | 15% | 90% |
-| `--color-text-secondary` | 40% | 75% |
-| `--color-border` | 90% | 25% |
+| Token                    | Light         | Dark          |
+| ------------------------ | ------------- | ------------- |
+| `--color-surface-1`      | 99% lightness | 12% lightness |
+| `--color-surface-2`      | 98%           | 18%           |
+| `--color-surface-3`      | 96%           | 21%           |
+| `--color-accent`         | 55% lightness | 65% lightness |
+| `--color-text-primary`   | 15%           | 90%           |
+| `--color-text-secondary` | 40%           | 75%           |
+| `--color-border`         | 90%           | 25%           |
 
 Typography: `--text-xxs` (0.625rem) through `--text-2xl` (2rem). Spacing base: `--spacing` (4px). Radii: `--radius-sm`, `--radius-md`.
 
@@ -300,7 +312,7 @@ Package manager store (from `astro-pigment/stores/pkgManager`):
 ```ts
 import { $pkgManager } from "astro-pigment/stores/pkgManager";
 
-$pkgManager.get() // "pnpm" | "npm" | "yarn" | "bun"
+$pkgManager.get(); // "pnpm" | "npm" | "yarn" | "bun"
 ```
 
 Used by `InstallPackage` internally. Also available for custom `CodePanels`-based tab switchers via `defineCodePanels`:
@@ -363,12 +375,14 @@ const examples = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    files: z.array(z.object({
-      name: z.string(),
-      type: z.enum(["html", "javascript", "css", "importmap"]),
-      lang: z.enum(["html", "javascript", "css"]),
-      content: z.string(),
-    })),
+    files: z.array(
+      z.object({
+        name: z.string(),
+        type: z.enum(["html", "javascript", "css", "importmap"]),
+        lang: z.enum(["html", "javascript", "css"]),
+        content: z.string(),
+      }),
+    ),
   }),
 });
 ```

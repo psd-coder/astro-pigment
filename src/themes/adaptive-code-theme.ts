@@ -17,7 +17,10 @@ export const adaptiveCodeTheme: any = {
       scope: ["text", "source", "variable.other.readwrite", "punctuation.definition.variable"],
       settings: { foreground: "var(--code-text)" },
     },
-    { scope: "variable.object.property", settings: { foreground: "var(--code-text)" } },
+    {
+      scope: "variable.object.property",
+      settings: { foreground: "var(--code-text)" },
+    },
     {
       scope: ["string.template variable", "string variable"],
       settings: { foreground: "var(--code-text)" },
@@ -37,7 +40,10 @@ export const adaptiveCodeTheme: any = {
     },
 
     // --- Escape characters ---
-    { scope: "constant.character.escape", settings: { foreground: "var(--code-escape)" } },
+    {
+      scope: "constant.character.escape",
+      settings: { foreground: "var(--code-escape)" },
+    },
 
     // --- Constants & numbers ---
     {
@@ -68,7 +74,10 @@ export const adaptiveCodeTheme: any = {
       ],
       settings: { foreground: "var(--code-keyword)" },
     },
-    { scope: "entity.name.tag.documentation", settings: { foreground: "var(--code-keyword)" } },
+    {
+      scope: "entity.name.tag.documentation",
+      settings: { foreground: "var(--code-keyword)" },
+    },
     { scope: "keyword.operator.new", settings: { fontStyle: "bold" } },
 
     // --- Operators & accessors ---
@@ -115,7 +124,10 @@ export const adaptiveCodeTheme: any = {
       scope: ["meta.enum variable.other.readwrite", "variable.other.enummember"],
       settings: { foreground: "var(--code-operator)" },
     },
-    { scope: "meta.property.object", settings: { foreground: "var(--code-operator)" } },
+    {
+      scope: "meta.property.object",
+      settings: { foreground: "var(--code-operator)" },
+    },
     {
       scope: ["meta.type", "meta.type-alias", "support.type", "entity.name.type"],
       settings: { fontStyle: "italic", foreground: "var(--code-type)" },
@@ -160,7 +172,10 @@ export const adaptiveCodeTheme: any = {
       scope: "punctuation.definition.typeparameters",
       settings: { foreground: "var(--code-property)" },
     },
-    { scope: "entity.name.namespace", settings: { foreground: "var(--code-type)" } },
+    {
+      scope: "entity.name.namespace",
+      settings: { foreground: "var(--code-type)" },
+    },
 
     // --- CSS ---
     {
@@ -171,7 +186,10 @@ export const adaptiveCodeTheme: any = {
       scope: ["variable.language.this", "variable.language.this punctuation.definition.variable"],
       settings: { foreground: "var(--code-tag)" },
     },
-    { scope: "source.css variable.parameter.url", settings: { foreground: "var(--code-string)" } },
+    {
+      scope: "source.css variable.parameter.url",
+      settings: { foreground: "var(--code-string)" },
+    },
     {
       scope: ["support.type.vendored.property-name"],
       settings: { foreground: "var(--code-property)" },
@@ -197,7 +215,10 @@ export const adaptiveCodeTheme: any = {
       scope: "keyword.other.unit.percentage.css",
       settings: { foreground: "var(--code-constant)" },
     },
-    { scope: "source.css meta.attribute-selector", settings: { foreground: "var(--code-string)" } },
+    {
+      scope: "source.css meta.attribute-selector",
+      settings: { foreground: "var(--code-string)" },
+    },
     {
       scope: "punctuation.separator.operator.css",
       settings: { foreground: "var(--code-operator)" },
@@ -252,10 +273,16 @@ export const adaptiveCodeTheme: any = {
       scope: ["punctuation.definition.anchor.yaml", "punctuation.definition.alias.yaml"],
       settings: { foreground: "var(--code-escape)" },
     },
-    { scope: "entity.other.document.begin.yaml", settings: { foreground: "var(--code-escape)" } },
+    {
+      scope: "entity.other.document.begin.yaml",
+      settings: { foreground: "var(--code-escape)" },
+    },
 
     // --- Diff ---
-    { scope: "markup.changed.diff", settings: { foreground: "var(--code-constant)" } },
+    {
+      scope: "markup.changed.diff",
+      settings: { foreground: "var(--code-constant)" },
+    },
     {
       scope: [
         "meta.diff.header.from-file",
@@ -265,12 +292,24 @@ export const adaptiveCodeTheme: any = {
       ],
       settings: { foreground: "var(--code-function)" },
     },
-    { scope: "markup.inserted.diff", settings: { foreground: "var(--code-string)" } },
-    { scope: "markup.deleted.diff", settings: { foreground: "var(--code-tag)" } },
+    {
+      scope: "markup.inserted.diff",
+      settings: { foreground: "var(--code-string)" },
+    },
+    {
+      scope: "markup.deleted.diff",
+      settings: { foreground: "var(--code-tag)" },
+    },
 
     // --- Environment ---
-    { scope: ["variable.other.env"], settings: { foreground: "var(--code-function)" } },
-    { scope: ["string.quoted variable.other.env"], settings: { foreground: "var(--code-text)" } },
+    {
+      scope: ["variable.other.env"],
+      settings: { foreground: "var(--code-function)" },
+    },
+    {
+      scope: ["string.quoted variable.other.env"],
+      settings: { foreground: "var(--code-text)" },
+    },
 
     // --- C++ ---
     {
@@ -287,31 +326,55 @@ export const adaptiveCodeTheme: any = {
       settings: { foreground: "var(--code-type)" },
     },
     { scope: "storage.type.class.doxygen", settings: { fontStyle: "" } },
-    { scope: ["storage.modifier.reference.cpp"], settings: { foreground: "var(--code-operator)" } },
+    {
+      scope: ["storage.modifier.reference.cpp"],
+      settings: { foreground: "var(--code-operator)" },
+    },
 
     // --- C# ---
-    { scope: "meta.interpolation.cs", settings: { foreground: "var(--code-text)" } },
-    { scope: "comment.block.documentation.cs", settings: { foreground: "var(--code-text)" } },
+    {
+      scope: "meta.interpolation.cs",
+      settings: { foreground: "var(--code-text)" },
+    },
+    {
+      scope: "comment.block.documentation.cs",
+      settings: { foreground: "var(--code-text)" },
+    },
 
     // --- GDScript ---
     {
       scope: "support.function.builtin.gdscript",
       settings: { foreground: "var(--code-function)" },
     },
-    { scope: "constant.language.gdscript", settings: { foreground: "var(--code-constant)" } },
+    {
+      scope: "constant.language.gdscript",
+      settings: { foreground: "var(--code-constant)" },
+    },
 
     // --- Go ---
-    { scope: "comment meta.annotation.go", settings: { foreground: "var(--code-parameter)" } },
+    {
+      scope: "comment meta.annotation.go",
+      settings: { foreground: "var(--code-parameter)" },
+    },
     {
       scope: "comment meta.annotation.parameters.go",
       settings: { foreground: "var(--code-constant)" },
     },
-    { scope: "constant.language.go", settings: { foreground: "var(--code-constant)" } },
+    {
+      scope: "constant.language.go",
+      settings: { foreground: "var(--code-constant)" },
+    },
 
     // --- GraphQL ---
     { scope: "variable.graphql", settings: { foreground: "var(--code-text)" } },
-    { scope: "string.unquoted.alias.graphql", settings: { foreground: "var(--code-escape)" } },
-    { scope: "constant.character.enum.graphql", settings: { foreground: "var(--code-operator)" } },
+    {
+      scope: "string.unquoted.alias.graphql",
+      settings: { foreground: "var(--code-escape)" },
+    },
+    {
+      scope: "constant.character.enum.graphql",
+      settings: { foreground: "var(--code-operator)" },
+    },
     {
       scope: "meta.objectvalues.graphql constant.object.key.graphql string.unquoted.graphql",
       settings: { foreground: "var(--code-escape)" },
@@ -327,7 +390,10 @@ export const adaptiveCodeTheme: any = {
       ],
       settings: { foreground: "var(--code-keyword)" },
     },
-    { scope: ["entity.name.tag"], settings: { foreground: "var(--code-function)" } },
+    {
+      scope: ["entity.name.tag"],
+      settings: { foreground: "var(--code-function)" },
+    },
     {
       scope: [
         "text.html constant.character.entity",
@@ -341,7 +407,10 @@ export const adaptiveCodeTheme: any = {
       ],
       settings: { foreground: "var(--code-tag)" },
     },
-    { scope: ["entity.other.attribute-name"], settings: { foreground: "var(--code-type)" } },
+    {
+      scope: ["entity.other.attribute-name"],
+      settings: { foreground: "var(--code-type)" },
+    },
     {
       scope: [
         "support.class.component",
@@ -357,8 +426,14 @@ export const adaptiveCodeTheme: any = {
       scope: ["punctuation.definition.annotation", "storage.type.annotation"],
       settings: { foreground: "var(--code-constant)" },
     },
-    { scope: "constant.other.enum.java", settings: { foreground: "var(--code-operator)" } },
-    { scope: "storage.modifier.import.java", settings: { foreground: "var(--code-text)" } },
+    {
+      scope: "constant.other.enum.java",
+      settings: { foreground: "var(--code-operator)" },
+    },
+    {
+      scope: "storage.modifier.import.java",
+      settings: { foreground: "var(--code-text)" },
+    },
     {
       scope: "comment.block.javadoc.java keyword.other.documentation.javadoc.java",
       settings: { fontStyle: "" },
@@ -383,12 +458,18 @@ export const adaptiveCodeTheme: any = {
       settings: { foreground: "var(--code-parameter)" },
     },
     { scope: "storage.type.class.jsdoc", settings: { fontStyle: "" } },
-    { scope: "support.type.object.console.js", settings: { foreground: "var(--code-text)" } },
+    {
+      scope: "support.type.object.console.js",
+      settings: { foreground: "var(--code-text)" },
+    },
     {
       scope: ["support.constant.node", "support.type.object.module.js"],
       settings: { foreground: "var(--code-keyword)" },
     },
-    { scope: "storage.modifier.implements", settings: { foreground: "var(--code-keyword)" } },
+    {
+      scope: "storage.modifier.implements",
+      settings: { foreground: "var(--code-keyword)" },
+    },
     {
       scope: [
         "constant.language.null.js",
@@ -399,7 +480,10 @@ export const adaptiveCodeTheme: any = {
       ],
       settings: { foreground: "var(--code-keyword)" },
     },
-    { scope: "variable.parameter.generic", settings: { foreground: "var(--code-type)" } },
+    {
+      scope: "variable.parameter.generic",
+      settings: { foreground: "var(--code-type)" },
+    },
     {
       scope: ["keyword.declaration.function.arrow.js", "storage.type.function.arrow.ts"],
       settings: { foreground: "var(--code-operator)" },
@@ -429,19 +513,34 @@ export const adaptiveCodeTheme: any = {
       scope: "support.function.macro.julia",
       settings: { fontStyle: "italic", foreground: "var(--code-operator)" },
     },
-    { scope: "constant.language.julia", settings: { foreground: "var(--code-constant)" } },
-    { scope: "constant.other.symbol.julia", settings: { foreground: "var(--code-parameter)" } },
+    {
+      scope: "constant.language.julia",
+      settings: { foreground: "var(--code-constant)" },
+    },
+    {
+      scope: "constant.other.symbol.julia",
+      settings: { foreground: "var(--code-parameter)" },
+    },
 
     // --- LaTeX ---
     {
       scope: "text.tex keyword.control.preamble",
       settings: { foreground: "var(--code-operator)" },
     },
-    { scope: "text.tex support.function.be", settings: { foreground: "var(--code-property)" } },
-    { scope: "constant.other.general.math.tex", settings: { foreground: "var(--code-escape)" } },
+    {
+      scope: "text.tex support.function.be",
+      settings: { foreground: "var(--code-property)" },
+    },
+    {
+      scope: "constant.other.general.math.tex",
+      settings: { foreground: "var(--code-escape)" },
+    },
 
     // --- Liquid ---
-    { scope: "variable.language.liquid", settings: { foreground: "var(--code-escape)" } },
+    {
+      scope: "variable.language.liquid",
+      settings: { foreground: "var(--code-escape)" },
+    },
 
     // --- Lua ---
     {
@@ -533,11 +632,20 @@ export const adaptiveCodeTheme: any = {
     },
 
     // --- Markdown formatting ---
-    { scope: "markup.bold", settings: { fontStyle: "bold", foreground: "var(--code-tag)" } },
-    { scope: "markup.italic", settings: { fontStyle: "italic", foreground: "var(--code-tag)" } },
+    {
+      scope: "markup.bold",
+      settings: { fontStyle: "bold", foreground: "var(--code-tag)" },
+    },
+    {
+      scope: "markup.italic",
+      settings: { fontStyle: "italic", foreground: "var(--code-tag)" },
+    },
     {
       scope: "markup.strikethrough",
-      settings: { fontStyle: "strikethrough", foreground: "var(--code-comment)" },
+      settings: {
+        fontStyle: "strikethrough",
+        foreground: "var(--code-comment)",
+      },
     },
     {
       scope: ["punctuation.definition.link", "markup.underline.link"],
@@ -569,7 +677,10 @@ export const adaptiveCodeTheme: any = {
       ],
       settings: { foreground: "var(--code-string)" },
     },
-    { scope: "fenced_code.block.language", settings: { foreground: "var(--code-property)" } },
+    {
+      scope: "fenced_code.block.language",
+      settings: { foreground: "var(--code-property)" },
+    },
     {
       scope: ["markup.fenced_code.block punctuation.definition", "markup.raw support.asciidoc"],
       settings: { foreground: "var(--code-comment)" },
@@ -578,7 +689,10 @@ export const adaptiveCodeTheme: any = {
       scope: ["markup.quote", "punctuation.definition.quote.begin"],
       settings: { foreground: "var(--code-escape)" },
     },
-    { scope: "meta.separator.markdown", settings: { foreground: "var(--code-operator)" } },
+    {
+      scope: "meta.separator.markdown",
+      settings: { foreground: "var(--code-operator)" },
+    },
     {
       scope: [
         "punctuation.definition.list.begin.markdown",
@@ -597,12 +711,18 @@ export const adaptiveCodeTheme: any = {
       ],
       settings: { foreground: "var(--code-function)" },
     },
-    { scope: "variable.parameter.name.nix", settings: { foreground: "var(--code-text)" } },
+    {
+      scope: "variable.parameter.name.nix",
+      settings: { foreground: "var(--code-text)" },
+    },
     {
       scope: "meta.embedded variable.parameter.name.nix",
       settings: { foreground: "var(--code-property)" },
     },
-    { scope: "string.unquoted.path.nix", settings: { foreground: "var(--code-escape)" } },
+    {
+      scope: "string.unquoted.path.nix",
+      settings: { foreground: "var(--code-escape)" },
+    },
 
     // --- PHP ---
     {
@@ -613,8 +733,14 @@ export const adaptiveCodeTheme: any = {
       scope: "meta.function.parameters.php punctuation.definition.variable.php",
       settings: { foreground: "var(--code-parameter)" },
     },
-    { scope: "constant.language.php", settings: { foreground: "var(--code-keyword)" } },
-    { scope: "text.html.php support.function", settings: { foreground: "var(--code-property)" } },
+    {
+      scope: "constant.language.php",
+      settings: { foreground: "var(--code-keyword)" },
+    },
+    {
+      scope: "text.html.php support.function",
+      settings: { foreground: "var(--code-property)" },
+    },
     { scope: "keyword.other.phpdoc.php", settings: { fontStyle: "" } },
 
     // --- Python ---
@@ -637,12 +763,18 @@ export const adaptiveCodeTheme: any = {
       scope: ["keyword.control.flow.python", "keyword.operator.logical.python"],
       settings: { foreground: "var(--code-keyword)" },
     },
-    { scope: "storage.type.function.python", settings: { foreground: "var(--code-keyword)" } },
+    {
+      scope: "storage.type.function.python",
+      settings: { foreground: "var(--code-keyword)" },
+    },
     {
       scope: ["support.token.decorator.python", "meta.function.decorator.identifier.python"],
       settings: { foreground: "var(--code-property)" },
     },
-    { scope: ["meta.function-call.python"], settings: { foreground: "var(--code-function)" } },
+    {
+      scope: ["meta.function-call.python"],
+      settings: { foreground: "var(--code-function)" },
+    },
     {
       scope: ["entity.name.function.decorator.python", "punctuation.definition.decorator.python"],
       settings: { fontStyle: "italic", foreground: "var(--code-constant)" },
@@ -655,8 +787,14 @@ export const adaptiveCodeTheme: any = {
       scope: ["support.type.exception.python", "support.function.builtin.python"],
       settings: { foreground: "var(--code-constant)" },
     },
-    { scope: ["support.type.python"], settings: { foreground: "var(--code-keyword)" } },
-    { scope: "constant.language.python", settings: { foreground: "var(--code-constant)" } },
+    {
+      scope: ["support.type.python"],
+      settings: { foreground: "var(--code-keyword)" },
+    },
+    {
+      scope: "constant.language.python",
+      settings: { foreground: "var(--code-constant)" },
+    },
     {
       scope: ["meta.indexed-name.python", "meta.item-access.python"],
       settings: { fontStyle: "italic", foreground: "var(--code-parameter)" },
@@ -668,8 +806,14 @@ export const adaptiveCodeTheme: any = {
     { scope: "meta.function.parameters.python", settings: { fontStyle: "" } },
 
     // --- R ---
-    { scope: "meta.function-call.r", settings: { foreground: "var(--code-function)" } },
-    { scope: "meta.function-call.arguments.r", settings: { foreground: "var(--code-text)" } },
+    {
+      scope: "meta.function-call.r",
+      settings: { foreground: "var(--code-function)" },
+    },
+    {
+      scope: "meta.function-call.arguments.r",
+      settings: { foreground: "var(--code-text)" },
+    },
 
     // --- Regexp ---
     {
@@ -679,7 +823,10 @@ export const adaptiveCodeTheme: any = {
       ],
       settings: { foreground: "var(--code-escape)" },
     },
-    { scope: "keyword.control.anchor.regexp", settings: { foreground: "var(--code-keyword)" } },
+    {
+      scope: "keyword.control.anchor.regexp",
+      settings: { foreground: "var(--code-keyword)" },
+    },
     { scope: "string.regexp.ts", settings: { foreground: "var(--code-text)" } },
     {
       scope: ["punctuation.definition.group.regexp", "keyword.other.back-reference.regexp"],
@@ -747,19 +894,34 @@ export const adaptiveCodeTheme: any = {
       ],
       settings: { foreground: "var(--code-keyword)" },
     },
-    { scope: "entity.name.type.numeric.rust", settings: { foreground: "var(--code-keyword)" } },
-    { scope: "meta.generic.rust", settings: { foreground: "var(--code-constant)" } },
+    {
+      scope: "entity.name.type.numeric.rust",
+      settings: { foreground: "var(--code-keyword)" },
+    },
+    {
+      scope: "meta.generic.rust",
+      settings: { foreground: "var(--code-constant)" },
+    },
     {
       scope: "entity.name.impl.rust",
       settings: { fontStyle: "italic", foreground: "var(--code-type)" },
     },
-    { scope: "entity.name.module.rust", settings: { foreground: "var(--code-constant)" } },
+    {
+      scope: "entity.name.module.rust",
+      settings: { foreground: "var(--code-constant)" },
+    },
     {
       scope: "entity.name.trait.rust",
       settings: { fontStyle: "italic", foreground: "var(--code-type)" },
     },
-    { scope: "storage.type.source.rust", settings: { foreground: "var(--code-type)" } },
-    { scope: "entity.name.union.rust", settings: { foreground: "var(--code-type)" } },
+    {
+      scope: "storage.type.source.rust",
+      settings: { foreground: "var(--code-type)" },
+    },
+    {
+      scope: "entity.name.union.rust",
+      settings: { foreground: "var(--code-type)" },
+    },
     {
       scope: "meta.enum.rust storage.type.source.rust",
       settings: { foreground: "var(--code-operator)" },
@@ -784,9 +946,18 @@ export const adaptiveCodeTheme: any = {
       scope: "meta.function.return-type.rust meta.generic.rust storage.type.rust",
       settings: { foreground: "var(--code-text)" },
     },
-    { scope: "meta.function.call.rust", settings: { foreground: "var(--code-function)" } },
-    { scope: "punctuation.brackets.angle.rust", settings: { foreground: "var(--code-property)" } },
-    { scope: "constant.other.caps.rust", settings: { foreground: "var(--code-constant)" } },
+    {
+      scope: "meta.function.call.rust",
+      settings: { foreground: "var(--code-function)" },
+    },
+    {
+      scope: "punctuation.brackets.angle.rust",
+      settings: { foreground: "var(--code-property)" },
+    },
+    {
+      scope: "constant.other.caps.rust",
+      settings: { foreground: "var(--code-constant)" },
+    },
     {
       scope: ["meta.function.definition.rust variable.other.rust"],
       settings: { foreground: "var(--code-parameter)" },
@@ -795,7 +966,10 @@ export const adaptiveCodeTheme: any = {
       scope: "meta.function.call.rust variable.other.rust",
       settings: { foreground: "var(--code-text)" },
     },
-    { scope: "variable.language.self.rust", settings: { foreground: "var(--code-tag)" } },
+    {
+      scope: "variable.language.self.rust",
+      settings: { foreground: "var(--code-tag)" },
+    },
     {
       scope: [
         "variable.other.metavariable.name.rust",
@@ -836,13 +1010,19 @@ export const adaptiveCodeTheme: any = {
       ],
       settings: { foreground: "var(--code-operator)" },
     },
-    { scope: "entity.name.tag.heredoc.shell", settings: { foreground: "var(--code-keyword)" } },
+    {
+      scope: "entity.name.tag.heredoc.shell",
+      settings: { foreground: "var(--code-keyword)" },
+    },
     {
       scope: "string.quoted.double.shell variable.other.normal.shell",
       settings: { foreground: "var(--code-text)" },
     },
 
     // --- Typst ---
-    { scope: ["markup.heading.typst"], settings: { foreground: "var(--code-tag)" } },
+    {
+      scope: ["markup.heading.typst"],
+      settings: { foreground: "var(--code-tag)" },
+    },
   ],
 };

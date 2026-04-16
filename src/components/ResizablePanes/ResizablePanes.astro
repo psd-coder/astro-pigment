@@ -8,6 +8,7 @@ type Props = {
 
 const { class: className, direction } = Astro.props;
 ---
+
 <x-resizable-panes direction={direction} class:list={[styles.container, className]}>
   <slot />
 </x-resizable-panes>

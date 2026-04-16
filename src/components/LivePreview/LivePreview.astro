@@ -6,8 +6,13 @@ type Props = HTMLAttributes<"div">;
 
 const { class: className, ...rest } = Astro.props;
 ---
+
 <x-live-preview class:list={[styles.host, className]} {...rest}>
-  <iframe data-ref="frame" class={styles.frame} sandbox="allow-scripts allow-same-origin" title="Live preview" />
+  <iframe
+    data-ref="frame"
+    class={styles.frame}
+    sandbox="allow-scripts allow-same-origin"
+    title="Live preview"></iframe>
 </x-live-preview>
 <script>
   import { define, type TypedEvent } from "nanotags";
@@ -27,10 +32,13 @@ const { class: className, ...rest } = Astro.props;
     }
   }
 
-  const previewValueSchema = v.fallback(v.object({
-    files: v.pipe(v.array(fileEntrySchema), v.readonly()),
-    importOverrides: importMapSchema,
-  }), { files: [], importOverrides: {} });
+  const previewValueSchema = v.fallback(
+    v.object({
+      files: v.pipe(v.array(fileEntrySchema), v.readonly()),
+      importOverrides: importMapSchema,
+    }),
+    { files: [], importOverrides: {} },
+  );
 
   const XLivePreview = define("x-live-preview")
     .withProps(() => ({
@@ -41,8 +49,9 @@ const { class: className, ...rest } = Astro.props;
     }))
     .withRefs(({ one }) => ({ frame: one("iframe") }))
     .setup((ctx) => {
-      const $html = computed([ctx.props.$value, $resolvedTheme], ({ files, importOverrides }, theme) =>
-        buildHtml(files, importOverrides, theme),
+      const $html = computed(
+        [ctx.props.$value, $resolvedTheme],
+        ({ files, importOverrides }, theme) => buildHtml(files, importOverrides, theme),
       );
       const $blobUrl = computed($html, (html) =>
         URL.createObjectURL(new Blob([html], { type: "text/html" })),

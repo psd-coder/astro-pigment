@@ -7,6 +7,7 @@ type Props = {
 
 const { class: className } = Astro.props;
 ---
+
 <div data-ref="panes" class:list={[styles.pane, className]}>
   <slot />
 </div>

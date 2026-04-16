@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 type Props = {
   class?: string;
   title: string;
-  back?: {href: string; label: string};
+  back?: { href: string; label: string };
   href: string;
 };
 
@@ -13,11 +13,13 @@ const { class: className, title, back, href } = Astro.props;
 ---
 
 <div class:list={[styles.headingRow, className]}>
-  {back && (
-    <a class={styles.backLink} href={back.href} aria-label={back.label}>
-      <Icon name="chevron-left" size={28} />
-    </a>
-  )}
+  {
+    back && (
+      <a class={styles.backLink} href={back.href} aria-label={back.label}>
+        <Icon name="chevron-left" size={28} />
+      </a>
+    )
+  }
   <h1>{title}</h1>
   <a
     href={href}

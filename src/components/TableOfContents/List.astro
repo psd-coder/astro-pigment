@@ -11,19 +11,22 @@ const { class: className, headings } = Astro.props;
 const filtered = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const currentPath = Astro.url.pathname;
 ---
+
 <div class={className}>
   <span class={styles.title}>On this page</span>
   <ul class={styles.list} role="menu" focusgroup="block">
-    {filtered.map((heading) => (
-      <li role="none">
-        <a
-          role="menuitem"
-          href={`${currentPath}#${heading.slug}`}
-          class:list={[styles.link, heading.depth === 3 && styles.nested]}
-        >
-          {heading.text}
-        </a>
-      </li>
-    ))}
+    {
+      filtered.map((heading) => (
+        <li role="none">
+          <a
+            role="menuitem"
+            href={`${currentPath}#${heading.slug}`}
+            class:list={[styles.link, heading.depth === 3 && styles.nested]}
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))
+    }
   </ul>
 </div>

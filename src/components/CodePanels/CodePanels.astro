@@ -19,12 +19,22 @@ const { items, defaultValue, lang, shikiThemes } = Astro.props;
 ---
 
 <Tabs value={defaultValue} class={styles.tabs} data-ref="tabs">
-  {items.map(({ id }) => (
-    <Tab value={id} class={styles.tab}>{id}</Tab>
-  ))}
+  {
+    items.map(({ id }) => (
+      <Tab value={id} class={styles.tab}>
+        {id}
+      </Tab>
+    ))
+  }
 </Tabs>
-{items.map(({ id, content }, i) => (
-  <div class={styles.panel} data-value={id} hidden={i !== 0}>
-    <Code code={content} lang={lang} {...(shikiThemes ? { themes: shikiThemes } : { theme: adaptiveCodeTheme })} />
-  </div>
-))}
+{
+  items.map(({ id, content }, i) => (
+    <div class={styles.panel} data-value={id} hidden={i !== 0}>
+      <Code
+        code={content}
+        lang={lang}
+        {...(shikiThemes ? { themes: shikiThemes } : { theme: adaptiveCodeTheme })}
+      />
+    </div>
+  ))
+}

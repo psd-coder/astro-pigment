@@ -68,7 +68,10 @@ const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---/;
 type ResolveFn = (
   source: string,
   importer: string,
-) => Promise<{ id: string; external?: boolean | "absolute" | "relative" } | null>;
+) => Promise<{
+  id: string;
+  external?: boolean | "absolute" | "relative";
+} | null>;
 type AddWatchFileFn = (id: string) => void;
 
 type CollectCssOpts = {

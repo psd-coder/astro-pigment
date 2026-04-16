@@ -1,7 +1,9 @@
 <script is:inline>
   function applyCurrentTheme() {
     var setting = localStorage.getItem("theme") || "auto";
-    var dark = setting === "dark" || (setting === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
+    var dark =
+      setting === "dark" ||
+      (setting === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
     document.documentElement.dataset.theme = dark ? "dark" : "light";
     document.documentElement.dataset.themeSetting = setting;
   }

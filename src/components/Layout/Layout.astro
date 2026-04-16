@@ -1,7 +1,20 @@
 ---
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
-import { clientRouter, faviconPath, githubUrl, huePicker, lang, logo, mainPageTitle, manifestIconPath, navLinks as configNavLinks, search, siteConfig, titleSuffix } from "virtual:theme-integration-config";
+import {
+  clientRouter,
+  faviconPath,
+  githubUrl,
+  huePicker,
+  lang,
+  logo,
+  mainPageTitle,
+  manifestIconPath,
+  navLinks as configNavLinks,
+  search,
+  siteConfig,
+  titleSuffix,
+} from "virtual:theme-integration-config";
 import "../../styles/index.css";
 import type { NavItem } from "../../types";
 import { getHref, isActiveHref } from "../../utils/urls";
@@ -10,6 +23,7 @@ import Footer from "../Footer/Footer.astro";
 import HueScript from "../HuePicker/HueScript.astro";
 import HuePicker from "../HuePicker/HuePicker.astro";
 import Icon from "../Icon/Icon.astro";
+
 import { Search } from "../Search";
 import { ThemeScript, ThemeToggle } from "../ThemeToggle";
 import styles from "./styles.module.css";
@@ -32,102 +46,124 @@ const resolvedTitle = isMainPage
 const resolvedDescription = description ?? siteConfig.project.description;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang={lang}>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <base href={getHref("")} />
-  {faviconPath && (
-    <>
-      <link rel="icon" href={getHref("favicon.ico")} sizes="32x32"/>
-      <link rel="icon" type="image/svg+xml" href={getHref("favicon.svg")} sizes="any" />
-    </>
-  )}
-  {manifestIconPath && (
-    <>
-      <link rel="icon" type="image/png" href={getHref("favicon-96x96.png")} sizes="96x96" />
-      <link rel="apple-touch-icon" sizes="180x180" href={getHref("apple-touch-icon.png")} />
-      <link rel="manifest" href={getHref("site.webmanifest")} />
-    </>
-  )}
-  <link rel="sitemap" href={getHref("sitemap-index.xml")} />
-  <Font cssVariable="--font-sans" preload />
-  <Font cssVariable="--font-mono" preload />
-  <title>{resolvedTitle}</title>
-  <meta name="description" content={resolvedDescription} />
-  <link rel="canonical" href={Astro.url.href} />
-  <meta property="og:title" content={resolvedTitle} />
-  <meta property="og:description" content={resolvedDescription} />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content={Astro.url.href} />
-  <meta property="og:site_name" content={siteConfig.project.name} />
-  {clientRouter && <ClientRouter />}
-  <ThemeScript />
-  {huePicker && <HueScript />}
-  <script src="./scripts.ts" />
-  <slot name="head-extra" />
-</head>
-<body class={styles.container}>
-  <a href="#main-content" class={styles.skipLink}>Skip to main content</a>
-  <x-sticky-header role="header">
-    <nav class:list={styles.nav}>
-      <a href={getHref("")} class={styles.logo}>
-        <slot name="logo">
-          {logo ? (
-            <Fragment set:html={logo} />
-          ) : (
-            <span class={styles.logoText}>{siteConfig.project.name}</span>
-          )}
-        </slot>
-      </a>
-      {navLinks.length > 0 && (
-        <div class:list={[styles.links, styles.primaryNav]} role="menubar" focusgroup="wrap">
-          {navLinks.map((item) => (
-            <a
-              role="menuitem"
-              href={getHref(item.href)}
-              class:list={[styles.link, isActiveHref(Astro, item.href) && styles.active]}
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
-      )}
-      <div class:list={[styles.links, styles.extraNav]} role="menubar" focusgroup="wrap">
-        {search && <Search />}
-        <ThemeToggle role="menuitem" />
-        {author && (
-          <a href={author.url} class:list={[styles.link, styles.square]} aria-label={author.name} role="menuitem">
-            {author.icon ? (
-              <Fragment set:html={author.icon} />
-            ) : author.url.includes("x.com") ? (
-              <Icon name="x" />
-            ) : null}
-          </a>
-        )}
-        <a href={githubUrl} class:list={[styles.link, styles.square]} aria-label="GitHub" role="menuitem">
-          <Icon name="github" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <base href={getHref("")} />
+    {
+      faviconPath && (
+        <>
+          <link rel="icon" href={getHref("favicon.ico")} sizes="32x32" />
+          <link rel="icon" type="image/svg+xml" href={getHref("favicon.svg")} sizes="any" />
+        </>
+      )
+    }
+    {
+      manifestIconPath && (
+        <>
+          <link rel="icon" type="image/png" href={getHref("favicon-96x96.png")} sizes="96x96" />
+          <link rel="apple-touch-icon" sizes="180x180" href={getHref("apple-touch-icon.png")} />
+          <link rel="manifest" href={getHref("site.webmanifest")} />
+        </>
+      )
+    }
+    <link rel="sitemap" href={getHref("sitemap-index.xml")} />
+    <Font cssVariable="--font-sans" preload />
+    <Font cssVariable="--font-mono" preload />
+    <title>{resolvedTitle}</title>
+    <meta name="description" content={resolvedDescription} />
+    <link rel="canonical" href={Astro.url.href} />
+    <meta property="og:title" content={resolvedTitle} />
+    <meta property="og:description" content={resolvedDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:site_name" content={siteConfig.project.name} />
+    {clientRouter && <ClientRouter />}
+    <ThemeScript />
+    {huePicker && <HueScript />}
+    <script src="./scripts.ts"></script>
+    <slot name="head-extra" />
+  </head>
+  <body class={styles.container}>
+    <a href="#main-content" class={styles.skipLink}>Skip to main content</a>
+    <x-sticky-header role="header">
+      <nav class:list={styles.nav}>
+        <a href={getHref("")} class={styles.logo}>
+          <slot name="logo">
+            {
+              logo ? (
+                <Fragment set:html={logo} />
+              ) : (
+                <span class={styles.logoText}>{siteConfig.project.name}</span>
+              )
+            }
+          </slot>
         </a>
-      </div>
-    </nav>
-  </x-sticky-header>
-  <div class={styles.main}>
-    {Astro.slots.has("sidebar") && (
-      <aside class={styles.sidebar}>
-        <slot name="sidebar" />
-      </aside>
-    )}
-    <main id="main-content" class={styles.content}>
-      <slot />
-    </main>
-  </div>
-  <Footer class={styles.footer}>
-    <slot name="footer-extra" slot="extra" />
-  </Footer>
-  <CodeBlockWrapper />
-  {huePicker && <HuePicker class={styles.huePicker} />}
-</body>
+        {
+          navLinks.length > 0 && (
+            <div class:list={[styles.links, styles.primaryNav]} role="menubar" focusgroup="wrap">
+              {navLinks.map((item) => (
+                <a
+                  role="menuitem"
+                  href={getHref(item.href)}
+                  class:list={[styles.link, isActiveHref(Astro, item.href) && styles.active]}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </div>
+          )
+        }
+        <div class:list={[styles.links, styles.extraNav]} role="menubar" focusgroup="wrap">
+          {search && <Search />}
+          <ThemeToggle role="menuitem" />
+          {
+            author && (
+              <a
+                href={author.url}
+                class:list={[styles.link, styles.square]}
+                aria-label={author.name}
+                role="menuitem"
+              >
+                {author.icon ? (
+                  <Fragment set:html={author.icon} />
+                ) : author.url.includes("x.com") ? (
+                  <Icon name="x" />
+                ) : null}
+              </a>
+            )
+          }
+          <a
+            href={githubUrl}
+            class:list={[styles.link, styles.square]}
+            aria-label="GitHub"
+            role="menuitem"
+          >
+            <Icon name="github" />
+          </a>
+        </div>
+      </nav>
+    </x-sticky-header>
+    <div class={styles.main}>
+      {
+        Astro.slots.has("sidebar") && (
+          <aside class={styles.sidebar}>
+            <slot name="sidebar" />
+          </aside>
+        )
+      }
+      <main id="main-content" class={styles.content}>
+        <slot />
+      </main>
+    </div>
+    <Footer class={styles.footer}>
+      <slot name="footer-extra" slot="extra" />
+    </Footer>
+    <CodeBlockWrapper />
+    {huePicker && <HuePicker class={styles.huePicker} />}
+  </body>
 </html>
 <script>
   import { define } from "nanotags";

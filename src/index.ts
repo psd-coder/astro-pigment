@@ -6,7 +6,10 @@ export default function docsTheme(config: DocsThemeConfig) {
 }
 
 export { adaptiveCodeTheme } from "./themes/adaptive-code-theme";
-export const shikiThemes = { light: "catppuccin-latte", dark: "catppuccin-mocha" } as const;
+export const shikiThemes = {
+  light: "catppuccin-latte",
+  dark: "catppuccin-mocha",
+} as const;
 
 export { fonts } from "./utils/fonts";
 export type {

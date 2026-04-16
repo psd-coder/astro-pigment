@@ -16,9 +16,13 @@ Main page shell. Renders sticky header with navigation, sidebar slot, content ar
 ---
 import { Layout } from "astro-pigment/components";
 ---
+
 <Layout
   title="Page Title"
-  navLinks={[{ href: "", label: "Home" }, { href: "api", label: "API" }]}
+  navLinks={[
+    { href: "", label: "Home" },
+    { href: "api", label: "API" },
+  ]}
 >
   <MyLogo slot="logo" />
   <meta slot="head-extra" name="robots" content="noindex" />
@@ -40,6 +44,7 @@ Desktop sidebar with scroll-spy highlighting + mobile popover trigger. Both rend
 import { TableOfContents } from "astro-pigment/components";
 const headings = await getHeadings(); // from Astro content render
 ---
+
 <TableOfContents slot="sidebar" headings={headings} />
 ```
 
@@ -57,6 +62,7 @@ Styled `<button>` with an optional `square` prop for icon-only buttons.
 ---
 import { Button } from "astro-pigment/components";
 ---
+
 <Button>Click me</Button>
 <Button square aria-label="Settings"><Icon name="list" /></Button>
 ```
@@ -69,10 +75,11 @@ Built-in SVG icons: `check`, `chevron-left`, `close`, `copy`, `github`, `list`, 
 ---
 import { Icon } from "astro-pigment/components";
 ---
+
 <Icon name="github" />
 <Icon name="github" size={32} />
 <Icon name="custom" label="Mastodon">
-  <svg viewBox="0 0 24 24"><path d="..." /></svg>
+  <svg viewBox="0 0 24 24"><path d="..."></path></svg>
 </Icon>
 ```
 
@@ -84,6 +91,7 @@ Site footer with license, GitHub, and author links. Read from the virtual config
 ---
 import { Footer } from "astro-pigment/components";
 ---
+
 <Footer />
 ```
 
@@ -95,6 +103,7 @@ Three-state theme switcher (auto/light/dark) with sun/moon/split icons.
 ---
 import { ThemeToggle } from "astro-pigment/components";
 ---
+
 <ThemeToggle />
 ```
 
@@ -114,6 +123,7 @@ Tabbed package manager switcher (pnpm/npm/yarn/bun). Selection persists to local
 ---
 import { InstallPackage } from "astro-pigment/components";
 ---
+
 <InstallPackage pkg="nanotags nanostores" />
 <InstallPackage pkg="typescript" dev />
 ```
@@ -126,6 +136,7 @@ Previous/next page navigation links.
 ---
 import { PrevNextNav } from "astro-pigment/components";
 ---
+
 <PrevNextNav
   prev={{ title: "Getting Started", href: "/getting-started" }}
   next={{ title: "API Reference", href: "/api" }}
@@ -140,6 +151,7 @@ Heading row with a "view as markdown" icon link.
 ---
 import { PageHeading } from "astro-pigment/components";
 ---
+
 <PageHeading title="API Reference" href="/api.md" />
 ```
 
@@ -155,6 +167,7 @@ CodeMirror 6 editor with Catppuccin themes that sync with dark mode. Supports Ja
 ---
 import { CodeEditor } from "astro-pigment/components/playground";
 ---
+
 <CodeEditor lang="javascript" />
 ```
 
@@ -166,6 +179,7 @@ Sandboxed iframe execution. Captures console output and posts it back to the par
 ---
 import { LivePreview } from "astro-pigment/components/playground";
 ---
+
 <LivePreview />
 ```
 
@@ -181,6 +195,7 @@ const files = [
   { name: "app.js", type: "javascript", lang: "javascript", content: "console.log('hi')" },
 ];
 ---
+
 <CodeExample files={files} />
 ```
 
@@ -196,6 +211,7 @@ const items = [
   { id: "npm", content: "npm install my-lib" },
 ];
 ---
+
 <CodePanels items={items} defaultValue="pnpm" lang="shellscript" />
 ```
 
@@ -207,6 +223,7 @@ Draggable split-pane layout with keyboard support. Supports horizontal and verti
 ---
 import { ResizablePanes, ResizablePane } from "astro-pigment/components/playground";
 ---
+
 <ResizablePanes direction="horizontal">
   <ResizablePane>Left content</ResizablePane>
   <ResizablePane>Right content</ResizablePane>
@@ -221,6 +238,7 @@ Expandable/collapsible section with an optional resize handle.
 ---
 import { CollapsiblePane } from "astro-pigment/components/playground";
 ---
+
 <CollapsiblePane expanded expandedSize={30}>
   <span slot="header">Details</span>
   <p>Collapsible content here</p>
@@ -235,6 +253,7 @@ Accessible tabs with roving focus, scroll arrows for overflow, and keyboard navi
 ---
 import { Tabs, Tab } from "astro-pigment/components/playground";
 ---
+
 <Tabs value="one">
   <Tab value="one">First</Tab>
   <Tab value="two">Second</Tab>

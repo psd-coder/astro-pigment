@@ -6,8 +6,6 @@
     "allowUnreachableCode": true,
     "exactOptionalPropertyTypes": false,
     "erasableSyntaxOnly": true,
-    "plugins": [
-      { "name": "@astrojs/ts-plugin" }
-    ]
+    "plugins": [{ "name": "@astrojs/ts-plugin" }]
   }
 }
