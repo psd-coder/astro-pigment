@@ -32,7 +32,7 @@ import { Layout } from "astro-pigment/components";
 </Layout>
 ```
 
-Props: `title` (required), `navLinks?` (array of `{ href, label }`).
+Props: `title` (required), `navLinks?` (array of `{ href, label }`), `alternate?` (array of `{ type, title, href }` — renders `<link rel="alternate">` tags in `<head>` plus a visually-hidden hint at the top of main content when a `text/markdown` entry is present).
 Slots: `default`, `sidebar`, `logo`, `head-extra`, `footer-extra`.
 
 ### TableOfContents
@@ -145,14 +145,35 @@ import { PrevNextNav } from "astro-pigment/components";
 
 ### PageHeading
 
-Heading row with a "view as markdown" icon link.
+Heading row with an optional "view as markdown" icon link. Omit `href` to hide the icon on pages without a `.md` twin.
 
 ```astro
 ---
 import { PageHeading } from "astro-pigment/components";
+import { getMarkdownAlternate } from "astro-pigment/utils/urls";
+
+const alt = getMarkdownAlternate("api"); // { type, title, href: "/api.md" }
 ---
 
-<PageHeading title="API Reference" href="/api.md" />
+<PageHeading title="API Reference" href={alt.href} />
+```
+
+Props: `title` (required), `href?`, `back?` (`{ href, label }`), `class?`.
+
+Pair with `Layout`'s `alternate` prop so the same URL is announced in `<head>` and (visually-hidden) at the top of main content:
+
+```astro
+---
+import { Layout, PageHeading } from "astro-pigment/components";
+import { getMarkdownAlternate } from "astro-pigment/utils/urls";
+
+const alt = getMarkdownAlternate("api");
+---
+
+<Layout title="API Reference" alternate={[alt]}>
+  <PageHeading title="API Reference" href={alt.href} />
+  <article class="prose"><slot /></article>
+</Layout>
 ```
 
 ## Playground

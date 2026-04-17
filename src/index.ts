@@ -16,6 +16,7 @@ export type {
   DocsThemeConfig,
   SiteConfig,
   NavItem,
+  AlternateLink,
   IconName,
   FileEntry,
   ExtraEntry,

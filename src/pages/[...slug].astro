@@ -5,18 +5,23 @@ import PageHeading from "../components/PageHeading/PageHeading.astro";
 import PrevNextNav from "../components/PrevNextNav/PrevNextNav.astro";
 import TableOfContents from "../components/TableOfContents/TableOfContents.astro";
 import { getDocsStaticPaths } from "../utils/content";
-import { getHref } from "../utils/urls";
+import { getMarkdownAlternate } from "../utils/urls";
 
 export const getStaticPaths = getDocsStaticPaths;
 
 const { doc, prev, next } = Astro.props;
 const { Content, headings } = await render(doc);
+const mdAlternate = doc.body ? getMarkdownAlternate(doc.id) : undefined;
 ---
 
-<Layout title={doc.data.title} description={doc.data.description}>
+<Layout
+  title={doc.data.title}
+  description={doc.data.description}
+  alternate={mdAlternate && [mdAlternate]}
+>
   <TableOfContents slot="sidebar" headings={headings} />
   <article id="content" class="prose">
-    <PageHeading title={doc.data.title} href={getHref(`${doc.id}.md`)} />
+    <PageHeading title={doc.data.title} href={mdAlternate?.href} />
     <Content />
     <PrevNextNav prev={prev} next={next} />
   </article>

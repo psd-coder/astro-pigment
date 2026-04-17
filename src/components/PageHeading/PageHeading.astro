@@ -6,7 +6,7 @@ type Props = {
   class?: string;
   title: string;
   back?: { href: string; label: string };
-  href: string;
+  href?: string;
 };
 
 const { class: className, title, back, href } = Astro.props;
@@ -21,13 +21,17 @@ const { class: className, title, back, href } = Astro.props;
     )
   }
   <h1>{title}</h1>
-  <a
-    href={href}
-    target="_blank"
-    rel="noreferrer"
-    class={styles.mdLink}
-    aria-label="View as Markdown"
-  >
-    <Icon name="markdown" size={32} />
-  </a>
+  {
+    href && (
+      <a
+        href={href}
+        target="_blank"
+        rel="noreferrer"
+        class={styles.mdLink}
+        aria-label="View as Markdown"
+      >
+        <Icon name="markdown" size={32} />
+      </a>
+    )
+  }
 </div>

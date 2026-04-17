@@ -15,6 +15,12 @@ export type NavItem = {
   label: string;
 };
 
+export type AlternateLink = {
+  type: string;
+  title: string;
+  href: string;
+};
+
 export type SiteConfig = {
   project: {
     name: string;

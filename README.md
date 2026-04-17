@@ -175,7 +175,7 @@ Import from `astro-pigment/components`:
 </Layout>
 ```
 
-Props: `title`, `navItems?`. Slots: `default`, `sidebar`, `logo`, `head-extra`, `footer-extra`, `author-icon`.
+Props: `title`, `navLinks?`, `alternate?` (array of `{ type, title, href }` — adds `<link rel="alternate">` to `<head>`, plus a visually-hidden hint at the top of main when a `text/markdown` entry is present). Slots: `default`, `sidebar`, `logo`, `head-extra`, `footer-extra`, `author-icon`.
 
 **TableOfContents** -- desktop sidebar with scroll-spy highlighting + mobile popover trigger. Both rendered from a single component.
 
@@ -183,10 +183,17 @@ Props: `title`, `navItems?`. Slots: `default`, `sidebar`, `logo`, `head-extra`, 
 <TableOfContents slot="sidebar" headings={headings} itemsSelector=".prose :is(h2, h3)[id]" />
 ```
 
-**PageHeading** -- heading row with a "view as markdown" icon link.
+**PageHeading** -- heading row with an optional "view as markdown" icon link. Pair with `getMarkdownAlternate` from `astro-pigment/utils/urls` to reuse the same href on `Layout`'s `alternate` prop; omit `href` to hide the icon.
 
 ```astro
-<PageHeading title="API Reference" href="/api.md" />
+---
+import { getMarkdownAlternate } from "astro-pigment/utils/urls";
+const alt = getMarkdownAlternate("api");
+---
+
+<Layout title="API Reference" alternate={[alt]}>
+  <PageHeading title="API Reference" href={alt.href} />
+</Layout>
 ```
 
 **Button** -- styled button with optional `square` prop for icon-only use.

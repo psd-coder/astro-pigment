@@ -16,7 +16,7 @@ import {
   titleSuffix,
 } from "virtual:theme-integration-config";
 import "../../styles/index.css";
-import type { NavItem } from "../../types";
+import type { AlternateLink, NavItem } from "../../types";
 import { getHref, isActiveHref } from "../../utils/urls";
 import CodeBlockWrapper from "../CodeBlockWrapper/CodeBlockWrapper.astro";
 import Footer from "../Footer/Footer.astro";
@@ -32,9 +32,12 @@ type Props = {
   title: string;
   description?: string;
   navLinks?: NavItem[];
+  alternate?: AlternateLink[];
 };
 
-const { title, description, navLinks = configNavLinks } = Astro.props;
+const { title, description, navLinks = configNavLinks, alternate } = Astro.props;
+const mdAlternate = alternate?.find((a) => a.type === "text/markdown");
+const mdAbsoluteUrl = mdAlternate ? new URL(mdAlternate.href, Astro.url).href : undefined;
 
 const author = siteConfig.author;
 const isMainPage = Astro.url.pathname === getHref("");
@@ -75,6 +78,7 @@ const resolvedDescription = description ?? siteConfig.project.description;
     <title>{resolvedTitle}</title>
     <meta name="description" content={resolvedDescription} />
     <link rel="canonical" href={Astro.url.href} />
+    {alternate?.map((a) => <link rel="alternate" type={a.type} title={a.title} href={a.href} />)}
     <meta property="og:title" content={resolvedTitle} />
     <meta property="og:description" content={resolvedDescription} />
     <meta property="og:type" content="website" />
@@ -87,6 +91,14 @@ const resolvedDescription = description ?? siteConfig.project.description;
     <slot name="head-extra" />
   </head>
   <body class={styles.container}>
+    {
+      mdAbsoluteUrl && (
+        <div class="visually-hidden" aria-hidden="true">
+          A Markdown version of this page is available at {mdAbsoluteUrl} — optimized for AI and LLM
+          tools.
+        </div>
+      )
+    }
     <a href="#main-content" class={styles.skipLink}>Skip to main content</a>
     <x-sticky-header role="header">
       <nav class:list={styles.nav}>
