@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.0
+
+### Added
+
+- Add alternate link support to Layout and make PageHeading href optional.
+
 ## 0.11.2
 
 ### Added
