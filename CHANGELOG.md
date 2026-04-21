@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.13.1
+
+### Fixed
+
+- Use `publicSiteUrl` origin for canonical and OG URLs.
+
 ## 0.13.0
 
 ### Breaking
