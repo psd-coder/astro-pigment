@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { siteConfig } from "virtual:theme-integration-config";
+import { siteConfig } from "virtual:pigment-config";
 import { jsonResponse } from "../utils/response";
 import { getHref } from "../utils/urls";
 

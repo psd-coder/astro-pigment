@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { slug as githubSlug } from "github-slugger";
-import { extraEntries } from "virtual:theme-extra-entries";
+import { extraEntries } from "virtual:pigment-extra-entries";
 import type { BlockEntry } from "../components/Search/types";
 import { getDocsCollection } from "../utils/content";
 import { splitMarkdownIntoSections } from "../utils/markdown";

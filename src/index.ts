@@ -20,4 +20,8 @@ export type {
   IconName,
   FileEntry,
   ExtraEntry,
+  OgImageSource,
+  OgTemplateContext,
+  OgTemplateFn,
+  OgTemplateFont,
 } from "./types";

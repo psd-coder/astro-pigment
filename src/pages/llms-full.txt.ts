@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
-import { extraEntries } from "virtual:theme-extra-entries";
-import { siteConfig } from "virtual:theme-integration-config";
+import { extraEntries } from "virtual:pigment-extra-entries";
+import { siteConfig } from "virtual:pigment-config";
 import { getDocsCollection } from "../utils/content";
 import {
   markdownLinkItem,

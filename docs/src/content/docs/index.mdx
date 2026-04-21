@@ -12,7 +12,7 @@ LLM-friendly endpoints, and a library of interactive components.
 
 - **Single integration**: rehype plugins, PostCSS, Shiki themes, sitemap, and SEO routes configured automatically
 - **Dark mode**: three-state toggle (auto/light/dark) with View Transitions, no FOUC
-- **CSS variable theming**: override `--theme-hue-override` or `--layout-width-override` in plain CSS
+- **Theming**: set `theme.hue` in config; all colors derive via OKLch
 - **Interactive playgrounds**: CodeMirror editor + sandboxed live preview with console capture
 - **LLM endpoints**: `/llms.txt` and `/llms-full.txt` auto-generated from your markdown content
 - **Bundled fonts**: Martian Grotesk + Martian Mono auto-injected (opt out with `fonts: false`)
@@ -48,10 +48,12 @@ export default defineConfig({
       },
       author: { name: "Your Name", url: "https://x.com/your_handle" },
       icon: "src/assets/icon.svg",
-      navLinks: [
-        { href: "/", label: "Overview" },
-        { href: "/api", label: "API" },
-      ],
+      docs: {
+        navLinks: [
+          { href: "/", label: "Overview" },
+          { href: "/api", label: "API" },
+        ],
+      },
     }),
   ],
 });
@@ -81,10 +83,11 @@ docsTheme({
 });
 ```
 
-Drag the slider, pick a hue you like, then hardcode it in CSS and remove `huePicker`:
+Drag the slider, pick a hue you like, then set it in config and remove `huePicker`:
 
-```css
-:root {
-  --theme-hue-override: 135; /* the value you picked */
-}
+```js
+docsTheme({
+  // ...your config
+  theme: { hue: 135 }, // the value you picked
+});
 ```

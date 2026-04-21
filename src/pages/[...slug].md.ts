@@ -1,5 +1,5 @@
 import type { APIRoute, GetStaticPaths } from "astro";
-import { extraEntries } from "virtual:theme-extra-entries";
+import { extraEntries } from "virtual:pigment-extra-entries";
 import { getDocsCollection } from "../utils/content";
 import { renderExtraEntryMarkdown, stringifyCleanMarkdown } from "../utils/markdown";
 import { markdownResponse } from "../utils/response";

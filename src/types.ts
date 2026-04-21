@@ -44,31 +44,60 @@ export type SiteConfig = {
   }>;
 };
 
+export type OgImageSource =
+  | string
+  | true
+  | {
+      logo?: string | false;
+      template?: string;
+      title?: string;
+      description?: string;
+    };
+
+export type OgTemplateFont = {
+  name: string;
+  data: ArrayBuffer;
+  weight?: number;
+  style?: "normal" | "italic";
+};
+
+export type OgTemplateContext = {
+  projectName: string;
+  description: string;
+  siteUrl: string;
+  pathname: string;
+  /** Data URI + natural dimensions of the OG logo (from `meta.og.logo` or top-level `logo`). */
+  logo?: { src: string; width: number; height: number };
+  hue: number;
+  fonts: OgTemplateFont[];
+};
+
+export type OgTemplateFn = (ctx: OgTemplateContext) => unknown | Promise<unknown>;
+
 export type DocsThemeConfig = SiteConfig & {
   site?: string;
-  /**
-   * Source icon(s) for favicons, apple-touch-icon, and webmanifest icons.
-   * String: single 512x512 PNG/SVG used for all sizes.
-   * Object: separate sources — `favicon` for tiny renders (favicon.svg/ico),
-   * `manifest` for 96px and up (apple-touch, web-app-manifest).
-   */
-  icon?: string | { favicon: string; manifest: string };
   /** Path to SVG file rendered as the header logo. Replaces the default project name text. */
   logo?: string;
   /** Show hue picker in header for interactive theme color customization. */
   huePicker?: boolean;
   /** Enable Astro View Transitions via ClientRouter. Default: true. */
   clientRouter?: boolean;
-  shikiThemes?: {
-    light: string;
-    dark: string;
-  };
   /** Enable full-text search. Default: true. */
   search?: boolean;
-  /** Inject bundled Martian Grotesk + Mono fonts. Set false to opt out. Default: true. */
-  fonts?: boolean;
-  /** CSS files to inject into every page. Paths relative to project root. */
-  customCss?: string[];
+  /** Theme customization. Consumed by CSS variables, fonts, custom CSS, and syntax highlighting. */
+  theme?: {
+    /** Base hue (0-360). Default: 180. */
+    hue?: number;
+    /** Shiki themes. Overrides the default adaptive hue-based theme. */
+    shiki?: {
+      light: string;
+      dark: string;
+    };
+    /** Inject bundled Martian Grotesk + Mono fonts. Set false to opt out. Default: true. */
+    fonts?: boolean;
+    /** CSS files to inject into every page. Paths relative to project root. */
+    customCss?: string[];
+  };
   docs?: {
     /** Default: "src/content/docs". */
     directory?: string;
@@ -76,13 +105,13 @@ export type DocsThemeConfig = SiteConfig & {
     renderDefaultPage?: boolean;
     /** Header navigation links. Hrefs may be relative ("api") or absolute ("/api"). */
     navLinks?: NavItem[];
+    /**
+     * Path to a module (relative to project root) that default-exports
+     * `ExtraEntry[]` or `() => Promise<ExtraEntry[]>`.
+     * Entries are included in search index, llms.txt, and llms-full.txt.
+     */
+    extraEntries?: string;
   };
-  /**
-   * Path to a module (relative to project root) that default-exports
-   * `ExtraEntry[]` or `() => Promise<ExtraEntry[]>`.
-   * Entries are included in search index, llms.txt, and llms-full.txt.
-   */
-  extraEntries?: string;
   meta?: {
     /** HTML lang attribute. Default: "en". */
     lang?: string;
@@ -90,6 +119,30 @@ export type DocsThemeConfig = SiteConfig & {
     titleSuffix?: string | false;
     /** Full <title> for the root/index page. Default: "{project.name} Documentation". */
     mainPageTitle?: string;
+    /**
+     * Source icon(s) for favicons, apple-touch-icon, and webmanifest icons.
+     * String: single 512x512 PNG/SVG used for all sizes.
+     * Object: separate sources — `favicon` for tiny renders (favicon.svg/ico),
+     * `manifest` for 96px and up (apple-touch, web-app-manifest).
+     */
+    icon?: string | { favicon: string; manifest: string };
+    /**
+     * Open Graph image. Defaults to `true` (built-in template) when unset.
+     * - string: path to a PNG file relative to project root (served as-is).
+     * - true: built-in template, uses top-level `logo` if set.
+     * - object: override template / logo / title / description. Omit `template` for built-in.
+     */
+    og?: {
+      image?: OgImageSource;
+      imageAlt?: string;
+    };
+    /** Twitter card metadata. Image defaults to og.image. */
+    twitter?: {
+      site?: string;
+      creator?: string;
+      image?: OgImageSource;
+      imageAlt?: string;
+    };
   };
 };
 

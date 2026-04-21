@@ -8,7 +8,7 @@ export default defineConfig({
       project: {
         name: "astro-pigment",
         description:
-          "Astro 6 documentation theme with dark mode, interactive playgrounds, and SEO endpoints.",
+          "Astro 6 documentation theme with dark mode, code highlighting, and built-in SEO and LLM-friendly endpoints",
         license: {
           name: "MIT",
           url: "https://github.com/psd-coder/astro-pigment/blob/main/LICENSE",
@@ -17,9 +17,19 @@ export default defineConfig({
       },
       author: { name: "Pavel Grinchenko", url: "https://x.com/psd_coder" },
       credits: [{ name: "Evil Martians", url: "https://evilmartians.com/" }],
-      icon: {
-        favicon: "src/assets/astro-pigment-favicon.svg",
-        manifest: "src/assets/astro-pigment.svg",
+      theme: {
+        hue: 274,
+      },
+      meta: {
+        icon: {
+          favicon: "src/assets/astro-pigment-favicon.svg",
+          manifest: "src/assets/astro-pigment.svg",
+        },
+        og: {
+          image: {
+            logo: "src/assets/astro-pigment-og-logo.png",
+          },
+        },
       },
       huePicker: true,
       search: true,

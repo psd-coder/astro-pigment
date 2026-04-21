@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { faviconPath } from "virtual:theme-integration-config";
+import { meta } from "virtual:pigment-config";
 import { icoIconResponse } from "../utils/icon";
 
-export const GET: APIRoute = () => icoIconResponse(faviconPath!);
+export const GET: APIRoute = () => icoIconResponse(meta.icon.faviconPath!);

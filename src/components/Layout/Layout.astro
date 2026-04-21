@@ -3,26 +3,25 @@ import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import {
   clientRouter,
-  faviconPath,
+  docs,
   githubUrl,
   huePicker,
-  lang,
   logo,
-  mainPageTitle,
-  manifestIconPath,
-  navLinks as configNavLinks,
+  meta,
   search,
   siteConfig,
-  titleSuffix,
-} from "virtual:theme-integration-config";
+  theme,
+} from "virtual:pigment-config";
 import "../../styles/index.css";
 import type { AlternateLink, NavItem } from "../../types";
 import { getHref, isActiveHref } from "../../utils/urls";
 import CodeBlockWrapper from "../CodeBlockWrapper/CodeBlockWrapper.astro";
 import Footer from "../Footer/Footer.astro";
-import HueScript from "../HuePicker/HueScript.astro";
 import HuePicker from "../HuePicker/HuePicker.astro";
+import HueScript from "../HuePicker/HueScript.astro";
 import Icon from "../Icon/Icon.astro";
+import LayoutFavicons from "./LayoutFavicons.astro";
+import LayoutMeta from "./LayoutMeta.astro";
 
 import { Search } from "../Search";
 import { ThemeScript, ThemeToggle } from "../ThemeToggle";
@@ -35,55 +34,32 @@ type Props = {
   alternate?: AlternateLink[];
 };
 
-const { title, description, navLinks = configNavLinks, alternate } = Astro.props;
+const { title, description, navLinks = docs.navLinks, alternate } = Astro.props;
 const mdAlternate = alternate?.find((a) => a.type === "text/markdown");
 const mdAbsoluteUrl = mdAlternate ? new URL(mdAlternate.href, Astro.url).href : undefined;
 
 const author = siteConfig.author;
 const isMainPage = Astro.url.pathname === getHref("");
 const resolvedTitle = isMainPage
-  ? mainPageTitle
-  : titleSuffix
-    ? `${title} | ${titleSuffix}`
+  ? meta.mainPageTitle
+  : meta.titleSuffix
+    ? `${title} | ${meta.titleSuffix}`
     : title;
 const resolvedDescription = description ?? siteConfig.project.description;
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={meta.lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <base href={getHref("")} />
-    {
-      faviconPath && (
-        <>
-          <link rel="icon" href={getHref("favicon.ico")} sizes="32x32" />
-          <link rel="icon" type="image/svg+xml" href={getHref("favicon.svg")} sizes="any" />
-        </>
-      )
-    }
-    {
-      manifestIconPath && (
-        <>
-          <link rel="icon" type="image/png" href={getHref("favicon-96x96.png")} sizes="96x96" />
-          <link rel="apple-touch-icon" sizes="180x180" href={getHref("apple-touch-icon.png")} />
-          <link rel="manifest" href={getHref("site.webmanifest")} />
-        </>
-      )
-    }
+    <LayoutFavicons />
+    <LayoutMeta title={resolvedTitle} description={resolvedDescription} alternate={alternate} />
     <link rel="sitemap" href={getHref("sitemap-index.xml")} />
     <Font cssVariable="--font-sans" preload />
     <Font cssVariable="--font-mono" preload />
-    <title>{resolvedTitle}</title>
-    <meta name="description" content={resolvedDescription} />
-    <link rel="canonical" href={Astro.url.href} />
-    {alternate?.map((a) => <link rel="alternate" type={a.type} title={a.title} href={a.href} />)}
-    <meta property="og:title" content={resolvedTitle} />
-    <meta property="og:description" content={resolvedDescription} />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url.href} />
-    <meta property="og:site_name" content={siteConfig.project.name} />
+    <style is:global set:html={`:root { --theme-hue-override: ${theme.hue}; }`}></style>
     {clientRouter && <ClientRouter />}
     <ThemeScript />
     {huePicker && <HueScript />}

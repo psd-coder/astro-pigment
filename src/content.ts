@@ -1,6 +1,6 @@
 import { glob } from "astro/loaders";
 import { defineCollection } from "astro:content";
-import { docsConfig } from "virtual:theme-integration-config";
+import { docs } from "virtual:pigment-config";
 import { docEntryDataSchema } from "./utils/schemas";
 
 export function defineDocsCollections() {
@@ -8,7 +8,7 @@ export function defineDocsCollections() {
     docs: defineCollection({
       loader: glob({
         pattern: "**/*.{md,mdx}",
-        base: docsConfig.directory,
+        base: docs.directory,
       }),
       schema: docEntryDataSchema,
     }),

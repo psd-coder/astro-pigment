@@ -1,0 +1,51 @@
+---
+import { meta, siteConfig } from "virtual:pigment-config";
+import type { AlternateLink } from "../../types";
+
+type Props = {
+  title: string;
+  description: string;
+  alternate?: AlternateLink[];
+};
+
+const { title, description, alternate } = Astro.props;
+
+const ogLocale = meta.lang.includes("-") ? meta.lang.replace("-", "_") : null;
+const absolute = (path: string | null) => (path ? new URL(path, Astro.url).href : null);
+const ogImageUrl = absolute(meta.og.image.url);
+const twitterImageUrl = absolute(meta.twitter.image.url);
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={Astro.url.href} />
+{alternate?.map((a) => <link rel="alternate" type={a.type} title={a.title} href={a.href} />)}
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={Astro.url.href} />
+<meta property="og:site_name" content={siteConfig.project.name} />
+{ogLocale && <meta property="og:locale" content={ogLocale} />}
+{
+  ogImageUrl && (
+    <>
+      <meta property="og:image" content={ogImageUrl} />
+      <meta property="og:image:alt" content={meta.og.image.alt} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+    </>
+  )
+}
+<meta name="twitter:card" content={twitterImageUrl ? "summary_large_image" : "summary"} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{meta.twitter.site && <meta name="twitter:site" content={meta.twitter.site} />}
+{meta.twitter.creator && <meta name="twitter:creator" content={meta.twitter.creator} />}
+{
+  twitterImageUrl && (
+    <>
+      <meta name="twitter:image" content={twitterImageUrl} />
+      <meta name="twitter:image:alt" content={meta.twitter.image.alt} />
+    </>
+  )
+}

@@ -1,0 +1,24 @@
+---
+import { meta } from "virtual:pigment-config";
+import { getHref } from "../../utils/urls";
+
+const { icon } = meta;
+---
+
+{
+  icon.faviconPath && (
+    <>
+      <link rel="icon" href={getHref("favicon.ico")} sizes="32x32" />
+      <link rel="icon" type="image/svg+xml" href={getHref("favicon.svg")} sizes="any" />
+    </>
+  )
+}
+{
+  icon.manifestIconPath && (
+    <>
+      <link rel="icon" type="image/png" href={getHref("favicon-96x96.png")} sizes="96x96" />
+      <link rel="apple-touch-icon" sizes="180x180" href={getHref("apple-touch-icon.png")} />
+      <link rel="manifest" href={getHref("site.webmanifest")} />
+    </>
+  )
+}
