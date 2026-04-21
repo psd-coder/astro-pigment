@@ -30,6 +30,7 @@ import { defineConfig } from "astro/config";
 import docsTheme from "astro-pigment";
 
 export default defineConfig({
+  site: "https://your-name.github.io",
   integrations: [
     docsTheme({
       project: {
@@ -106,7 +107,6 @@ type DocsThemeConfig = {
   // Optional
   author?: { name: string; url: string; icon?: string };
   credits?: Array<{ name: string; url: string }>;
-  site?: string; // default: auto GitHub Pages URL
   logo?: string; // path to SVG rendered as header logo
   huePicker?: boolean; // show hue slider in header for initial theme setup
   clientRouter?: boolean; // Astro View Transitions, default true
@@ -146,7 +146,7 @@ type DocsThemeConfig = {
 ### What the integration does
 
 - Stores config in a virtual module (`virtual:pigment-config`) so components read it automatically
-- Auto-sets `site` and `base` from GitHub config (GitHub Pages URL in CI, `/` in dev)
+- Requires `site` in `astro.config.mjs`; auto-sets `base` from GitHub config (`/repo/` in CI, `/` in dev)
 - Injects rehype-slug + rehype-autolink-headings
 - Injects an adaptive Shiki theme that derives syntax colors from `--theme-hue` (based on Catppuccin, hue-rotated via OKLch). Override with `theme.shiki` to use fixed themes instead.
 - Injects PostCSS preset-env (nesting, custom-media, media-query-ranges)

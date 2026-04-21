@@ -12,7 +12,7 @@ import { adaptiveCodeTheme } from "./themes/adaptive-code-theme";
 import type { DocsThemeConfig, SiteConfig } from "./types";
 import { generateScopedName, transitiveCssPlugin } from "./utils/cssModules";
 import { fonts } from "./utils/fonts";
-import { deriveBase, deriveGitHubPagesSite, getGithubUrl } from "./utils/github";
+import { deriveBase, getGithubUrl } from "./utils/github";
 import { isGenerated, resolveImageSource } from "./utils/ogResolve";
 import { deriveTwitterCreator } from "./utils/twitter";
 import { buildConfigModule, virtualReexportDefault } from "./utils/virtualModules";
@@ -103,9 +103,6 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
   const search = config.search ?? true;
   const logo = config.logo ? readSvg(config.logo) : null;
   const themeHue = config.theme?.hue ?? 180;
-  const publicSiteUrl =
-    config.site ??
-    `${deriveGitHubPagesSite(config.project.github)}/${config.project.github.repository}`;
   const lang = config.meta?.lang ?? "en";
   const titleSuffix =
     config.meta?.titleSuffix !== undefined ? config.meta.titleSuffix : siteConfig.project.name;
@@ -119,8 +116,18 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
     name: "astro-pigment",
     hooks: {
       "astro:config:setup": ({ config: astroConfig, updateConfig, injectRoute, injectScript }) => {
-        const site = config.site ?? deriveGitHubPagesSite(config.project.github);
-        const base = config.site ? "/" : deriveBase(config.project.github);
+        if (!astroConfig.site) {
+          throw new Error(
+            "[astro-pigment] `site` must be set in astro.config.mjs (e.g. site: 'https://example.com'). " +
+              "Astro uses it to construct absolute URLs — setting it only via integration config is not sufficient.",
+          );
+        }
+
+        const base = deriveBase(config.project.github);
+        const effectiveBase =
+          astroConfig.base && astroConfig.base !== "/" ? astroConfig.base : base;
+        const publicSiteUrl =
+          astroConfig.site.replace(/\/$/, "") + effectiveBase.replace(/\/$/, "");
         const astroRoot = fileURLToPath(astroConfig.root);
 
         const extraEntriesModuleCode = config.docs?.extraEntries
@@ -308,8 +315,8 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
         }
 
         updateConfig({
-          site: astroConfig.site ?? site,
-          base: astroConfig.base !== "/" ? astroConfig.base : base,
+          site: astroConfig.site,
+          base: effectiveBase,
           integrations,
           ...(config.theme?.fonts !== false && { fonts: fonts() }),
           markdown: {

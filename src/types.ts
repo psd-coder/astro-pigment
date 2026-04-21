@@ -75,7 +75,6 @@ export type OgTemplateContext = {
 export type OgTemplateFn = (ctx: OgTemplateContext) => unknown | Promise<unknown>;
 
 export type DocsThemeConfig = SiteConfig & {
-  site?: string;
   /** Path to SVG file rendered as the header logo. Replaces the default project name text. */
   logo?: string;
   /** Show hue picker in header for interactive theme color customization. */

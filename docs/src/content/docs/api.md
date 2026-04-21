@@ -6,7 +6,15 @@ order: 2
 
 ## Integration Config
 
-The integration accepts a single config object combining site metadata and optional features:
+The integration accepts a single config object combining site metadata and optional features. `site` must be set at the top level of `defineConfig` — Astro uses it to construct absolute URLs and the integration enforces this:
+
+```ts
+// astro.config.mjs
+export default defineConfig({
+  site: "https://your-name.github.io", // required
+  integrations: [docsTheme({ ... })],
+});
+```
 
 ```ts
 docsTheme({
@@ -34,9 +42,6 @@ docsTheme({
 
   // Optional: additional credits rendered as "& Name" after author in footer
   credits: [{ name: "Evil Martians", url: "https://evilmartians.com/" }],
-
-  // Optional: override auto-derived GitHub Pages URL
-  site: "https://custom-domain.com",
 
   // Optional: path to SVG file rendered as the header logo.
   // Replaces the default project name text. The logo slot in Layout still overrides this.
@@ -116,7 +121,7 @@ docsTheme({
 ### What the integration does
 
 1. Stores config in a **virtual module** (`virtual:pigment-config`) so components read it automatically
-2. Auto-sets `site` and `base` from GitHub config (GitHub Pages URL in CI, `/` in dev)
+2. Requires `site` in `astro.config.mjs`; auto-sets `base` from GitHub config (`/repo/` in CI, `/` in dev)
 3. Injects **rehype-slug** + **rehype-autolink-headings**
 4. Injects an **adaptive Shiki theme** that derives syntax colors from `--theme-hue` (based on Catppuccin, hue-rotated via OKLch). Override with `theme.shiki` to use fixed themes instead.
 5. Injects **PostCSS preset-env** (nesting, custom-media, media-query-ranges)

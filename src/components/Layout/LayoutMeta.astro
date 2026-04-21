@@ -1,7 +1,7 @@
 ---
 import { meta, siteConfig } from "virtual:pigment-config";
 import type { AlternateLink } from "../../types";
-import { getAbsoluteUrl, getHost } from "../../utils/urls";
+import { getAbsoluteUrl } from "../../utils/urls";
 
 type Props = {
   title: string;
@@ -12,9 +12,11 @@ type Props = {
 const { title, description, alternate } = Astro.props;
 
 const ogLocale = meta.lang.includes("-") ? meta.lang.replace("-", "_") : null;
-const canonical = getHost() + Astro.url.pathname;
-const ogImageUrl = meta.og.image.url ? getAbsoluteUrl(meta.og.image.url) : null;
-const twitterImageUrl = meta.twitter.image.url ? getAbsoluteUrl(meta.twitter.image.url) : null;
+const canonical = Astro.url.href;
+const ogImageUrl = meta.og.image.url ? getAbsoluteUrl(Astro.url.origin, meta.og.image.url) : null;
+const twitterImageUrl = meta.twitter.image.url
+  ? getAbsoluteUrl(Astro.url.origin, meta.twitter.image.url)
+  : null;
 ---
 
 <title>{title}</title>

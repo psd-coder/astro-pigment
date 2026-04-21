@@ -1,9 +1,8 @@
 import type { AstroGlobal } from "astro";
-import { publicSiteUrl } from "virtual:pigment-config";
 import type { AlternateLink } from "../types";
 
-export function getHost(): string {
-  return new URL(publicSiteUrl).origin;
+export function getAbsoluteUrl(origin: string, path: string): string {
+  return origin + getHref(path);
 }
 
 export function getHref(href: string): string {
@@ -11,10 +10,6 @@ export function getHref(href: string): string {
   const normalized = href.startsWith("/") ? href.slice(1) : href;
   // "/base/index" → "/base/", "/base/foo/index" → "/base/foo/", others untouched.
   return (base + normalized).replace(/(^|\/)index$/, "$1");
-}
-
-export function getAbsoluteUrl(path: string): string {
-  return getHost() + getHref(path);
 }
 
 export function getMarkdownAlternate(slug: string): AlternateLink {
