@@ -1,6 +1,7 @@
 ---
 import { meta, siteConfig } from "virtual:pigment-config";
 import type { AlternateLink } from "../../types";
+import { getAbsoluteUrl, getHost } from "../../utils/urls";
 
 type Props = {
   title: string;
@@ -11,19 +12,19 @@ type Props = {
 const { title, description, alternate } = Astro.props;
 
 const ogLocale = meta.lang.includes("-") ? meta.lang.replace("-", "_") : null;
-const absolute = (path: string | null) => (path ? new URL(path, Astro.url).href : null);
-const ogImageUrl = absolute(meta.og.image.url);
-const twitterImageUrl = absolute(meta.twitter.image.url);
+const canonical = getHost() + Astro.url.pathname;
+const ogImageUrl = meta.og.image.url ? getAbsoluteUrl(meta.og.image.url) : null;
+const twitterImageUrl = meta.twitter.image.url ? getAbsoluteUrl(meta.twitter.image.url) : null;
 ---
 
 <title>{title}</title>
 <meta name="description" content={description} />
-<link rel="canonical" href={Astro.url.href} />
+<link rel="canonical" href={canonical} />
 {alternate?.map((a) => <link rel="alternate" type={a.type} title={a.title} href={a.href} />)}
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url.href} />
+<meta property="og:url" content={canonical} />
 <meta property="og:site_name" content={siteConfig.project.name} />
 {ogLocale && <meta property="og:locale" content={ogLocale} />}
 {
