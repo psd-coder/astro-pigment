@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.15.0
+
+### Breaking
+
+- `base` auto-derivation dropped; set `base` directly in `astro.config.mjs`. The integration no longer guesses it from GitHub Pages hostname + CI env and uses `astroConfig.base` directly.
+
 ## 0.14.0
 
 ### Breaking
