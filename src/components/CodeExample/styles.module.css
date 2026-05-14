@@ -74,6 +74,11 @@
     }
   }
 
+  .fileEditor {
+    flex: 1;
+    min-height: 0;
+  }
+
   .logsLabel {
     flex: 1;
 

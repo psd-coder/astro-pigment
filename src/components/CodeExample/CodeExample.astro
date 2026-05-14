@@ -42,7 +42,11 @@ if (!firstFile) throw new Error("No files provided");
           ))
         }
       </Tabs>
-      <CodeEditor data-ref="x-code-example:editor" lang={firstFile.type} />
+      <CodeEditor
+        data-ref="x-code-example:editor"
+        lang={firstFile.type}
+        class={styles.fileEditor}
+      />
     </ResizablePane>
     <ResizablePane class:list={[styles.pane, styles.previewPane]}>
       <LivePreview data-ref="x-code-example:preview" />
