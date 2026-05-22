@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.16.1
+
+### Fixed
+
+- Adjust CodeExample styles.
+
 ## 0.16.0
 
 ### Breaking
