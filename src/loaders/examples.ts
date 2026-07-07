@@ -39,7 +39,7 @@ const TYPE_ORDER: Record<FileEntryType, number> = {
   importmap: 3,
 };
 
-function dedent(text: string): string {
+export function dedent(text: string): string {
   const lines = text.split("\n");
   const indent = lines
     .filter((l) => l.trim().length > 0)
@@ -52,14 +52,14 @@ function dedent(text: string): string {
   return lines.map((l) => l.slice(indent)).join("\n");
 }
 
-function resolveType(el: Element): FileEntryType | null {
+export function resolveType(el: Element): FileEntryType | null {
   const dataType = el.getAttribute("data-type");
   if (dataType) return dataType as FileEntryType;
   if (el.getAttribute("type") === "importmap") return "importmap";
   return null;
 }
 
-function parseExampleHtml(raw: string) {
+export function parseExampleHtml(raw: string) {
   const { document } = parseHTML(raw);
 
   const title = document.querySelector("title")?.textContent ?? "";
