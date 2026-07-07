@@ -33,7 +33,7 @@ export async function pngIconResponse(iconPath: string | null, size: number): Pr
 }
 
 // ICO: ICONDIR header (6 bytes) + single ICONDIRENTRY (16 bytes) + PNG payload
-function pngToIco(png: Buffer, size: number): Buffer {
+export function pngToIco(png: Buffer, size: number): Buffer {
   const headerSize = 6;
   const entrySize = 16;
   const dataOffset = headerSize + entrySize;
