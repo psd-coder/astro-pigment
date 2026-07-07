@@ -116,7 +116,7 @@
     flex-direction: column;
     gap: calc(var(--spacing) * 4);
 
-    width: 280px;
+    width: var(--layout-sidebar-width-override, 280px);
     max-height: 100dvh;
     margin: 0;
     padding: calc(var(--spacing) * 5);
