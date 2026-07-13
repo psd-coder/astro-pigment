@@ -19,4 +19,4 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - run: pnpm oxlint
       - run: pnpm typecheck
-      - run: pnpm publish --no-git-checks --provenance
+      - run: pnpm stage publish --no-git-checks
