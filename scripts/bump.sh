@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 if [ $# -lt 1 ]; then
   echo "Usage: $0 <patch|minor|major>"
@@ -7,7 +8,9 @@ fi
 
 VERSION_TYPE=$1
 
-npm --no-git-tag-version version $VERSION_TYPE
+# --no-git-tag-version: the commit and tag are created manually below.
+# --no-git-checks: pnpm otherwise aborts on a dirty tree, but this script deliberately commits package.json only.
+pnpm version "$VERSION_TYPE" --no-git-tag-version --no-git-checks
 
 NEW_VERSION=$(node -p "require('./package.json').version")
 
