@@ -123,7 +123,7 @@ docsTheme({
 
 1. Stores config in a **virtual module** (`virtual:pigment-config`) so components read it automatically
 2. Requires `site` in `astro.config.mjs`; auto-sets `base` from GitHub config (`/repo/` in CI, `/` in dev)
-3. Injects **rehype-slug** + **rehype-autolink-headings**
+3. Configures **markdown**: **rehype-slug** + **rehype-autolink-headings**, **GitHub Flavored Markdown** (tables, strikethrough, task lists) via an explicit `remark-gfm`, and keeps **smartypants** typography on. GFM works in both `.md` and `.mdx` with no consumer config
 4. Injects an **adaptive Shiki theme** that derives syntax colors from `--theme-hue` (based on Catppuccin, hue-rotated via OKLch). Override with `theme.shiki` to use fixed themes instead.
 5. Injects **PostCSS preset-env** (nesting, custom-media, media-query-ranges)
 6. Injects **sitemap** + `llms.txt`, `llms-full.txt`, `[slug].md` routes

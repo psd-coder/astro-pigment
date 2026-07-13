@@ -11,6 +11,7 @@ import rehypeSlug from "rehype-slug";
 import { adaptiveCodeTheme } from "./themes/adaptive-code-theme";
 import type { DocsThemeConfig, SiteConfig } from "./types";
 import { generateScopedName, transitiveCssPlugin } from "./utils/cssModules";
+import { gfmMarkdownConfig } from "./utils/markdownConfig";
 import { fonts } from "./utils/fonts";
 import { getGithubUrl } from "./utils/github";
 import { isGenerated, resolveImageSource } from "./utils/ogResolve";
@@ -317,6 +318,7 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
           ...(config.theme?.fonts !== false && { fonts: fonts() }),
           markdown: {
             shikiConfig,
+            ...gfmMarkdownConfig,
             rehypePlugins: [
               rehypeSlug,
               [
