@@ -1,5 +1,7 @@
 ---
-import { siteConfig, githubUrl } from "virtual:pigment-config";
+import { githubUrl, siteConfig } from "virtual:pigment-config";
+import logo from "../../assets/logo/astro-pigment.svg?raw";
+import { ASTRO_PIGMENT_URL } from "../../constants";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -40,4 +42,7 @@ const { class: className } = Astro.props;
     }
     <slot name="extra" />
   </div>
+  <a class={styles.brand} href={ASTRO_PIGMENT_URL} aria-label="Astro Pigment">
+    <Fragment set:html={logo} />
+  </a>
 </footer>

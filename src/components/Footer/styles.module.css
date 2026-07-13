@@ -2,6 +2,7 @@
 
 @layer docs-theme {
   .container {
+    position: relative;
     display: flex;
     gap: calc(var(--spacing) * 4);
     align-items: center;
@@ -11,6 +12,57 @@
       flex-direction: column;
       align-items: start;
     }
+  }
+
+  /* Absolutely centered so it sits at the footer's optical center regardless of side blocks. */
+  .brand {
+    /* Baked-gradient logo can't be repainted per-node, so tint the whole desaturated mark via
+       filter: sepia lays down a ~40deg tone, hue-rotate lands it on the live theme hue. */
+    --brand-tint: hue-rotate(calc((var(--theme-hue) - 40) * 1deg));
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: inline-flex;
+    filter: grayscale(1) sepia(0.8) var(--brand-tint);
+    opacity: 0.55;
+    transform: translate(-50%, -50%);
+    transition:
+      filter 0.15s,
+      opacity 0.15s;
+
+    /* Reveal the full brand colors on hover. */
+    &:hover {
+      filter: grayscale(0) sepia(0) hue-rotate(0deg);
+      opacity: 1;
+    }
+
+    /* Logo colors are baked; invert the desaturated mark so it stays legible on dark backgrounds. */
+    :global([data-theme="dark"]) & {
+      filter: grayscale(1) invert(1) sepia(0.8) var(--brand-tint);
+
+      &:hover {
+        filter: grayscale(0) invert(0) sepia(0) hue-rotate(0deg);
+      }
+
+      /* On hover the invert drops, dumping the baked deep-violet glyph (#310c4d) onto the
+         dark bg where it disappears. Repaint it with the theme text color so it reads. */
+      &:hover svg path[fill="#310c4d"] {
+        fill: var(--color-text-primary);
+      }
+    }
+
+    @media (--mobiles) {
+      position: static;
+      align-self: center;
+      transform: none;
+    }
+  }
+
+  .brand svg {
+    display: block;
+    width: 16px;
+    height: 16px;
   }
 
   .block {
