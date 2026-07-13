@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.17.0
+
+### Added
+
+- Branded footer logo linking to the project site.
+- Allow overriding `TableOfContents` sidebar width via the `--layout-sidebar-width-override` CSS variable.
+
+### Fixed
+
+- Render GFM tables, strikethrough, and task lists in `.mdx`.
+
+### Documentation
+
+- Drop hardcoded Astro major version from package descriptions.
+
 ## 0.16.1
 
 ### Fixed
