@@ -9,7 +9,7 @@ export default defineConfig({
       project: {
         name: "astro-pigment",
         description:
-          "Astro 6 documentation theme with dark mode, code highlighting, and built-in SEO and LLM-friendly endpoints",
+          "Astro documentation theme with dark mode, code highlighting, and built-in SEO and LLM-friendly endpoints",
         license: {
           name: "MIT",
           url: "https://github.com/psd-coder/astro-pigment/blob/main/LICENSE",
