@@ -15,6 +15,7 @@ import { gfmMarkdownConfig } from "./utils/markdownConfig";
 import { fonts } from "./utils/fonts";
 import { getGithubUrl } from "./utils/github";
 import { isGenerated, resolveImageSource } from "./utils/ogResolve";
+import { sanitizeInlineSvg } from "./utils/svg";
 import { deriveTwitterCreator } from "./utils/twitter";
 import { buildConfigModule, virtualReexportDefault } from "./utils/virtualModules";
 
@@ -49,7 +50,7 @@ function extractSiteConfig(config: DocsThemeConfig): SiteConfig {
 }
 
 function readSvg(filePath: string): string {
-  return readFileSync(path.resolve(filePath), "utf-8");
+  return sanitizeInlineSvg(readFileSync(path.resolve(filePath), "utf-8"));
 }
 
 export function createIntegration(config: DocsThemeConfig): AstroIntegration {

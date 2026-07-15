@@ -77,7 +77,7 @@
   }
 
   .logo {
-    display: inline-block;
+    display: inline-flex;
     grid-column: 1;
     grid-row: 1;
 
@@ -86,6 +86,15 @@
 
     &:hover {
       color: var(--color-secondary);
+    }
+
+    /* Constrain any injected logo SVG (incl. Figma exports with intrinsic width/height
+       attributes) to the header height, so it never lays out at its native size. */
+    & svg {
+      display: block;
+      width: auto;
+      height: calc(var(--spacing) * 7);
+      max-width: 100%;
     }
   }
 
