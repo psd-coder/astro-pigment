@@ -16,7 +16,7 @@
     position: relative;
   }
 
-  & :is(h2, h3, h4, h5, h6) > a.anchor {
+  & :is(h1, h2, h3, h4, h5, h6) > a.anchor {
     position: absolute;
     right: 100%;
 
@@ -38,7 +38,8 @@
     }
   }
 
-  & :is(h2, h3, h4, h5, h6):hover > a.anchor {
+  & :is(h1, h2, h3, h4, h5, h6):hover > a.anchor,
+  & :is(h1, h2, h3, h4, h5, h6) > a.anchor:focus-visible {
     opacity: 1;
   }
 

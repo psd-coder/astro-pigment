@@ -11,6 +11,7 @@ import rehypeSlug from "rehype-slug";
 import { adaptiveCodeTheme } from "./themes/adaptive-code-theme";
 import type { DocsThemeConfig, SiteConfig } from "./types";
 import { generateScopedName, transitiveCssPlugin } from "./utils/cssModules";
+import { headingText, type HeadingNode } from "./utils/headingAnchor";
 import { gfmMarkdownConfig } from "./utils/markdownConfig";
 import { fonts } from "./utils/fonts";
 import { getGithubUrl } from "./utils/github";
@@ -326,12 +327,12 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
                 rehypeAutolinkHeadings,
                 {
                   behavior: "prepend",
-                  properties: {
-                    className: ["anchor"],
-                    ariaHidden: true,
-                    tabIndex: -1,
-                  },
+                  // Give the self-link an accessible name / anchor text via aria-label
                   content: [],
+                  properties: (heading: HeadingNode) => ({
+                    className: ["anchor"],
+                    ariaLabel: `Section titled "${headingText(heading)}"`,
+                  }),
                 },
               ],
             ],
