@@ -46,6 +46,13 @@ declare module "virtual:pigment-config" {
   export const themePicker: boolean;
   export const clientRouter: boolean;
   export const search: boolean;
+  export const robots: {
+    contentSignal: {
+      search: boolean;
+      aiTrain: boolean;
+      aiInput: boolean;
+    };
+  };
   export const theme: {
     hue: number;
     saturation: number;

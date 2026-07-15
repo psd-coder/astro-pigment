@@ -60,6 +60,10 @@ docsTheme({
   // Optional: enable full-text search UI in header. Default: true.
   // search: false,
 
+  // Optional: robots.txt Content-Signal directive (contentsignal.org). Each flag
+  // maps to yes/no in the "User-agent: *" block. All default to true.
+  // robots: { contentSignal: { search: true, aiTrain: false, aiInput: false } },
+
   // Optional: theme tokens. Hue feeds CSS variables and the auto OG template.
   theme: {
     // hue: 220,
@@ -133,9 +137,40 @@ docsTheme({
 8. When `search: true` (default): injects `/search-index.json` and renders a search input in the Layout header
 9. When `clientRouter: true` (default): enables Astro View Transitions via `<ClientRouter />`
 10. When `meta.icon` is configured: generates **favicons** (svg, ico, 96x96 png), **apple-touch-icon**, **webmanifest** + manifest icons (192x192, 512x512)
-11. Always serves `/robots.txt` (permissive, with `Sitemap:` pointing at `/sitemap-index.xml`)
+11. Always serves `/robots.txt` (permissive, with a `Content-Signal:` directive and `Sitemap:` pointing at `/sitemap-index.xml`)
 12. Always serves `/og.png` (built-in template by default, or whatever `meta.og.image` specifies) and emits `<meta property="og:image">` at 1200x630
 13. Twitter falls back to the OG image; emits `summary_large_image` Twitter card tags. Override with `meta.twitter.image` to use a different mode/path
+
+## robots.txt
+
+`/robots.txt` is always served: permissive (`Allow: /`), with a `Sitemap:` line pointing at `/sitemap-index.xml` and a [Content-Signal](https://contentsignal.org) directive on the `User-agent: *` block. Content-Signal states how crawlers may use your content, independent of whether they may fetch it. Three flags, each defaulting to `true` (emitted as `yes`):
+
+| Flag      | Directive  | Meaning                                                    |
+| --------- | ---------- | ---------------------------------------------------------- |
+| `search`  | `search`   | Use the content to build a search index                    |
+| `aiTrain` | `ai-train` | Use the content to train an AI model                       |
+| `aiInput` | `ai-input` | Use the content as AI input (RAG, grounding, live answers) |
+
+Set any to `false` to emit `no`. For example, to allow search indexing but opt out of AI training and retrieval:
+
+```ts
+docsTheme({
+  // ...
+  robots: { contentSignal: { aiTrain: false, aiInput: false } },
+});
+```
+
+produces:
+
+```
+User-agent: *
+Content-Signal: search=yes, ai-train=no, ai-input=no
+Allow: /
+
+Sitemap: https://your-site/sitemap-index.xml
+```
+
+Content-Signal is a preference expressed to crawlers, not an access control; it does not block fetching.
 
 ## CSS Customization
 

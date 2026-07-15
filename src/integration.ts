@@ -105,6 +105,11 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
   const themePicker = config.themePicker ?? false;
   const clientRouter = config.clientRouter ?? true;
   const search = config.search ?? true;
+  const contentSignal = {
+    search: config.robots?.contentSignal?.search ?? true,
+    aiTrain: config.robots?.contentSignal?.aiTrain ?? true,
+    aiInput: config.robots?.contentSignal?.aiInput ?? true,
+  };
   const logo = config.logo ? readSvg(config.logo) : null;
   const themeHue = config.theme?.hue ?? 180;
   const themeSaturation = config.theme?.saturation ?? 50;
@@ -205,6 +210,7 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
           themePicker,
           clientRouter,
           search,
+          robots: { contentSignal },
           theme: { hue: themeHue, saturation: themeSaturation },
           docs: { ...docsConfig, navLinks },
           meta: {

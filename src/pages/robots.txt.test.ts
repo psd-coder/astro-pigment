@@ -1,6 +1,13 @@
 import type { APIContext } from "astro";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { GET } from "./robots.txt";
+
+const fx = vi.hoisted(() => ({
+  robots: { contentSignal: { search: true, aiTrain: true, aiInput: true } },
+}));
+
+vi.mock("virtual:pigment-config", () => ({ robots: fx.robots }));
+
+const { GET } = await import("./robots.txt");
 
 function ctx(site?: URL): APIContext {
   return { site } as APIContext;
@@ -8,6 +15,7 @@ function ctx(site?: URL): APIContext {
 
 afterEach(() => {
   vi.unstubAllEnvs();
+  fx.robots.contentSignal = { search: true, aiTrain: true, aiInput: true };
 });
 
 describe("GET /robots.txt", () => {
@@ -29,5 +37,16 @@ describe("GET /robots.txt", () => {
     vi.stubEnv("BASE_URL", "/base/");
     const body = await (await GET(ctx(new URL("https://example.com/")))).text();
     expect(body).toContain("Sitemap: https://example.com/base/sitemap-index.xml");
+  });
+
+  it("emits an all-yes Content-Signal directive by default", async () => {
+    const body = await (await GET(ctx())).text();
+    expect(body).toContain("Content-Signal: search=yes, ai-train=yes, ai-input=yes");
+  });
+
+  it("reflects configured Content-Signal flags as yes/no", async () => {
+    fx.robots.contentSignal = { search: true, aiTrain: false, aiInput: false };
+    const body = await (await GET(ctx())).text();
+    expect(body).toContain("Content-Signal: search=yes, ai-train=no, ai-input=no");
   });
 });

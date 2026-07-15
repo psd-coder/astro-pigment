@@ -83,6 +83,21 @@ export type DocsThemeConfig = SiteConfig & {
   clientRouter?: boolean;
   /** Enable full-text search. Default: true. */
   search?: boolean;
+  /** robots.txt customization. */
+  robots?: {
+    /**
+     * Content-Signal directive (contentsignal.org) added to the `User-agent: *` block.
+     * Each flag maps to yes/no in the output. Defaults: all true.
+     */
+    contentSignal?: {
+      /** Allow content use for building a search index. Default: true. */
+      search?: boolean;
+      /** Allow content use for AI model training. Default: true. */
+      aiTrain?: boolean;
+      /** Allow content use as AI input (RAG, grounding, live retrieval). Default: true. */
+      aiInput?: boolean;
+    };
+  };
   /** Theme customization. Consumed by CSS variables, fonts, custom CSS, and syntax highlighting. */
   theme?: {
     /** Base hue (0-360). Default: 180. */
