@@ -21,6 +21,7 @@ export default defineConfig({
       theme: {
         hue: 274,
       },
+      logo: "./src/assets/astro-pigment-full.svg",
       meta: {
         icon: {
           favicon: "src/assets/astro-pigment-favicon.svg",

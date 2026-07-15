@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1872" height="512" fill="none" viewBox="0 0 1872 512">
+  <path fill="currentColor" d="M660.72 289.56h-31.36V345h-38.64V154.6h70q67.76 0 67.76 66.08 0 33.32-17.36 51.24-17.08 17.64-50.4 17.64m-31.36-33.04h31.08q28.84 0 28.84-35.84 0-17.64-7-25.2-7-7.84-21.84-7.84h-31.08zM752.803 345V154.6h38.64V345zm156.557-68.32v-33.6h55.44v98.84q-40.04 6.44-64.96 6.44-44.52 0-61.32-23.8-16.52-23.8-16.52-75.6t17.36-74.76 59.08-22.96q26.04 0 56.28 5.88l10.08 1.96-1.12 29.96q-33.6-3.64-55.16-3.64-21.28 0-29.96 5.04t-12.88 18.76q-3.92 13.44-3.92 46.48 0 32.76 8.12 45.92t33.6 13.16l23.24-1.12v-36.96zM998.492 345V154.6h65.798l33.6 138.88 33.6-138.88h65.8V345h-38.64V197.72h-4.2l-37.24 138.88h-38.64l-37.24-138.88h-4.2V345zm237.548 0V154.6h123.2v33.6h-84.56v44.52h67.76v33.04h-67.76v45.64h84.56V345zm152.24 0V154.6h65.24l45.92 156.8h2.8V154.6h38.64V345h-63.56l-47.6-156.8h-2.8V345zm174.26-156.24V154.6h140v34.16h-50.4V345h-38.64V188.76z"/>
+  <g clip-path="url(#a)">
+    <foreignObject width="2000" height="2000" x="-1000" y="-1000" transform="rotate(90 -1 255)scale(.24)">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="background:conic-gradient(from 90deg,#07aaa0 0deg,#05a7aa 5.01832deg,#298ef0 55.0268deg,#7b45f2 100.718deg,#9c41e0 132.519deg,#da40bb 162.337deg,#f95070 197.561deg,#fa8708 231.877deg,#e3b407 262.298deg,#86cf16 304.188deg,#18c55c 325.829deg,#07aaa0 360deg);height:100%;width:100%;opacity:1"></div>
+    </foreignObject>
+  </g>
+  <path d="M254 16c132.548 0 240 107.452 240 240S386.548 496 254 496 14 388.548 14 256 121.452 16 254 16m0 100c-77.32 0-140 62.68-140 140s62.68 140 140 140 140-62.68 140-140-62.68-140-140-140" />
+  <g filter="url(#b)">
+    <circle cx="112" cy="129" r="50" fill="#9c42e0"/>
+    <circle cx="112" cy="129" r="58" stroke="#fff" stroke-width="16"/>
+  </g>
+  <path fill="currentColor" d="m173.76 345 42.84-190.4h73.36L332.8 345h-38.64l-7.56-34.44h-66.64L212.4 345zm72.8-158.48-19.32 90.44h52.08L260 186.52z"/>
+  <defs>
+    <clipPath id="a">
+      <path d="M254 16c132.548 0 240 107.452 240 240S386.548 496 254 496 14 388.548 14 256 121.452 16 254 16m0 100c-77.32 0-140 62.68-140 140s62.68 140 140 140 140-62.68 140-140-62.68-140-140-140"/>
+    </clipPath>
+    <filter id="b" width="172" height="172" x="26" y="43" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+      <feMorphology in="SourceAlpha" operator="dilate" radius="4" result="effect1_dropShadow_2011_2"/>
+      <feOffset/>
+      <feGaussianBlur stdDeviation="8"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix values="0 0 0 0 0.192157 0 0 0 0 0.0470588 0 0 0 0 0.301961 0 0 0 0.25 0"/>
+      <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_2011_2"/>
+      <feBlend in="SourceGraphic" in2="effect1_dropShadow_2011_2" result="shape"/>
+    </filter>
+  </defs>
+</svg>
