@@ -11,6 +11,7 @@ import rehypeSlug from "rehype-slug";
 import { adaptiveCodeTheme } from "./themes/adaptive-code-theme";
 import type { DocsThemeConfig, SiteConfig } from "./types";
 import { generateScopedName, transitiveCssPlugin } from "./utils/cssModules";
+import { internalSourcemapNoiseFilter } from "./utils/devServer";
 import { headingText, type HeadingNode } from "./utils/headingAnchor";
 import { gfmMarkdownConfig } from "./utils/markdownConfig";
 import { fonts } from "./utils/fonts";
@@ -373,6 +374,7 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
                 },
               },
               transitiveCssPlugin(),
+              internalSourcemapNoiseFilter(),
             ],
           },
         });
