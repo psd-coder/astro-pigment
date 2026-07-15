@@ -55,18 +55,30 @@
     "./utils/response": "./src/utils/response.ts",
     "./utils/schemas": "./src/utils/schemas.ts",
     "./utils/urls": "./src/utils/urls.ts",
+    "./edge": "./src/edge/index.ts",
+    "./edge/vercel": "./src/edge/vercel.ts",
+    "./edge/netlify": "./src/edge/netlify.ts",
+    "./edge/cloudflare": "./src/edge/cloudflare.ts",
     "./styles/*": "./src/styles/*",
     "./types": "./src/types.ts",
     "./stylelint.config": "./stylelint.config.js",
     "./browserslist": "./.browserslistrc"
   },
   "peerDependencies": {
+    "@netlify/edge-functions": "^3.0.0",
+    "@vercel/functions": "^3.0.0",
     "astro": "^6.0.0",
     "nanostores": "^1.0.0",
     "nanotags": "^0.14.0",
     "sharp": "^0.34.0"
   },
   "peerDependenciesMeta": {
+    "@netlify/edge-functions": {
+      "optional": true
+    },
+    "@vercel/functions": {
+      "optional": true
+    },
     "sharp": {
       "optional": true
     }
@@ -107,8 +119,10 @@
     "valibot": "^1.3.1"
   },
   "devDependencies": {
+    "@netlify/edge-functions": "^3.0.8",
     "@prettier/plugin-oxc": "^0.1.4",
     "@types/mdast": "^4.0.4",
+    "@vercel/functions": "^3.7.5",
     "astro": "^6.1.5",
     "nanostores": "^1.0.0",
     "nanotags": "^0.15.2",

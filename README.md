@@ -342,6 +342,71 @@ When `docs` is configured, the integration auto-generates:
 - **`/[slug].md`**: individual markdown endpoints for each doc file
 - **Sitemap**: via `@astrojs/sitemap`
 
+## Edge Middleware
+
+Every doc page ships a `.md` twin, but an agent landing on `/guide` doesn't know to ask for `/guide.md`. A static deploy has no server to negotiate, so the theme ships optional edge middleware: when a request's `Accept` header prefers markdown, it serves the prebuilt `.md` in place — same URL, `200`, `Content-Type: text/markdown`. Browsers keep getting HTML. Detection reads the standard `Accept` header, not AI-crawler User-Agents.
+
+Add the entry file for your host and install its provider package (optional peer dependencies, so you only pull in the one you use). Each entry assumes Astro's default `base: "/"`; for a custom base, use the `create*Middleware({ base })` factory.
+
+Each entry also scopes which requests reach the middleware. The core only negotiates paths whose last segment has no dot, and every config below mirrors that exact rule — so scoping never changes which pages negotiate, it only stops paying invocations to reach a no-op.
+
+The config must be a **literal in your own file**. Vercel and Netlify both read it statically at build time and neither follows a re-export: Vercel ignores the matcher and runs on every request, Netlify never picks up the declaration. Both fail silently.
+
+### Cloudflare Pages
+
+No provider package needed; the prebuilt `.md` is served straight from the `ASSETS` binding.
+
+```ts
+// functions/_middleware.ts
+export { onRequest } from "astro-pigment/edge/cloudflare";
+```
+
+Cloudflare can't express the rule directly, since `_routes.json` takes globs rather than regex, so it has to be enumerated. Put it in `public/` and Astro copies it into the build output:
+
+```json
+// public/_routes.json
+{
+  "version": 1,
+  "include": ["/*"],
+  "exclude": ["/_astro/*", "/*.html", "/*.md", "/*.txt", "/*.xml", "/*.json", "/*.png"]
+}
+```
+
+Without it a root `_middleware.ts` matches every route, so nothing counts as static and the whole site draws on the Workers free plan's 100,000 requests/day — a budget shared across your entire account. The extensions are whatever your build emits (`find dist -type f`), and this is the one place the rule can drift: add a `.webp` and it silently starts invoking the middleware again.
+
+### Netlify
+
+Netlify supplies the runtime; `@netlify/edge-functions` is only needed for its types.
+
+```ts
+// netlify/edge-functions/markdown.ts
+import type { Config } from "@netlify/edge-functions";
+
+export { default } from "astro-pigment/edge/netlify";
+
+export const config: Config = {
+  path: "/*",
+  excludedPattern: "/.*\\.[^/]*$",
+};
+```
+
+### Vercel
+
+Requires `@vercel/functions` at runtime for the pass-through.
+
+```ts
+// middleware.ts — project root
+export { default } from "astro-pigment/edge/vercel";
+
+export const config = {
+  matcher: ["/((?!.*\\.[^/]*$).*)"],
+};
+```
+
+### Other hosts
+
+Deno Deploy, Workers with static assets, a custom Node/Bun server — wrap your static handler with `negotiateMarkdown` from `astro-pigment/edge`.
+
 ## Favicon & Webmanifest
 
 The `meta.icon` option requires the [`sharp`](https://sharp.pixelplumbing.com/) package for raster image generation. Install it in your project:
