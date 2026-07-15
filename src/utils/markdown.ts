@@ -1,4 +1,4 @@
-import type { Root, RootContent } from "mdast";
+import type { Code, Root, RootContent } from "mdast";
 import { toString } from "mdast-util-to-string";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdx from "remark-mdx";
@@ -17,11 +17,33 @@ const stringifier = unified()
 const DROP = new Set(["yaml", "toml", "mdxjsEsm", "mdxFlowExpression", "mdxTextExpression"]);
 const UNWRAP = new Set(["mdxJsxFlowElement", "mdxJsxTextElement"]);
 
+// The <InstallPackage> component renders per-manager tabs on the page; in the
+// clean markdown twin (for LLMs) it collapses to a single pnpm command so the
+// instruction survives instead of unwrapping to nothing.
+function installPackageCode(node: unknown): Code | undefined {
+  const el = node as {
+    type?: string;
+    name?: unknown;
+    attributes?: Array<{ type?: string; name?: unknown; value?: unknown }>;
+  };
+  if (el.type !== "mdxJsxFlowElement" || el.name !== "InstallPackage") return undefined;
+  const attrs = Array.isArray(el.attributes) ? el.attributes : [];
+  const pkg = attrs.find((a) => a?.type === "mdxJsxAttribute" && a.name === "pkg");
+  if (typeof pkg?.value !== "string") return undefined;
+  const dev = attrs.some((a) => a?.type === "mdxJsxAttribute" && a.name === "dev");
+  return { type: "code", lang: "sh", value: `pnpm add${dev ? " -D" : ""} ${pkg.value}` };
+}
+
 function stripMdxNodes(tree: Root): void {
   visit(tree, (node, index, parent) => {
     if (!parent || index === undefined) return undefined;
     if (DROP.has(node.type)) {
       parent.children.splice(index, 1);
+      return [SKIP, index];
+    }
+    const installCode = installPackageCode(node);
+    if (installCode) {
+      parent.children.splice(index, 1, installCode as RootContent);
       return [SKIP, index];
     }
     if (UNWRAP.has(node.type) && "children" in node) {

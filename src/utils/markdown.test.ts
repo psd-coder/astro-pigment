@@ -48,6 +48,18 @@ describe("stringifyCleanMarkdown", () => {
     expect(out).not.toContain("title: Secret");
     expect(out).toContain("# Heading");
   });
+
+  it("collapses <InstallPackage> to a single pnpm command", () => {
+    const out = stringifyCleanMarkdown('<InstallPackage pkg="astro-pigment nanostores" />');
+    expect(out).toContain("```sh");
+    expect(out).toContain("pnpm add astro-pigment nanostores");
+    expect(out).not.toContain("InstallPackage");
+  });
+
+  it("adds -D for a dev InstallPackage", () => {
+    const out = stringifyCleanMarkdown('<InstallPackage pkg="typescript" dev />');
+    expect(out).toContain("pnpm add -D typescript");
+  });
 });
 
 describe("extractSections", () => {
