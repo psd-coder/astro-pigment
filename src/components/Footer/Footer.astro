@@ -42,7 +42,13 @@ const { class: className } = Astro.props;
     }
     <slot name="extra" />
   </div>
-  <a class={styles.brand} href={ASTRO_PIGMENT_URL} aria-label="Astro Pigment">
+  <a
+    class={styles.brand}
+    href={ASTRO_PIGMENT_URL}
+    target="_blank"
+    aria-label="Made with Astro Pigment"
+  >
+    made with
     <Fragment set:html={logo} />
   </a>
 </footer>

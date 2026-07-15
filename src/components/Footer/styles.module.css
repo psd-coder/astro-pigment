@@ -18,15 +18,20 @@
   .brand {
     /* Baked-gradient logo can't be repainted per-node, so tint the whole desaturated mark via
        filter: sepia lays down a ~40deg tone, hue-rotate lands it on the live theme hue. */
-    --brand-tint: hue-rotate(calc((var(--theme-hue) - 40) * 1deg));
+    --brand-tint: hue-rotate(calc((var(--theme-hue) - 80) * 1deg));
 
     position: absolute;
     top: 50%;
     left: 50%;
     display: inline-flex;
+    gap: var(--spacing);
+    align-items: center;
+    text-decoration: none;
+    font-size: var(--text-xxs);
+    color: var(--color-text-secondary);
     filter: grayscale(1) sepia(0.8) var(--brand-tint);
-    opacity: 0.55;
-    transform: translate(-50%, -50%);
+    opacity: 0.4;
+    transform: translate(-50%, calc(var(--spacing) * 3));
     transition:
       filter 0.15s,
       opacity 0.15s;
@@ -37,32 +42,17 @@
       opacity: 1;
     }
 
-    /* Logo colors are baked; invert the desaturated mark so it stays legible on dark backgrounds. */
-    :global([data-theme="dark"]) & {
-      filter: grayscale(1) invert(1) sepia(0.8) var(--brand-tint);
-
-      &:hover {
-        filter: grayscale(0) invert(0) sepia(0) hue-rotate(0deg);
-      }
-
-      /* On hover the invert drops, dumping the baked deep-violet glyph (#310c4d) onto the
-         dark bg where it disappears. Repaint it with the theme text color so it reads. */
-      &:hover svg path[fill="#310c4d"] {
-        fill: var(--color-text-primary);
-      }
-    }
-
     @media (--mobiles) {
       position: static;
-      align-self: center;
-      transform: none;
+      align-self: start;
+      transform: translate(0, calc(var(--spacing) * 3));
     }
   }
 
   .brand svg {
     display: block;
-    width: 16px;
-    height: 16px;
+    width: calc(var(--spacing) * 4);
+    height: calc(var(--spacing) * 4);
   }
 
   .block {
