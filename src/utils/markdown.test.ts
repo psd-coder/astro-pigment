@@ -49,16 +49,42 @@ describe("stringifyCleanMarkdown", () => {
     expect(out).toContain("# Heading");
   });
 
-  it("collapses <InstallPackage> to a single pnpm command", () => {
+  it("expands <InstallPackage> to a command per package manager", () => {
     const out = stringifyCleanMarkdown('<InstallPackage pkg="astro-pigment nanostores" />');
-    expect(out).toContain("```sh");
-    expect(out).toContain("pnpm add astro-pigment nanostores");
+    expect(out).toContain("Install `astro-pigment nanostores`:");
+    expect(out).toContain("- pnpm: `pnpm add astro-pigment nanostores`");
+    expect(out).toContain("- npm: `npm install astro-pigment nanostores`");
+    expect(out).toContain("- yarn: `yarn add astro-pigment nanostores`");
+    expect(out).toContain("- bun: `bun add astro-pigment nanostores`");
     expect(out).not.toContain("InstallPackage");
   });
 
-  it("adds -D for a dev InstallPackage", () => {
+  // A fenced block of four install lines reads as a script to run top-to-bottom.
+  it("keeps the commands out of a code fence", () => {
+    const out = stringifyCleanMarkdown('<InstallPackage pkg="typescript" />');
+    expect(out).not.toContain("```");
+  });
+
+  it("uses each manager's dev flag for a dev InstallPackage", () => {
     const out = stringifyCleanMarkdown('<InstallPackage pkg="typescript" dev />');
-    expect(out).toContain("pnpm add -D typescript");
+    expect(out).toContain("Install `typescript` as a dev dependency:");
+    expect(out).toContain("- pnpm: `pnpm add -D typescript`");
+    expect(out).toContain("- npm: `npm install --save-dev typescript`");
+    expect(out).toContain("- yarn: `yarn add -D typescript`");
+    expect(out).toContain("- bun: `bun add -d typescript`");
+  });
+
+  it("treats dev={true} as a dev InstallPackage", () => {
+    const out = stringifyCleanMarkdown('<InstallPackage pkg="typescript" dev={true} />');
+    expect(out).toContain("- pnpm: `pnpm add -D typescript`");
+  });
+
+  it("skips dev flags when dev is explicitly false", () => {
+    const out = stringifyCleanMarkdown('<InstallPackage pkg="typescript" dev={false} />');
+    expect(out).toContain("- pnpm: `pnpm add typescript`");
+    expect(out).toContain("- npm: `npm install typescript`");
+    expect(out).not.toContain("-D");
+    expect(out).not.toContain("--save-dev");
   });
 });
 

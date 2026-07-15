@@ -1,5 +1,6 @@
 ---
 import { CodePanels, codePanelsStyles } from "../CodePanels";
+import { installCommands } from "../../utils/installCommands";
 
 type Props = {
   pkg: string;
@@ -8,12 +9,7 @@ type Props = {
 
 const { pkg, dev } = Astro.props;
 
-const managers = [
-  { id: "pnpm", content: `pnpm add${dev ? " -D" : ""} ${pkg}` },
-  { id: "npm", content: `npm install${dev ? " --save-dev" : ""} ${pkg}` },
-  { id: "yarn", content: `yarn add${dev ? " -D" : ""} ${pkg}` },
-  { id: "bun", content: `bun add${dev ? " -d" : ""} ${pkg}` },
-];
+const managers = installCommands(pkg, dev);
 ---
 
 <x-install-package class={codePanelsStyles.wrapper}>

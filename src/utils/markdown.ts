@@ -1,4 +1,4 @@
-import type { Code, Root, RootContent } from "mdast";
+import type { List, Paragraph, Root, RootContent } from "mdast";
 import { toString } from "mdast-util-to-string";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdx from "remark-mdx";
@@ -6,6 +6,7 @@ import remarkParse from "remark-parse";
 import remarkStringify from "remark-stringify";
 import { unified } from "unified";
 import { SKIP, visit } from "unist-util-visit";
+import { installCommands } from "./installCommands";
 
 const parser = unified().use(remarkParse).use(remarkFrontmatter, ["yaml", "toml"]).use(remarkMdx);
 
@@ -18,9 +19,17 @@ const DROP = new Set(["yaml", "toml", "mdxjsEsm", "mdxFlowExpression", "mdxTextE
 const UNWRAP = new Set(["mdxJsxFlowElement", "mdxJsxTextElement"]);
 
 // The <InstallPackage> component renders per-manager tabs on the page; in the
-// clean markdown twin (for LLMs) it collapses to a single pnpm command so the
-// instruction survives instead of unwrapping to nothing.
-function installPackageCode(node: unknown): Code | undefined {
+// clean markdown twin (for LLMs) it becomes a labelled list of every manager
+function attrIsTruthy(value: unknown): boolean {
+  if (value === null || value === undefined) return true;
+  if (typeof value === "string") return value.length > 0;
+  if (typeof value === "object" && "value" in value) {
+    return (value as { value?: unknown }).value !== "false";
+  }
+  return false;
+}
+
+function installPackageNodes(node: unknown): RootContent[] | undefined {
   const el = node as {
     type?: string;
     name?: unknown;
@@ -30,8 +39,36 @@ function installPackageCode(node: unknown): Code | undefined {
   const attrs = Array.isArray(el.attributes) ? el.attributes : [];
   const pkg = attrs.find((a) => a?.type === "mdxJsxAttribute" && a.name === "pkg");
   if (typeof pkg?.value !== "string") return undefined;
-  const dev = attrs.some((a) => a?.type === "mdxJsxAttribute" && a.name === "dev");
-  return { type: "code", lang: "sh", value: `pnpm add${dev ? " -D" : ""} ${pkg.value}` };
+  const devAttr = attrs.find((a) => a?.type === "mdxJsxAttribute" && a.name === "dev");
+  const dev = devAttr !== undefined && attrIsTruthy(devAttr.value);
+
+  const intro: Paragraph = {
+    type: "paragraph",
+    children: [
+      { type: "text", value: "Install " },
+      { type: "inlineCode", value: pkg.value },
+      { type: "text", value: dev ? " as a dev dependency:" : ":" },
+    ],
+  };
+  const list: List = {
+    type: "list",
+    ordered: false,
+    spread: false,
+    children: installCommands(pkg.value, dev).map(({ id, content }) => ({
+      type: "listItem",
+      spread: false,
+      children: [
+        {
+          type: "paragraph",
+          children: [
+            { type: "text", value: `${id}: ` },
+            { type: "inlineCode", value: content },
+          ],
+        },
+      ],
+    })),
+  };
+  return [intro, list];
 }
 
 function stripMdxNodes(tree: Root): void {
@@ -41,10 +78,10 @@ function stripMdxNodes(tree: Root): void {
       parent.children.splice(index, 1);
       return [SKIP, index];
     }
-    const installCode = installPackageCode(node);
-    if (installCode) {
-      parent.children.splice(index, 1, installCode as RootContent);
-      return [SKIP, index];
+    const installNodes = installPackageNodes(node);
+    if (installNodes) {
+      parent.children.splice(index, 1, ...installNodes);
+      return [SKIP, index + installNodes.length];
     }
     if (UNWRAP.has(node.type) && "children" in node) {
       parent.children.splice(index, 1, ...(node.children as RootContent[]));
