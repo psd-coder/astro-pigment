@@ -48,6 +48,9 @@
   }
 
   .triggerLabel {
+    color: var(--color-text-secondary);
+    font-size: var(--text-xs);
+
     @media (--tablets) {
       display: none;
     }

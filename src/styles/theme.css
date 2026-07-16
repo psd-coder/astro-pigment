@@ -13,8 +13,8 @@
   --color-text-secondary: oklch(40% calc(0.02 * var(--theme-saturation-factor)) var(--theme-hue));
   --color-text-tertiary: oklch(75% calc(0.02 * var(--theme-saturation-factor)) var(--theme-hue));
   --color-text-tertiary-hover: oklch(from var(--color-text-tertiary) calc(l - 0.15) c h);
-  --color-accent: oklch(55% calc(0.15 * var(--theme-saturation-factor)) var(--theme-hue));
-  --color-accent-dark: oklch(50% calc(0.15 * var(--theme-saturation-factor)) var(--theme-hue));
+  --color-accent: oklch(50% calc(0.15 * var(--theme-saturation-factor)) var(--theme-hue));
+  --color-accent-dark: oklch(45% calc(0.15 * var(--theme-saturation-factor)) var(--theme-hue));
   --color-accent-focus: oklch(from var(--color-accent) l c h / 50%);
   --color-border: oklch(90% calc(0.02 * var(--theme-saturation-factor)) var(--theme-hue));
   --color-border-hover: oklch(82% calc(0.02 * var(--theme-saturation-factor)) var(--theme-hue));
@@ -22,17 +22,17 @@
 
   /* Code highlighting: hue offsets from Catppuccin, anchored so --code-string = --theme-hue.
      Absolute oklch with moderate chroma to stay in sRGB gamut at all hues. */
-  --code-keyword: oklch(50% 0.19 mod(calc(var(--theme-hue) + 155), 360));
-  --code-string: oklch(54% 0.19 var(--theme-hue));
-  --code-function: oklch(52% 0.19 mod(calc(var(--theme-hue) + 120), 360));
-  --code-constant: oklch(58% 0.19 mod(calc(var(--theme-hue) - 100), 360));
-  --code-type: oklch(56% 0.19 mod(calc(var(--theme-hue) - 74), 360));
-  --code-tag: oklch(50% 0.19 mod(calc(var(--theme-hue) - 122), 360));
-  --code-parameter: oklch(56% 0.14 mod(calc(var(--theme-hue) - 122), 360));
-  --code-escape: oklch(54% 0.14 mod(calc(var(--theme-hue) + 196), 360));
-  --code-operator: oklch(52% 0.14 mod(calc(var(--theme-hue) + 59), 360));
-  --code-property: oklch(54% 0.14 mod(calc(var(--theme-hue) + 93), 360));
-  --code-comment: oklch(65% 0.03 mod(calc(var(--theme-hue) + 137), 360));
+  --code-keyword: oklch(49% 0.19 mod(calc(var(--theme-hue) + 155), 360));
+  --code-string: oklch(49% 0.19 var(--theme-hue));
+  --code-function: oklch(49% 0.19 mod(calc(var(--theme-hue) + 120), 360));
+  --code-constant: oklch(49% 0.19 mod(calc(var(--theme-hue) - 100), 360));
+  --code-type: oklch(49% 0.19 mod(calc(var(--theme-hue) - 74), 360));
+  --code-tag: oklch(49% 0.19 mod(calc(var(--theme-hue) - 122), 360));
+  --code-parameter: oklch(51% 0.14 mod(calc(var(--theme-hue) - 122), 360));
+  --code-escape: oklch(51% 0.14 mod(calc(var(--theme-hue) + 196), 360));
+  --code-operator: oklch(51% 0.14 mod(calc(var(--theme-hue) + 59), 360));
+  --code-property: oklch(51% 0.14 mod(calc(var(--theme-hue) + 93), 360));
+  --code-comment: oklch(56% 0.03 mod(calc(var(--theme-hue) + 137), 360));
   --code-text: oklch(40% 0.03 mod(calc(var(--theme-hue) + 137), 360));
   --spacing: 4px;
   --text-xxs: 0.625rem;
@@ -53,7 +53,7 @@
   --color-surface-1: oklch(12% calc(0.02 * var(--theme-saturation-factor)) var(--theme-hue));
   --color-surface-2: oklch(18% calc(0.02 * var(--theme-saturation-factor)) var(--theme-hue));
   --color-surface-3: oklch(21% calc(0.02 * var(--theme-saturation-factor)) var(--theme-hue));
-  --color-surface-4: oklch(21% calc(0.023 * var(--theme-saturation-factor)) var(--theme-hue));
+  --color-surface-4: oklch(19% calc(0.023 * var(--theme-saturation-factor)) var(--theme-hue));
   --color-text-primary: oklch(90% calc(0.02 * var(--theme-saturation-factor)) var(--theme-hue));
   --color-text-secondary: oklch(75% calc(0.02 * var(--theme-saturation-factor)) var(--theme-hue));
   --color-text-tertiary: oklch(45% calc(0.02 * var(--theme-saturation-factor)) var(--theme-hue));
@@ -75,7 +75,7 @@
   --code-escape: oklch(76% 0.08 mod(calc(var(--theme-hue) + 196), 360));
   --code-operator: oklch(72% 0.08 mod(calc(var(--theme-hue) + 59), 360));
   --code-property: oklch(74% 0.08 mod(calc(var(--theme-hue) + 93), 360));
-  --code-comment: oklch(55% 0.03 mod(calc(var(--theme-hue) + 137), 360));
+  --code-comment: oklch(60% 0.03 mod(calc(var(--theme-hue) + 137), 360));
   --code-text: oklch(83% 0.03 mod(calc(var(--theme-hue) + 137), 360));
 
   color-scheme: dark;
