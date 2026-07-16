@@ -1,11 +1,22 @@
 ---
+import type { HTMLAttributes } from "astro/types";
 import Kbd from "../Kbd/Kbd.astro";
 import Icon from "../Icon/Icon.astro";
 import styles from "./styles.module.css";
+
+type Props = HTMLAttributes<"button">;
+
+const { class: className, ...restProps } = Astro.props;
 ---
 
 <x-search>
-  <button data-ref="trigger" class={styles.trigger} type="button" aria-label="Search docs">
+  <button
+    data-ref="trigger"
+    class:list={[styles.trigger, className]}
+    type="button"
+    aria-label="Search docs"
+    {...restProps}
+  >
     <Icon name="search" size={16} class={styles.triggerIcon} />
     <span class={styles.triggerLabel}>Search...</span>
     <Kbd class={styles.kbd}>/</Kbd>
