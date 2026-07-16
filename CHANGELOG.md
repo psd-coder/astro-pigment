@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.18.0
+
+### Added
+
+- Markdown twins: every doc is also built as a standalone `.md` file at a `.md`-suffixed URL (`/guide` → `/guide.md`).
+- Opt-in Vercel, Netlify, and Cloudflare edge adapters serve those twins at the same URL via `Accept`-header negotiation (`negotiateMarkdown`, `markdownAssetUrl`, `prefersMarkdown`).
+- `robots.contentSignal` config (`search`/`aiTrain`/`aiInput`, each default `true`) declaring Content-Signal permissions in `robots.txt`.
+- Render `InstallPackage` as a per-package-manager command list in the markdown twin.
+- Rework footer brand into a "made with Astro Pigment" credit.
+
+### Fixed
+
+- Meet WCAG AA color contrast in code syntax tokens and UI text across theme hues.
+- Resolve header nav accessibility violations (menubar roles, `role="banner"`, logo link name).
+- Remove `<base>` tag that broke in-page anchor links.
+- Give heading permalinks real anchor text for SEO and accessibility.
+- Sanitize inline SVG logos so `<foreignObject>` no longer breaks layout.
+- Silence dev router warning from dev-toolbar source-map requests.
+
 ## 0.17.0
 
 ### Added
