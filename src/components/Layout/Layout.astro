@@ -53,7 +53,6 @@ const resolvedDescription = description ?? siteConfig.project.description;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <base href={getHref("")} />
     <LayoutFavicons />
     <LayoutMeta title={resolvedTitle} description={resolvedDescription} alternate={alternate} />
     <link rel="sitemap" href={getHref("sitemap-index.xml")} />
