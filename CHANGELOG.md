@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.20.0
+
+### Breaking
+
+- Astro 7 is now required: the `astro` peer range moves from `^6.0.0` to `^7.0.0`.
+- The markdown pipeline runs on Astro 7's Sätteri processor, where GFM and smart typography are native features. Smart typography now reads `--` as an en dash and `---` as an em dash, where the previous smartypants mapping turned `--` into an em dash and left `---` alone.
+
+### Added
+
+- Index page descriptions as a search key, giving authors a place to put search terms the headings do not spell out.
+- Query tokenizer and term-aware snippet extraction, so a multi-word query gets a snippet built around the terms that actually matched instead of a literal whole-query lookup.
+
+### Fixed
+
+- Rank search results by relevance instead of page order: pages rank by their best block and the tail is trimmed relative to that score. Also indexes the page title and requires every query word to match, so extra words narrow the results.
+- Highlight every query term separately in results and on the page, instead of marking only a whole-query literal match.
+- Chunk oversized sections in the search index at word boundaries, so one large section no longer skews ranking or yields snippets from anywhere inside it.
+- Flatten markdown table rows into comma-separated cells so tables no longer reach search snippets as `|---|---|` soup.
+
+### Documentation
+
+- List sites built with the theme in the README.
+
 ## 0.19.0
 
 ### Breaking
