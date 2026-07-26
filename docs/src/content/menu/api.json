@@ -5,7 +5,8 @@
       "label": "Reference",
       "items": [
         { "title": "Page frontmatter", "href": "/api/page-frontmatter" },
-        { "title": "Menu collection", "href": "/api/menu-collection" }
+        { "title": "Menu collection", "href": "/api/menu-collection" },
+        { "title": "Components", "href": "/api/components" }
       ]
     }
   ]

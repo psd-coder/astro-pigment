@@ -39,7 +39,6 @@ export default defineConfig({
         navLinks: [
           { href: "/", label: "Overview" },
           { href: "/api", label: "API" },
-          { href: "/components", label: "Components" },
           { href: "/theme-preview", label: "Theme Preview" },
         ],
       },
