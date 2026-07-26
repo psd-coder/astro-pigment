@@ -1,0 +1,55 @@
+---
+import { MOBILE_POPOVERS, registerMobilePopover, type MobilePopoverName } from "./utils";
+import styles from "./styles.module.css";
+
+type Props = { popover: MobilePopoverName };
+
+const { popover } = Astro.props;
+
+registerMobilePopover(Astro.locals, popover);
+---
+
+{/* Fullscreen slide-in panel for any mobile nav surface — Layout renders its trigger. */}
+<x-mobile-popover id={MOBILE_POPOVERS[popover]} class={styles.popover} popover="auto">
+  <div class={styles.panel}>
+    <slot />
+  </div>
+</x-mobile-popover>
+
+<script>
+  import { define } from "nanotags";
+
+  define("x-mobile-popover")
+    .withRefs((r) => ({
+      links: r.many<HTMLAnchorElement>("a[href]"),
+    }))
+    .setup((ctx) => {
+      const host = ctx.host as HTMLElement & { hidePopover(): void };
+
+      // Tap outside the panel (i.e. on the backdrop layer itself) closes.
+      ctx.on(ctx.host, "click", (e) => {
+        if (e.target === ctx.host) host.hidePopover();
+      });
+
+      // On open, bring the active item into view — the list can be long.
+      ctx.on(ctx.host, "toggle", (e) => {
+        if ((e as Event & { newState?: string }).newState !== "open") return;
+        // Any aria-current value — "page" for the nav menu, "location" for the
+        // ToC's in-page anchors.
+        ctx.host.querySelector<HTMLElement>("[aria-current]")?.scrollIntoView({ block: "nearest" });
+      });
+
+      // In-page anchors (ToC, or a member link while on that entry) smooth-scroll
+      // and close; cross-page links just close and let the navigation happen.
+      ctx.on(ctx.refs.links, "click", (e) => {
+        const link = e.currentTarget as HTMLAnchorElement;
+        const hash = link.href.split("#")[1];
+        const target = hash ? document.getElementById(hash) : null;
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ block: "start", behavior: "smooth" });
+        }
+        host.hidePopover();
+      });
+    });
+</script>

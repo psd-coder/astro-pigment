@@ -1,0 +1,24 @@
+---
+import { ButtonGroup } from "../ButtonGroup";
+import { MobilePopoverTrigger } from "../MobilePopover";
+import styles from "./styles.module.css";
+
+type Props = {
+  nav: boolean;
+  toc: boolean;
+};
+
+const { nav, toc } = Astro.props;
+
+const ICON_SIZE = 20;
+---
+
+{/* Each trigger ships with its popover; this only groups and places them. */}
+<ButtonGroup class={styles.mobileTriggers} aria-label="Page navigation">
+  {nav && <MobilePopoverTrigger popover="nav" icon="hamburger" label="Menu" size={ICON_SIZE} />}
+  {
+    toc && (
+      <MobilePopoverTrigger popover="toc" icon="toc" label="Table of contents" size={ICON_SIZE} />
+    )
+  }
+</ButtonGroup>

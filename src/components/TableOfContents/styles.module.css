@@ -22,8 +22,11 @@
     display: block;
     flex-shrink: 0;
 
+    /* Aligns with the link text, which clears the guide line. */
+    padding-left: calc(var(--spacing) * 2 + 1px);
+
     font-size: var(--text-xxs);
-    font-weight: 800;
+    font-weight: 700;
     color: var(--color-text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -32,98 +35,57 @@
   .list {
     overflow-y: auto;
     display: flex;
-    flex: 1;
     flex-direction: column;
 
     min-height: 0;
+    margin: 0;
+    padding: 0;
 
     list-style: none;
   }
 
+  /* Per-link borders butt together into one continuous guide line (the list has no
+     gap), which lets the active entry color its own segment as a position marker. */
   .link {
     display: block;
+    overflow: hidden;
 
-    padding: var(--spacing) calc(var(--spacing) * 3) var(--spacing) 0;
+    padding: var(--spacing) calc(var(--spacing) * 3) var(--spacing) calc(var(--spacing) * 2);
+    border-left: 1px solid var(--color-border);
 
-    font-size: var(--text-sm);
-    font-weight: 500;
+    font-size: var(--text-xs);
     color: var(--color-text-secondary);
     text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
-    transition: color 0.15s;
+    transition:
+      color 0.15s,
+      border-color 0.15s;
 
     &.active.active {
       color: var(--color-accent);
+      border-color: var(--color-accent);
     }
   }
 
   .link:hover {
     color: var(--color-text-primary);
+    border-color: var(--color-border-hover);
   }
 
+  /* Same size as the top level — depth reads from the indent alone. */
   .nested {
-    padding-left: calc(var(--spacing) * 4);
-    font-size: var(--text-xs);
+    padding-left: calc(var(--spacing) * 5);
   }
 
-  /* Mobile version */
-  .popoverTrigger.popoverTrigger {
-    position: fixed;
-    z-index: 10;
-    right: var(--layout-gap-x);
-    bottom: var(--layout-gap-x);
-
-    margin-left: auto;
-
-    @media (--min-tablets) {
-      bottom: calc(var(--layout-gap-x) + var(--spacing) * 10);
-    }
-
-    @media (--min-laptops) {
-      display: none;
-    }
-  }
-
-  .popover {
-    position: fixed;
-    z-index: 10;
-    inset: 0;
-
-    overflow-y: auto;
-    overscroll-behavior: contain;
-
-    width: 100vw;
-    height: 100vh;
-    border: none;
-
-    background: none;
-
-    &::backdrop {
-      opacity: 0.8;
-      background: var(--color-surface-3);
-    }
-
-    &:not(:popover-open) {
-      display: none;
-    }
-  }
-
-  .popoverPanel {
-    position: absolute;
-    inset: 0 0 0 auto;
-
+  /* Mobile version — MobilePopover owns the panel chrome, this is just its content. */
+  .popoverList {
     display: flex;
+    flex: 1;
     flex-direction: column;
     gap: calc(var(--spacing) * 4);
 
-    width: var(--layout-sidebar-width-override, 280px);
-    max-height: 100dvh;
-    margin: 0;
-    padding: calc(var(--spacing) * 5);
-    border: none;
-    border-left: 1px solid var(--color-border);
-
-    background: var(--color-surface-1);
-    box-shadow: 0 4px 24px oklch(from var(--color-accent) l c h / 10%);
+    min-height: 0;
   }
 }

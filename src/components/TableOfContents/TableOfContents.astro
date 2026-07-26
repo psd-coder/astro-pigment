@@ -1,6 +1,5 @@
 ---
-import { Button } from "../Button";
-import { Icon } from "../Icon";
+import { MobilePopover } from "../MobilePopover";
 import styles from "./styles.module.css";
 import List from "./List.astro";
 import { type Heading } from "./utils";
@@ -13,23 +12,13 @@ type Props = {
 const { headings, itemsSelector = "#content :is(h2, h3)[id]" } = Astro.props;
 ---
 
-{/* Desktop sidebar */}
 <x-toc items-selector={itemsSelector} class={styles.component}>
   <List headings={headings} class={styles.sidebar} />
-</x-toc>
 
-{/* Mobile popover */}
-<Button
-  class={styles.popoverTrigger}
-  square
-  popovertarget="mobile-toc"
-  aria-label="Table of contents"
->
-  <Icon name="list" size={20} />
-</Button>
-<x-mobile-toc id="mobile-toc" class={styles.popover} popover="auto">
-  <List headings={headings} class={styles.popoverPanel} />
-</x-mobile-toc>
+  <MobilePopover popover="toc">
+    <List headings={headings} class={styles.popoverList} />
+  </MobilePopover>
+</x-toc>
 
 <script>
   import { define } from "nanotags";
@@ -41,11 +30,12 @@ const { headings, itemsSelector = "#content :is(h2, h3)[id]" } = Astro.props;
     .withProps(({ string }) => ({
       itemsSelector: string(),
     }))
-    .withRefs((r) => ({
-      links: r.many<HTMLAnchorElement>("a[href*='#']"),
-    }))
     .setup((ctx) => {
       const $activeSlug = atom<string | null>(null);
+      // Queried off the host rather than declared as a ref: refs stop at nested
+      // custom-element boundaries, which would skip the copy inside
+      // <x-mobile-popover>. Both lists must highlight together.
+      const links = [...ctx.host.querySelectorAll<HTMLAnchorElement>("a[href*='#']")];
 
       function updateActive() {
         const headings = [
@@ -87,38 +77,23 @@ const { headings, itemsSelector = "#content :is(h2, h3)[id]" } = Astro.props;
       function activateLink(hashOrLink: string | Element) {
         const slug = typeof hashOrLink === "string" ? hashOrLink : getLinkSlug(hashOrLink);
 
-        for (const link of ctx.refs.links) {
-          link.classList.toggle(styles.active, getLinkSlug(link) === slug);
+        for (const link of links) {
+          const active = getLinkSlug(link) === slug;
+          link.classList.toggle(styles.active, active);
+          // "location" rather than "page": these are in-page anchors, not a
+          // separate page. Color alone wouldn't convey the current entry.
+          if (active) link.setAttribute("aria-current", "location");
+          else link.removeAttribute("aria-current");
         }
       }
 
       ctx.on(window, "scroll", throttle(updateActive, 50), { passive: true });
-      ctx.on(ctx.refs.links, "click", (e) => {
+      ctx.on(links, "click", (e) => {
         const link = e.currentTarget as Element;
         requestAnimationFrame(() => activateLink(link));
       });
       ctx.effect($activeSlug, (slug) => slug && activateLink(slug));
 
       updateActive();
-    });
-
-  define("x-mobile-toc")
-    .withRefs((r) => ({
-      links: r.many<HTMLAnchorElement>("a[href*='#']"),
-    }))
-    .setup((ctx) => {
-      ctx.on(ctx.host, "click", (e) => {
-        if (e.target === ctx.host) {
-          ctx.host.hidePopover();
-        }
-      });
-
-      ctx.on(ctx.refs.links, "click", (e) => {
-        e.preventDefault();
-        const hash = (e.currentTarget as HTMLAnchorElement).getAttribute("href")?.split("#")[1];
-        const target = hash ? document.getElementById(hash) : null;
-        target?.scrollIntoView({ block: "start", behavior: "smooth" });
-        ctx.host.hidePopover();
-      });
     });
 </script>

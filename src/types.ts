@@ -1,18 +1,26 @@
+import type { HTMLAttributes } from "astro/types";
+
 export type IconName =
   | "check"
   | "chevron-left"
   | "copy"
   | "github"
-  | "list"
+  | "hamburger"
   | "markdown"
   | "search"
+  | "toc"
   | "close"
   | "x"
   | "custom";
 
+/** Extra HTML attributes spread onto a rendered link. `false`/`undefined` drops the attribute. */
+export type LinkAttrs = Partial<HTMLAttributes<"a">>;
+
 export type NavItem = {
   href: string;
   label: string;
+  /** e.g. `{ target: "_blank", rel: "noopener" }`. */
+  attrs?: LinkAttrs;
 };
 
 export type AlternateLink = {
