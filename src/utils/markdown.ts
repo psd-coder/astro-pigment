@@ -91,9 +91,28 @@ function stripMdxNodes(tree: Root): void {
   });
 }
 
+// remark-parse has no GFM table support, so a table arrives as literal pipe rows.
+// Left alone they read as "|---|---|" soup in search snippets.
+const TABLE_ROW = /^\s*\|.*\|\s*$/;
+const TABLE_DELIMITER_ROW = /^\s*\|[\s:|-]*\|\s*$/;
+
+function flattenTableRow(line: string): string {
+  return line
+    .trim()
+    .replace(/^\||\|$/g, "")
+    .split("|")
+    .map((cell) => cell.trim())
+    .filter(Boolean)
+    .join(", ");
+}
+
 function nodesToPlainText(nodes: RootContent[]): string {
   return nodes
     .map((n) => toString(n))
+    .join("\n")
+    .split("\n")
+    .filter((line) => !TABLE_DELIMITER_ROW.test(line))
+    .map((line) => (TABLE_ROW.test(line) ? flattenTableRow(line) : line))
     .join(" ")
     .replace(/\s+/g, " ")
     .trim();
