@@ -1,0 +1,82 @@
+---
+import type { MenuGroup } from "../../utils/schemas";
+import { getHref, isCurrentHref } from "../../utils/urls";
+import styles from "./styles.module.css";
+
+type Props = { groups: MenuGroup[]; rail?: boolean };
+
+const { groups, rail = false } = Astro.props;
+
+// Active on an exact page match, so a linkable group heading ("/api") stays
+// inactive while one of its items ("/api/debounced") is the current page —
+// aria-current="page" has a single target.
+const isActive = (link: { href?: string }) => link.href != null && isCurrentHref(Astro, link.href);
+---
+
+<nav
+  class:list={[styles.sidebar, rail && styles.rail]}
+  data-sidebar-nav-rail={rail ? "" : undefined}
+  aria-label="Section navigation"
+>
+  {
+    groups.map((group) => (
+      <div class={styles.group}>
+        {group.label !== null &&
+          (group.href != null ? (
+            <a
+              href={getHref(group.href)}
+              aria-current={isActive(group) ? "page" : undefined}
+              class:list={[styles.link, isActive(group) && styles.active]}
+              {...group.attrs}
+            >
+              {group.label}
+            </a>
+          ) : (
+            <span class={styles.groupTitle}>{group.label}</span>
+          ))}
+        {group.items.length > 0 && (
+          <ul class:list={[styles.list, group.label === null && styles.flatList]}>
+            {group.items.map((item) => (
+              <li>
+                <a
+                  href={getHref(item.href)}
+                  aria-current={isActive(item) ? "page" : undefined}
+                  class:list={[styles.link, isActive(item) && styles.active]}
+                  {...item.attrs}
+                >
+                  {item.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    ))
+  }
+</nav>
+
+<script>
+  // Center the active entry within the rail's own scroll box — not via
+  // scrollIntoView({ block: "center" }), which would also scroll the window (the
+  // rail is sticky, so that jump moves the page content pointlessly). Runs on
+  // first load and after every client-side navigation (the module executes once,
+  // so re-run on the router's swap event, which fires pre-paint). Scoped to the
+  // rail via [data-sidebar-nav-rail] so the mobile copy is left alone.
+  function centerActiveEntry() {
+    const rail = document.querySelector<HTMLElement>("[data-sidebar-nav-rail]");
+    const active = rail?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!rail || !active) return;
+
+    const aRect = active.getBoundingClientRect();
+    const cRect = rail.getBoundingClientRect();
+    // Already fully visible within the rail's scroll box → leave scroll alone, so
+    // paging between adjacent entries in the same section doesn't re-scroll it.
+    if (aRect.top >= cRect.top && aRect.bottom <= cRect.bottom) return;
+
+    const activeCenter = aRect.top - cRect.top + rail.scrollTop + aRect.height / 2;
+    rail.scrollTop = activeCenter - rail.clientHeight / 2;
+  }
+
+  centerActiveEntry();
+  document.addEventListener("astro:after-swap", centerActiveEntry);
+</script>
