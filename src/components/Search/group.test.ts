@@ -10,6 +10,7 @@ function block({ score, ...overrides }: BlockInit): ScoredBlock {
     item: {
       pageTitle: overrides.pageId,
       pageOrder: 0,
+      description: "",
       heading: "H",
       anchor: "h",
       body: "body text",

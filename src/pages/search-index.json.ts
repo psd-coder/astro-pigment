@@ -30,13 +30,10 @@ function chunkBody(body: string): string[] {
   return chunks;
 }
 
-function buildSections(
-  pageId: string,
-  pageTitle: string,
-  pageOrder: number,
-  body: string,
-): BlockEntry[] {
-  const sections = splitMarkdownIntoSections(body, pageTitle);
+type PageMeta = Pick<BlockEntry, "pageId" | "pageTitle" | "pageOrder" | "description">;
+
+function buildSections(page: PageMeta, body: string): BlockEntry[] {
+  const sections = splitMarkdownIntoSections(body, page.pageTitle);
   const slugOccurrences = new Map<string, number>();
   const entries: BlockEntry[] = [];
 
@@ -52,14 +49,7 @@ function buildSections(
     if (!section.body && !section.heading) continue;
 
     for (const chunk of section.body ? chunkBody(section.body) : [""]) {
-      entries.push({
-        pageId,
-        pageTitle,
-        pageOrder,
-        heading: section.heading,
-        anchor,
-        body: chunk,
-      });
+      entries.push({ ...page, heading: section.heading, anchor, body: chunk });
     }
   }
 
@@ -71,23 +61,26 @@ export const GET: APIRoute = async () => {
   const searchEntries = extraEntries.filter((e) => e.search !== false);
 
   const index: BlockEntry[] = [
-    ...docs.flatMap((entry) =>
-      entry.body ? buildSections(entry.id, entry.data.title, entry.data.order, entry.body) : [],
-    ),
-    ...searchEntries.flatMap((entry) =>
-      entry.body
-        ? buildSections(entry.id, entry.title, entry.order, entry.body)
-        : [
-            {
-              pageId: entry.id,
-              pageTitle: entry.title,
-              pageOrder: entry.order,
-              heading: "",
-              anchor: "",
-              body: entry.description,
-            },
-          ],
-    ),
+    ...docs.flatMap((entry) => {
+      const page = {
+        pageId: entry.id,
+        pageTitle: entry.data.title,
+        pageOrder: entry.data.order,
+        description: entry.data.description,
+      };
+      return entry.body ? buildSections(page, entry.body) : [];
+    }),
+    ...searchEntries.flatMap((entry) => {
+      const page = {
+        pageId: entry.id,
+        pageTitle: entry.title,
+        pageOrder: entry.order,
+        description: entry.description,
+      };
+      return entry.body
+        ? buildSections(page, entry.body)
+        : [{ ...page, heading: "", anchor: "", body: entry.description }];
+    }),
   ];
 
   return jsonResponse(index);
