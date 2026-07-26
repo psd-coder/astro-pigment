@@ -1,0 +1,12 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import styles from "./styles.module.css";
+
+type Props = HTMLAttributes<"div">;
+
+const { class: className, ...restProps } = Astro.props;
+---
+
+<div role="group" class:list={[styles.buttonGroup, className]} {...restProps}>
+  <slot />
+</div>

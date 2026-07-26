@@ -1,4 +1,5 @@
 export { Button } from "./Button";
+export { ButtonGroup } from "./ButtonGroup";
 export { Icon } from "./Icon";
 export { Layout } from "./Layout";
 export { Footer } from "./Footer";

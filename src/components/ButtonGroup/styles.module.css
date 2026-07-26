@@ -1,0 +1,32 @@
+@layer docs-theme {
+  .buttonGroup {
+    display: inline-flex;
+  }
+
+  /* Doubled class so the seam styles beat a child's own border-radius at equal
+     specificity, whatever the bundle order. */
+  .buttonGroup.buttonGroup > * {
+    position: relative;
+    border-radius: 0;
+
+    &:first-child {
+      border-start-start-radius: var(--radius-md);
+      border-end-start-radius: var(--radius-md);
+    }
+
+    &:last-child {
+      border-start-end-radius: var(--radius-md);
+      border-end-end-radius: var(--radius-md);
+    }
+
+    /* collapse the shared border between neighbours */
+    &:not(:first-child) {
+      margin-inline-start: -1px;
+    }
+
+    &:hover,
+    &:focus-visible {
+      z-index: 1;
+    }
+  }
+}
