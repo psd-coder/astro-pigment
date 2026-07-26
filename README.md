@@ -196,7 +196,7 @@ type DocsThemeConfig = {
 
 - Stores config in a virtual module (`virtual:pigment-config`) so components read it automatically
 - Requires `site` in `astro.config.mjs`; auto-sets `base` from GitHub config (`/repo/` in CI, `/` in dev)
-- Injects rehype-slug + rehype-autolink-headings
+- Configures markdown on Astro's Sätteri processor: heading ids + heading self-link anchors, GitHub Flavored Markdown and smart typography
 - Injects an adaptive Shiki theme that derives syntax colors from `--theme-hue` (based on Catppuccin, hue-rotated via OKLch). Override with `theme.shiki` to use fixed themes instead.
 - Injects PostCSS preset-env (nesting, custom-media, media-query-ranges)
 - When `meta.icon` is configured: generates favicons (svg, ico, 96x96 png), apple-touch-icon, webmanifest + manifest icons
