@@ -1,0 +1,103 @@
+---
+title: "Menu collection"
+description: Define reusable section navigations as JSON and attach one to a page with menu.
+order: 4
+menu: "api"
+---
+
+A **menu** is a reusable, flat navigation defined once as data and shared across
+many pages. It's an ordinary content collection of JSON files: one file is one
+menu, and a page opts into it with a single frontmatter field. This is how a
+"reference section" is built — the entries are [ordinary docs pages](/api/page-frontmatter),
+and the menu is just the list that ties them together.
+
+## Registering the collection
+
+Add the menu collection to your content config alongside the docs collection.
+Both come from `astro-pigment/content`:
+
+```ts
+// src/content.config.ts
+import { defineDocsCollections, defineMenuCollection } from "astro-pigment/content";
+
+export const collections = {
+  ...defineDocsCollections(),
+  ...defineMenuCollection(),
+};
+```
+
+Menu files live in `src/content/menu/`. The **filename is the menu id**:
+`src/content/menu/api.json` is the menu `"api"`.
+
+## Attaching a menu to a page
+
+Point a page's `menu` at a menu id. That page renders the menu in its left
+column and its own outline on the right (a [three-column layout](/api/page-frontmatter)):
+
+```yaml
+---
+title: "debounce"
+description: Delay a function until input settles.
+order: 12
+menu: "api"
+---
+```
+
+The menu item whose `href` matches the current path is marked active and
+auto-centered within the rail's own scroll box.
+
+## Schema
+
+A menu is a list of groups; each group is a label (or `null` for an unlabelled,
+flat group) and a list of items. A group heading can itself be a link — give it
+an `href` and it renders as a top-level link, with an empty `items` for a
+standalone link or nested items for a section landing. Each item has a `title`
+and an `href`:
+
+```
+menu      = { groups: MenuGroup[] }
+MenuGroup = { label: string | null; href?: string; attrs?: LinkAttrs; items?: MenuItem[] }
+MenuItem  = { title: string; href: string; attrs?: LinkAttrs }
+LinkAttrs = Record<string, string | number | boolean>
+```
+
+Any link — group heading or item — takes an optional `attrs` object that is
+spread onto the rendered `<a>`: `target`, `rel`, `data-*`, anything. A `false`
+value drops the attribute.
+
+An `href` carrying a scheme (`https://`, `mailto:`) or a leading `//` points
+outside the site: it is used verbatim and never marked active. Everything else
+is a site path, absolute (`/api`) or relative (`api`), resolved against the
+site base.
+
+The JSON is validated at build time; a malformed menu fails the build with a
+clear error rather than rendering wrong.
+
+## Example
+
+```json
+// src/content/menu/api.json
+{
+  "groups": [
+    { "label": "Overview", "href": "/api" },
+    {
+      "label": "Reference",
+      "items": [
+        { "title": "Page frontmatter", "href": "/api/page-frontmatter" },
+        { "title": "Menu collection", "href": "/api/menu-collection" }
+      ]
+    },
+    {
+      "label": "Astro docs",
+      "href": "https://docs.astro.build",
+      "attrs": { "target": "_blank", "rel": "noopener" }
+    }
+  ]
+}
+```
+
+Here "Overview" and "Astro docs" are group-level links (no nested items), while
+"Reference" is a plain heading over its items. "Astro docs" is external by its
+href alone and opens in a new tab via its `attrs`. Menus are flat (one level) —
+nested menus are not supported; sub-structure belongs in a page's own
+on-this-page outline.
