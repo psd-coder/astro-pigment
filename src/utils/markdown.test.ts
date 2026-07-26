@@ -117,6 +117,17 @@ describe("splitMarkdownIntoSections", () => {
     const [lead] = splitMarkdownIntoSections(raw, "My Page");
     expect(lead).toEqual({ heading: "My Page", level: 1, body: "Intro." });
   });
+
+  it("flattens table rows and drops their delimiter row", () => {
+    const raw = "## T\n\n| Field | Type |\n| ----- | :---: |\n| title | string |";
+    const [section] = splitMarkdownIntoSections(raw);
+    expect(section?.body).toBe("Field, Type title, string");
+  });
+
+  it("leaves pipes inside prose alone", () => {
+    const [section] = splitMarkdownIntoSections("## T\n\nRun `a | b` to pipe.");
+    expect(section?.body).toBe("Run a | b to pipe.");
+  });
 });
 
 describe("formatSections", () => {
