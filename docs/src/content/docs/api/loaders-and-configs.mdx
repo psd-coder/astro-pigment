@@ -1,0 +1,52 @@
+---
+title: "Loaders & exportable configs"
+description: The examples collection loader, plus shareable stylelint and browserslist configs.
+order: 8
+menu: "api"
+---
+
+## Examples Loader
+
+For sites with interactive code examples, import the content collection loader:
+
+```ts
+// content.config.ts
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
+import { examplesLoader } from "astro-pigment/loaders/examples";
+
+const examples = defineCollection({
+  loader: examplesLoader("src/content/examples/"),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    descriptionHtml: z.string().default(""),
+    files: z.array(
+      z.object({
+        name: z.string(),
+        type: z.enum(["html", "javascript", "css", "importmap"]),
+        lang: z.enum(["html", "javascript", "css"]),
+        content: z.string(),
+      }),
+    ),
+  }),
+});
+```
+
+The loader parses `.html` files with `data-type` attributes into `FileEntry` arrays compatible with the `CodeExample` playground component. An element with `id="description"` is extracted as `descriptionHtml` (rich HTML description); if absent, `descriptionHtml` falls back to the plain-text `description`. Requires `linkedom` (bundled with the theme).
+
+## Exportable Configs
+
+Stylelint config with CSS standards, clean ordering, and CSS Modules support:
+
+```js
+// stylelint.config.js
+export default { extends: ["astro-pigment/stylelint.config"] };
+```
+
+Browserslist targeting last 2 versions:
+
+```
+// .browserslistrc
+extends astro-pigment/browserslist
+```

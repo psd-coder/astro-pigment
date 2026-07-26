@@ -1,0 +1,74 @@
+---
+title: "SEO & robots"
+description: robots.txt with Content-Signal, sitemap, llms.txt, and per-doc markdown routes.
+order: 9
+menu: "api"
+---
+
+## robots.txt
+
+`/robots.txt` is always served: permissive (`Allow: /`), with a `Sitemap:` line pointing at `/sitemap-index.xml` and a [Content-Signal](https://contentsignal.org) directive on the `User-agent: *` block. Content-Signal states how crawlers may use your content, independent of whether they may fetch it. Three flags, each defaulting to `true` (emitted as `yes`):
+
+| Flag      | Directive  | Meaning                                                    |
+| --------- | ---------- | ---------------------------------------------------------- |
+| `search`  | `search`   | Use the content to build a search index                    |
+| `aiTrain` | `ai-train` | Use the content to train an AI model                       |
+| `aiInput` | `ai-input` | Use the content as AI input (RAG, grounding, live answers) |
+
+Set any to `false` to emit `no`. For example, to allow search indexing but opt out of AI training and retrieval:
+
+```ts
+docsTheme({
+  // ...
+  robots: { contentSignal: { aiTrain: false, aiInput: false } },
+});
+```
+
+produces:
+
+```
+User-agent: *
+Content-Signal: search=yes, ai-train=no, ai-input=no
+Allow: /
+
+Sitemap: https://your-site/sitemap-index.xml
+```
+
+Content-Signal is a preference expressed to crawlers, not an access control; it does not block fetching.
+
+## SEO and LLM Endpoints
+
+When `docs` is configured in the integration, four endpoints are auto-generated:
+
+| Endpoint             | Description                                                        |
+| -------------------- | ------------------------------------------------------------------ |
+| `/llms.txt`          | Structured index: project name, description, per-doc `##` sections |
+| `/llms-full.txt`     | All docs concatenated into a single markdown file                  |
+| `/[slug].md`         | Individual markdown for each doc (and extra entries with `body`)   |
+| `/sitemap-index.xml` | Standard sitemap via `@astrojs/sitemap`                            |
+
+Docs are sorted by the `order` field in frontmatter. Frontmatter and import statements are stripped from the output.
+
+When `docs.extraEntries` is configured, those entries are appended after docs in `llms.txt` and `llms-full.txt`. Entries with a `body` field also get individual `/[id].md` routes.
+
+### Extra Entries
+
+Each entry has `id` (URL path segment), `title`, `description`, `order`, and optional `body` (markdown). Pass a static array for simple cases, or a module path for dynamic data:
+
+```ts
+// src/extra-entries.ts
+import type { ExtraEntry } from "astro-pigment";
+import { getCollection } from "astro:content";
+
+export default async function (): Promise<ExtraEntry[]> {
+  const examples = await getCollection("examples");
+  return examples.map((ex) => ({
+    id: `examples/${ex.id}`,
+    title: ex.data.title,
+    description: ex.data.description,
+    order: 101,
+  }));
+}
+```
+
+The module must default-export an `ExtraEntry[]` or a function returning `Promise<ExtraEntry[]>`.

@@ -1,0 +1,105 @@
+---
+title: "Social images"
+description: Generated favicons, webmanifest, Open Graph images, and Twitter cards.
+order: 10
+menu: "api"
+---
+
+## Favicon and Webmanifest
+
+`meta.icon` accepts either a single source path or an object with two sources:
+
+```js
+// Single source (same icon for all sizes)
+meta: { icon: "src/assets/icon.svg" }
+
+// Two sources — simplified design for tiny favicons, detailed for manifest
+meta: {
+  icon: {
+    favicon: "src/assets/favicon.svg",
+    manifest: "src/assets/icon-detailed.svg",
+  },
+}
+```
+
+Use the object form when a detailed 512x512 design becomes illegible at 16-32px. Both `favicon` and `manifest` are required in the object form.
+
+| File                            | Source     | Size/Format                                   |
+| ------------------------------- | ---------- | --------------------------------------------- |
+| `/favicon.svg`                  | `favicon`  | Passthrough (SVG source only)                 |
+| `/favicon.ico`                  | `favicon`  | 32x32 ICO                                     |
+| `/favicon-96x96.png`            | `manifest` | 96x96 PNG                                     |
+| `/apple-touch-icon.png`         | `manifest` | 180x180 PNG                                   |
+| `/web-app-manifest-192x192.png` | `manifest` | 192x192 PNG                                   |
+| `/web-app-manifest-512x512.png` | `manifest` | 512x512 PNG                                   |
+| `/site.webmanifest`             | —          | JSON manifest with project name and icon refs |
+
+The Layout `<head>` renders the corresponding `<link>` tags only when `meta.icon` is set. Uses `sharp` for image resizing (bundled with the theme).
+
+## Open Graph and Twitter Cards
+
+`/og.png` is always served. By default it uses a built-in satori template; override via `meta.og.image`:
+
+> **Tip:** in most cases, provide a dedicated `image.logo`. Your site logo is tuned for the site's own surface colors (light/dark neutrals), but the OG card uses a theme-hue-tinted background — a logo that reads cleanly on the site can lose contrast or clash on the card. An OG-specific variant with a palette tuned for that background keeps the mark legible across any `theme.hue`.
+
+```ts
+// Default: built-in template with fallback logo. No config needed.
+// meta: { og: { image: true } }
+
+// Static PNG (served as-is)
+meta: { og: { image: "src/assets/og.png" } };
+
+// Built-in template with overrides (all fields optional)
+meta: {
+  og: {
+    image: {
+      logo: "src/assets/og-logo.png", // string path | false (skip) | absent (fallback)
+      title: "My App",                // override project.name on the card
+      description: "Short pitch",     // override project.description on the card
+    },
+  },
+};
+
+// Custom satori template (same override fields apply)
+meta: {
+  og: {
+    image: {
+      template: "./src/og-template.ts",
+      title: "My App",
+    },
+  },
+};
+```
+
+Built-in and template modes require `sharp` (same peer dep as `meta.icon`). The built-in template uses `theme.hue` for color, bundled Martian Grotesk + Mono, and `project.{name,description}`. Logo resolution: explicit `image.logo` (string) → top-level `logo` → nothing. The resolved logo is rendered in its original colors (no processing) and replaces the project name; pass `image: { logo: false }` to render only the project name even when a top-level `logo` is set.
+
+The built-in OG template always uses the bundled Martian fonts — it does **not** pick up whatever you've configured in Astro's top-level `fonts` option. Astro's font pipeline emits woff2 only, but satori requires TTF/OTF, so server-side image generation is decoupled from browser-served fonts. To use different typography in your OG card, switch to a custom template (mode 2 above) and load your own TTF/OTF buffers inside it — `ctx.fonts` is provided as a convenience but isn't required.
+
+Custom templates default-export an `OgTemplateFn`:
+
+```ts
+// src/og-template.ts
+import type { OgTemplateFn } from "astro-pigment";
+
+const template: OgTemplateFn = (ctx) => ({
+  type: "div",
+  props: {
+    style: {
+      display: "flex",
+      width: "1200px",
+      height: "630px",
+      color: "white",
+      background: `hsl(${ctx.hue} 30% 12%)`,
+    },
+    children: ctx.projectName,
+  },
+});
+
+export default template;
+```
+
+Satori's color parser doesn't handle `oklch()` — stick to hex, `rgb()`, or `hsl()` inside templates.
+
+`ctx` exposes `projectName`, `description`, `siteUrl`, `pathname`, `logo` (`{ src: dataUri, width, height }` if `meta.og.logo` resolves, else undefined), `hue`, and `fonts` (Martian Grotesk Std Regular/Bold, Martian Mono Regular) for satori.
+
+Twitter falls back to the OG image when `meta.twitter.image` is unset; set it independently to use a different mode/path. Twitter card is always `summary_large_image` when an image is present.

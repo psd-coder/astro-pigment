@@ -1,0 +1,72 @@
+---
+title: "Stores & search"
+description: Reactive theme, media, and package-manager stores, and full-text search.
+order: 7
+menu: "api"
+---
+
+## Stores
+
+Reactive state stores available for client-side code:
+
+```ts
+// Theme store
+import { $themeSetting, $resolvedTheme, cycleTheme } from "astro-pigment/stores/theme";
+
+$themeSetting.get(); // "auto" | "light" | "dark"
+$resolvedTheme.get(); // "light" | "dark"
+cycleTheme(); // auto -> light -> dark -> auto
+
+// Theme color axes — what ThemePicker writes, read by the CSS variable overrides
+import { $hue, $saturation, DEFAULT_HUE, DEFAULT_SATURATION } from "astro-pigment/stores/theme";
+
+$hue.get(); // string, "0"-"360", default "180"
+$saturation.get(); // string, "0"-"100", default "50"
+
+// Media queries
+import { $prefersDarkScheme, $prefersReducedMotion, media } from "astro-pigment/stores/media";
+
+$prefersDarkScheme.get(); // boolean
+$prefersReducedMotion.get(); // boolean
+
+// Build a store for any media query
+const $isWide = media("(min-width: 64rem)");
+```
+
+Both stores are powered by [nanostores](https://github.com/nanostores/nanostores). Theme setting, hue, and saturation all persist to `localStorage`.
+
+### Package manager store
+
+From `astro-pigment/stores/pkgManager`:
+
+```ts
+import { $pkgManager } from "astro-pigment/stores/pkgManager";
+
+$pkgManager.get(); // "pnpm" | "npm" | "yarn" | "bun"
+```
+
+Used by `InstallPackage` internally. Also available for custom `CodePanels`-based tab switchers via `defineCodePanels`:
+
+```ts
+import { defineCodePanels } from "astro-pigment/utils/defineCodePanels";
+import { $pkgManager } from "astro-pigment/stores/pkgManager";
+
+defineCodePanels("x-my-switcher", $pkgManager);
+```
+
+## Search
+
+Full-text search is enabled by default (`search: true`). When enabled:
+
+- Injects a `/search-index.json` endpoint built from all docs (and `extraEntries`) at build time
+- Renders a search input in the Layout header that queries the index client-side
+- Extra entries with `body` are split into sections like docs; entries without `body` are indexed by title and description
+
+To disable:
+
+```ts
+docsTheme({
+  search: false,
+  // ...
+});
+```
