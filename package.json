@@ -122,7 +122,7 @@
     "@netlify/edge-functions": "^3.0.8",
     "@prettier/plugin-oxc": "^0.1.4",
     "@types/mdast": "^4.0.4",
-    "@vercel/functions": "^3.7.5",
+    "@vercel/functions": "^3.7.6",
     "astro": "^6.1.5",
     "nanostores": "^1.0.0",
     "nanotags": "^0.15.2",
