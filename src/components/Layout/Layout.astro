@@ -97,7 +97,13 @@ const resolvedDescription = description ?? siteConfig.project.description;
     <a href="#main-content" class={styles.skipLink}>Skip to main content</a>
     <x-sticky-header role="banner">
       <nav class:list={styles.nav}>
-        <a href={getHref("")} class={styles.logo} aria-label={siteConfig.project.name}>
+        <a
+          href={getHref("")}
+          class={styles.logo}
+          aria-label={siteConfig.project.name}
+          transition:name="pigment-logo"
+          transition:animate="initial"
+        >
           <slot name="logo">
             {
               logo ? (
@@ -124,7 +130,13 @@ const resolvedDescription = description ?? siteConfig.project.description;
             </div>
           )
         }
-        <div class:list={[styles.links, styles.extraNav]} role="menubar" focusgroup="wrap">
+        <div
+          class:list={[styles.links, styles.extraNav]}
+          role="menubar"
+          focusgroup="wrap"
+          transition:name="pigment-nav-extra"
+          transition:animate="initial"
+        >
           {search && <Search role="menuitem" />}
           <ThemeToggle role="menuitem" />
           {
@@ -157,7 +169,11 @@ const resolvedDescription = description ?? siteConfig.project.description;
     <div class={styles.main}>
       {
         showSidebar && (
-          <aside class={styles.sidebar}>
+          <aside
+            class={styles.sidebar}
+            transition:name="pigment-sidebar"
+            transition:animate="initial"
+          >
             <Fragment set:html={sidebarHtml} />
           </aside>
         )
