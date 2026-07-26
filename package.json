@@ -120,14 +120,14 @@
   },
   "devDependencies": {
     "@netlify/edge-functions": "^3.0.8",
-    "@prettier/plugin-oxc": "^0.1.4",
+    "@prettier/plugin-oxc": "^0.2.2",
     "@types/mdast": "^4.0.4",
     "@vercel/functions": "^3.7.6",
     "astro": "^6.1.5",
     "nanostores": "^1.4.1",
     "nanotags": "^0.15.2",
     "oxlint": "^1.59.0",
-    "prettier": "^3.8.3",
+    "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.9.3",
     "vitest": "^4.1.10"
