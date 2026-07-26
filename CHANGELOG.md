@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.19.0
+
+### Breaking
+
+- The page outline now always owns the right rail and the left rail is reserved for navigation. Icon `list` is renamed to `hamburger`, and `--layout-sidebar-width-override` sizes the left rail — size the outline with the new `--layout-sidebar-width-right-override`.
+- The build fails on a dangling `menu` reference and on two pages resolving to the same route slug, instead of reserving an empty column or silently dropping a page.
+
+### Added
+
+- `menu` content collection (`defineMenuCollection`): a flat JSON navigation per file, its filename as id, opted into by a page's `menu: "<id>"` frontmatter. Paired with `toc` so each frontmatter field owns one column.
+- Section menu rendered in the left rail, with linkable group headings and an active entry that re-centers in the rail only when off-screen.
+- Mobile navigation and outline triggers share one `MobilePopover` and sit side by side as a single grouped control.
+- `ButtonGroup` component: adjacent buttons collapse shared borders, keeping only the outer corners rounded.
+- Morph the shell across client-side navigations, so the logo, extra-nav block, footer blocks, and left rail hold in place while only the content swaps.
+- `isExternalHref` and `getRouteSlug` in `astro-pigment/utils/urls`, and `attrs` on nav and menu links for extra `<a>` attributes.
+
+### Changed
+
+- Active and current href matching is consolidated behind one path normalizer and is segment-aware, so `/guide` no longer marks `/guidelines` active, and `getHref` passes external hrefs through verbatim.
+
+### Fixed
+
+- Separate code comments from code text without losing AA contrast, by pulling `--code-text` forward instead of dimming the comment below the AA floor.
+
+### Documentation
+
+- Split the API reference into per-topic pages under Authoring, Configuration, and Deployment menu groups; the landing keeps the integration config object plus a map of the rest.
+- Move the components reference to `/api/components` under the Reference menu group, picking up the section nav and three-column layout.
+- Document the three-column layout, the new frontmatter fields, and the menu collection.
+
 ## 0.18.0
 
 ### Added
