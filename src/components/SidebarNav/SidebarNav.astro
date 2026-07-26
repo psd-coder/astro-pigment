@@ -1,0 +1,15 @@
+---
+import type { MenuGroup } from "../../utils/schemas";
+import { MobilePopover } from "../MobilePopover";
+import SidebarNavList from "./SidebarNavList.astro";
+
+type Props = { groups: MenuGroup[] };
+
+const { groups } = Astro.props;
+---
+
+{/* Desktop rail hides below the tablet breakpoint; the mobile copy carries the same menu. */}
+<SidebarNavList groups={groups} rail />
+<MobilePopover popover="nav">
+  <SidebarNavList groups={groups} />
+</MobilePopover>

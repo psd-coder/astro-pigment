@@ -1,0 +1,82 @@
+@import url("../../styles/media.css");
+
+@layer docs-theme {
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 5);
+    overflow-y: auto;
+    padding-block: calc(var(--spacing) * 2);
+    font-size: var(--text-sm);
+  }
+
+  /* The desktop rail instance hides below the tablet breakpoint; the mobile
+     copy (a second SidebarNavList inside MobilePopover) carries no .rail and stays. */
+  .rail {
+    @media (--tablets) {
+      display: none;
+    }
+  }
+
+  .group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+  }
+
+  /* Group headings and standalone links sit at the root indent; a group's items
+     are nested one step in behind a guide line, so a bare top-level link
+     ("Overview", an external link) reads as a peer of the heading, not an item. */
+  .groupTitle {
+    padding-inline: calc(var(--spacing) * 2);
+
+    font-size: var(--text-xxs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-secondary);
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+
+    /* The guide line lands under the root text edge; items clear it by the same step. */
+    margin: 0 0 0 calc(var(--spacing) * 2);
+    padding: 0;
+    border-left: 1px solid var(--color-border);
+
+    list-style: none;
+  }
+
+  .listItem {
+    margin-left: calc(var(--spacing) * 2);
+  }
+
+  /* A headingless group (label: null) has nothing to nest under, so its items stay
+     at the root indent — a guide line there would trail off nothing. */
+  .flatList {
+    margin-left: 0;
+    border-left: none;
+  }
+
+  .link {
+    display: block;
+    padding: calc(var(--spacing) * 0.75) calc(var(--spacing) * 2);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:hover {
+      background: var(--color-surface-3);
+    }
+
+    &.active {
+      color: var(--color-accent);
+      background: var(--color-surface-3);
+    }
+  }
+}
