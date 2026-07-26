@@ -4,3 +4,13 @@ onlyBuiltDependencies:
 allowBuilds:
   esbuild: true
   sharp: true
+# 3 days blocks ~94% of malicious releases (median takedown is 14 hours)
+minimumReleaseAge: 4320
+# Already vetted and locked before the cooldown was introduced; all age out
+# past the 3-day cutoff on 2026-07-27, after which this list can be deleted.
+minimumReleaseAgeExclude:
+  - "@vercel/cli-config"
+  - "@vercel/functions"
+  - "@vercel/oidc"
+  - es-toolkit
+  - postcss
