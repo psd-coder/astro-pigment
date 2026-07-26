@@ -1,0 +1,19 @@
+---
+import type { ComponentProps } from "astro/types";
+import { MOBILE_POPOVERS, type MobilePopoverName } from "./utils";
+import { Button } from "../Button";
+import { Icon } from "../Icon";
+
+type Props = {
+  popover: MobilePopoverName;
+  icon: ComponentProps<typeof Icon>["name"];
+  label: string;
+  size: number;
+};
+
+const { popover, icon, label, size } = Astro.props;
+---
+
+<Button square popovertarget={MOBILE_POPOVERS[popover]} aria-label={label}>
+  <Icon name={icon} size={size} />
+</Button>

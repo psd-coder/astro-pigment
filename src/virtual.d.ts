@@ -24,6 +24,9 @@ declare module "virtual:pigment-config" {
   type NavItem = {
     href: string;
     label: string;
+    // Inline import: a top-level one would make this file a module and the
+    // ambient `declare module` blocks would stop resolving.
+    attrs?: Partial<import("astro/types").HTMLAttributes<"a">>;
   };
 
   type ResolvedImage =

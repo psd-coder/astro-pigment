@@ -165,6 +165,19 @@
     justify-content: end;
   }
 
+  /* Menu pages carry a third column (grouped nav + content + on-this-page rail).
+     Widen the shared layout band so all three fit at the prose reading width — and
+     so the header and footer, which track the same band, stay aligned with the
+     content. Applies only when both rails are present: a right-rail-only page fits
+     inside the base band. */
+  .wideLayout {
+    @media (--min-laptops) {
+      --layout-width: calc(
+        var(--layout-width-base) + var(--layout-sidebar-width-right) + var(--layout-gap-x) * 2
+      );
+    }
+  }
+
   .main {
     display: flex;
     grid-column: container-start / container-end;
@@ -182,6 +195,22 @@
     flex-shrink: 0;
 
     width: var(--layout-sidebar-width);
+    max-height: calc(100dvh - var(--layout-header-offset) - var(--layout-gap-y));
+
+    @media (--tablets) {
+      display: contents;
+    }
+  }
+
+  .sidebarRight {
+    position: sticky;
+    top: var(--layout-header-offset);
+
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    width: var(--layout-sidebar-width-right);
     max-height: calc(100dvh - var(--layout-header-offset) - var(--layout-gap-y));
 
     @media (--tablets) {
@@ -211,6 +240,23 @@
     }
   }
 
+  /* Floating dock for the mobile menu / ToC popovers. Doubled class so `display: none`
+     beats ButtonGroup's own `display` at equal specificity, whatever the bundle order. */
+  .mobileTriggers.mobileTriggers {
+    position: fixed;
+    z-index: 10;
+    right: var(--layout-gap-x);
+    bottom: var(--layout-gap-x);
+
+    @media (--min-tablets) {
+      bottom: calc(var(--layout-gap-x) + var(--spacing) * 10);
+    }
+
+    @media (--min-laptops) {
+      display: none;
+    }
+  }
+
   .themePicker {
     position: fixed;
     bottom: calc(var(--spacing) * 3);
@@ -224,6 +270,14 @@
     @media (--min-laptops) {
       right: 0;
       bottom: 0;
+    }
+  }
+
+  /* Two triggers make the dock one square button wider (icon + padding + borders);
+     slide the picker over by the same amount so it keeps clear of them. */
+  .shifted {
+    @media (--tablets) {
+      right: calc(var(--spacing) * 12 + 20px + var(--spacing) * 4 + 2px);
     }
   }
 

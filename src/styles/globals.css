@@ -1,16 +1,17 @@
 @import url("./media.css");
 
 :root {
-  --layout-width: var(--layout-width-override, 1080px);
+  --layout-width-base: 1080px;
+  --layout-width: var(--layout-width-override, var(--layout-width-base));
   --layout-sidebar-width: var(--layout-sidebar-width-override, 248px);
+  --layout-sidebar-width-right: var(--layout-sidebar-width-right-override, 248px);
   --layout-header-height: calc(var(--spacing) * 14);
   --layout-gap-y: calc(var(--spacing) * 12);
-  --layout-gap-x: calc(var(--spacing) * 6);
+  --layout-gap-x: calc(var(--spacing) * 4);
   --layout-header-offset: calc(var(--layout-header-height) + var(--layout-gap-y));
 
   @media (--laptops) {
     --layout-gap-y: calc(var(--spacing) * 8);
-    --layout-gap-x: calc(var(--spacing) * 4);
   }
 
   @media (--mobiles) {

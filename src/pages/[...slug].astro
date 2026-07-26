@@ -19,7 +19,7 @@ const mdAlternate = doc.body ? getMarkdownAlternate(doc.id) : undefined;
   description={doc.data.description}
   alternate={mdAlternate && [mdAlternate]}
 >
-  <TableOfContents slot="sidebar" headings={headings} />
+  {doc.data.toc && <TableOfContents slot="sidebar-right" headings={headings} />}
   <article id="content" class="prose">
     <PageHeading title={doc.data.title} href={mdAlternate?.href} />
     <Content />

@@ -13,7 +13,8 @@ import {
 } from "virtual:pigment-config";
 import "../../styles/index.css";
 import type { AlternateLink, NavItem } from "../../types";
-import { getHref, isActiveHref } from "../../utils/urls";
+import { getHref, isActiveHref, isCurrentHref } from "../../utils/urls";
+import { hasMobilePopover } from "../MobilePopover";
 import CodeBlockWrapper from "../CodeBlockWrapper/CodeBlockWrapper.astro";
 import Footer from "../Footer/Footer.astro";
 import Icon from "../Icon/Icon.astro";
@@ -22,6 +23,7 @@ import ThemePickerScript from "../ThemePicker/ThemePickerScript.astro";
 import ThemeStyle from "../ThemeStyle/ThemeStyle.astro";
 import LayoutFavicons from "./LayoutFavicons.astro";
 import LayoutMeta from "./LayoutMeta.astro";
+import LayoutMobileTriggers from "./LayoutMobileTriggers.astro";
 
 import { Search } from "../Search";
 import { ThemeScript, ThemeToggle } from "../ThemeToggle";
@@ -34,12 +36,30 @@ type Props = {
   alternate?: AlternateLink[];
 };
 
+// Astro.slots.has() reports true for a conditional slot ({cond && <el slot="x"/>}),
+// because the compiler hoists the condition inside the slot function. Rendering it
+// is the only reliable emptiness check.
+const renderSlot = async (name: string): Promise<string> => {
+  const html: unknown = await Astro.slots.render(name);
+  return typeof html === "string" ? html : "";
+};
+
 const { title, description, navLinks = docs.navLinks, alternate } = Astro.props;
+const [sidebarHtml, sidebarRightHtml] = await Promise.all([
+  renderSlot("sidebar"),
+  renderSlot("sidebar-right"),
+]);
+const showSidebar = sidebarHtml.trim() !== "";
+const showSidebarRight = sidebarRightHtml.trim() !== "";
+// The slotted sidebars own their mobile popovers and register them while rendering above,
+// so only read the registry after those awaits.
+const hasMobileNav = hasMobilePopover(Astro.locals, "nav");
+const hasMobileToc = hasMobilePopover(Astro.locals, "toc");
 const mdAlternate = alternate?.find((a) => a.type === "text/markdown");
 const mdAbsoluteUrl = mdAlternate ? new URL(mdAlternate.href, Astro.url).href : undefined;
 
 const author = siteConfig.author;
-const isMainPage = Astro.url.pathname === getHref("");
+const isMainPage = isCurrentHref(Astro, "");
 const resolvedTitle = isMainPage
   ? meta.mainPageTitle
   : meta.titleSuffix
@@ -65,7 +85,7 @@ const resolvedDescription = description ?? siteConfig.project.description;
     <script src="./scripts.ts"></script>
     <slot name="head-extra" />
   </head>
-  <body class={styles.container}>
+  <body class:list={[styles.container, showSidebar && showSidebarRight && styles.wideLayout]}>
     {
       mdAbsoluteUrl && (
         <div class="visually-hidden" aria-hidden="true">
@@ -96,6 +116,7 @@ const resolvedDescription = description ?? siteConfig.project.description;
                   role="menuitem"
                   href={getHref(item.href)}
                   class:list={[styles.link, isActiveHref(Astro, item.href) && styles.active]}
+                  {...item.attrs}
                 >
                   {item.label}
                 </a>
@@ -135,21 +156,39 @@ const resolvedDescription = description ?? siteConfig.project.description;
     </x-sticky-header>
     <div class={styles.main}>
       {
-        Astro.slots.has("sidebar") && (
+        showSidebar && (
           <aside class={styles.sidebar}>
-            <slot name="sidebar" />
+            <Fragment set:html={sidebarHtml} />
           </aside>
         )
       }
       <main id="main-content" class={styles.content}>
         <slot />
       </main>
+      {
+        showSidebarRight && (
+          <aside class={styles.sidebarRight}>
+            <Fragment set:html={sidebarRightHtml} />
+          </aside>
+        )
+      }
     </div>
     <Footer class={styles.footer}>
       <slot name="footer-extra" slot="extra" />
     </Footer>
+    {
+      (hasMobileNav || hasMobileToc) && (
+        <LayoutMobileTriggers nav={hasMobileNav} toc={hasMobileToc} />
+      )
+    }
     <CodeBlockWrapper />
-    {themePicker && <ThemePicker class={styles.themePicker} />}
+    {
+      themePicker && (
+        <ThemePicker
+          class:list={[styles.themePicker, hasMobileNav && hasMobileToc && styles.shifted]}
+        />
+      )
+    }
   </body>
 </html>
 <script>
