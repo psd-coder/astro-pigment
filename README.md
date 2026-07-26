@@ -16,6 +16,13 @@ An Astro documentation theme with dark mode, interactive playgrounds, and SEO en
 - **Accessible**: roving focus, ARIA attributes, keyboard navigation throughout
 - **Zero build step**: Astro resolves `.astro`/`.ts` source directly from the package
 
+## Sites built with it
+
+- [astro-pigment](https://astro-pigment.psdcoder.dev) — these docs, dogfooding every component ([source](https://github.com/psd-coder/astro-pigment/tree/main/docs))
+- [nanotags](https://nanotags.psdcoder.dev) — tiny Custom Elements wrapper with nanostores reactivity ([source](https://github.com/psd-coder/nanotags/tree/main/apps/docs))
+- [datavolve](https://datavolve.psdcoder.dev) — type-safe evolutions for versioned data ([source](https://github.com/psd-coder/datavolve/tree/main/apps/docs))
+- [typed-channel](https://typed-channel.psdcoder.dev) — type-safe messaging between contexts ([source](https://github.com/psd-coder/typed-channel/tree/main/docs))
+
 ## Installation
 
 ```bash
