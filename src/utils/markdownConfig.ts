@@ -1,7 +1,7 @@
 import remarkGfm from "remark-gfm";
 
 // GitHub Flavored Markdown + typography settings for the theme's markdown pipeline, spread into
-// the inline `markdown` config in the integration.
+// the `unified()` processor the integration passes to `markdown.processor`.
 //
 // The theme replaces Astro's `markdown` config wholesale and injects `@astrojs/mdx` itself.
 // Astro normally auto-adds remark-gfm via the `markdown.gfm` default, but that default is not
