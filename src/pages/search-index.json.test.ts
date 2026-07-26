@@ -17,7 +17,14 @@ type Extra = {
   search?: boolean;
 };
 
-type Block = { pageId: string; pageTitle: string; heading: string; anchor: string; body: string };
+type Block = {
+  pageId: string;
+  pageTitle: string;
+  description: string;
+  heading: string;
+  anchor: string;
+  body: string;
+};
 
 const fx = vi.hoisted(() => ({
   docs: [
@@ -53,6 +60,19 @@ describe("GET /search-index.json", () => {
     expect(guide.map((e) => e.heading)).toEqual(["Guide", "Setup", "Setup"]);
     expect(guide.map((e) => e.anchor)).toEqual(["guide", "setup", "setup-1"]);
     expect(guide[0]?.body).toBe("Intro para.");
+  });
+
+  it("repeats the page description on every block of a page", async () => {
+    const index = await getIndex();
+    const guide = index.filter((e) => e.pageId === "guide");
+    expect(guide).toHaveLength(3);
+    expect(guide.every((e) => e.description === "d")).toBe(true);
+  });
+
+  it("carries the description of extra entries", async () => {
+    const index = await getIndex();
+    expect(index.find((e) => e.pageId === "ex")?.description).toBe("exdesc");
+    expect(index.find((e) => e.pageId === "bodyless")?.description).toBe("just desc");
   });
 
   it("splits extra entries that have a body into sections", async () => {

@@ -15,6 +15,8 @@ clientChannel.on("init", ({ data }) => {
     keys: [
       { name: "heading", weight: 3 },
       { name: "pageTitle", weight: 2 },
+      // Authored page summaries carry terms the headings never spell out
+      { name: "description", weight: 2 },
       { name: "body", weight: 1 },
     ],
     useTokenSearch: true,

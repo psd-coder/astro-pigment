@@ -2,6 +2,8 @@ export type BlockEntry = {
   pageId: string;
   pageTitle: string;
   pageOrder: number;
+  /** Page-level summary, repeated on every block so it can boost the whole page. */
+  description: string;
   heading: string;
   anchor: string;
   body: string;
