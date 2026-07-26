@@ -1,0 +1,65 @@
+---
+title: "Page frontmatter"
+description: Per-page frontmatter fields and the adaptive one/two/three-column layout they drive.
+order: 3
+menu: "api"
+---
+
+Every docs entry is a Markdown/MDX file in the `docs` collection. Five frontmatter
+fields are recognized; `title`, `description`, and `order` are mandatory, while
+`menu` and `toc` are optional and drive the page's column layout.
+
+## Fields
+
+| Field         | Type      | Default | Purpose                                              |
+| ------------- | --------- | ------- | ---------------------------------------------------- |
+| `title`       | `string`  | —       | Page title (heading, `<title>`, search, nav).        |
+| `description` | `string`  | —       | Meta description and search summary.                 |
+| `order`       | `number`  | —       | Global reading order (sort, prev/next, `llms.txt`).  |
+| `menu`        | `string`  | —       | Left column: id of a menu to render, or nothing.     |
+| `toc`         | `boolean` | `true`  | Right column: whether the on-this-page rail renders. |
+
+## Adaptive layout
+
+Each column is decided by its own field, and each field owns one side: the
+on-this-page outline always occupies the right rail, and the left column is
+reserved for navigation between pages. There are no global defaults — layout is
+decided per page:
+
+| `menu`        | `toc`   | Left column | Right column | Columns |
+| ------------- | ------- | ----------- | ------------ | ------- |
+| —             | `true`  | —           | page TOC     | 2       |
+| —             | `false` | —           | —            | 1       |
+| `"<menu id>"` | `true`  | menu        | page TOC     | 3       |
+| `"<menu id>"` | `false` | menu        | —            | 2       |
+
+- **Omitting `menu`** (the default) is a two-column prose page: content plus the
+  on-this-page rail.
+- **`menu: "<menu id>"`** adds that [menu](/api/menu-collection) in the left
+  column — three columns.
+- **`toc: false`** suppresses the on-this-page outline; with no `menu` either,
+  the page renders full-width.
+
+On a three-column page the right rail is reserved even when a page has no
+headings, so the content band keeps a stable width as you move between entries.
+
+## Section landings
+
+Author a section's landing page as an ordinary `index` file inside the section's
+directory: `src/content/docs/api/index.mdx` serves at `/api`, mirroring the way
+the root `src/content/docs/index.mdx` serves at `/`. Astro's collection loader
+already strips the trailing `index` when it derives entry ids, so that file is
+the entry `api` — the same id an `api.mdx` at the top level would get, which is
+why a section can have one or the other but not both.
+
+## Overriding rail widths
+
+The three column widths come from CSS variables you can override:
+
+```css
+:root {
+  --layout-width-override: 1280px; /* content band */
+  --layout-sidebar-width-override: 280px; /* left rail */
+  --layout-sidebar-width-right-override: 240px; /* right on-this-page rail */
+}
+```

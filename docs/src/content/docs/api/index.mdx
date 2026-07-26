@@ -2,6 +2,7 @@
 title: "API"
 description: Integration config, stores, fonts, CSS customization, SEO endpoints, and exportable configs.
 order: 2
+menu: "api"
 ---
 
 import { InstallPackage } from "astro-pigment/components";
@@ -113,10 +114,12 @@ docsTheme({
   docs: {
     directory: "src/content/docs", // default; also controls defineDocsCollections() glob base
     renderDefaultPage: true, // default; set false to ship your own [...slug].astro
-    // Optional: header navigation links (href accepts "/api" or "api")
+    // Optional: header navigation links (href accepts "/api" or "api").
+    // `attrs` is spread onto the rendered <a> (target, rel, data-*, ...).
     navLinks: [
       { href: "/", label: "Overview" },
       { href: "/api", label: "API" },
+      { href: "https://astro.build", label: "Astro", attrs: { target: "_blank" } },
     ],
     // Optional: extra entries for search index + llms.txt from non-collection pages.
     // Path to a module that default-exports ExtraEntry[] or () => Promise<ExtraEntry[]>.
@@ -179,9 +182,13 @@ The theme uses CSS variables with fallback defaults. Override them in your own C
 ```css
 :root {
   --layout-width-override: 1280px; /* wider layout */
-  --layout-sidebar-width-override: 280px;
+  --layout-sidebar-width-override: 280px; /* left rail (nav / TOC) */
+  --layout-sidebar-width-right-override: 240px; /* right on-this-page rail */
 }
 ```
+
+See [Page frontmatter](/api/page-frontmatter) for the adaptive 1/2/3-column
+layout and [Menu collection](/api/menu-collection) for the section navigation.
 
 For customizing theme, use `theme.hue` and `theme.saturation` in the integration config — it's the single source of truth for both the site CSS and the auto-generated OG image. `saturation` is a 0-100 multiplier applied to surfaces, text, accent, and border chromas: default 50 keeps the current look, 0 renders fully monochrome, 100 doubles every chroma. Code syntax colors use their own tuned chromas and follow the hue only, so readability is preserved at any saturation.
 
@@ -216,13 +223,18 @@ Text sizes from `--text-xxs` (0.625rem) to `--text-2xl` (2rem). Spacing base `--
 
 ### Responsive breakpoints
 
+Each breakpoint comes as a max-width query and a matching min-width one, offset by 1px so the pair never both match:
+
 ```css
-@custom-media --mobiles (max-width: 48rem); /* <768px */
-@custom-media --tablets (max-width: 64rem); /* <1024px */
-@custom-media --laptops (max-width: 80rem); /* <1280px */
+@custom-media --mobiles (max-width: 48rem); /* 768px */
+@custom-media --min-tablets (min-width: 47.9375rem); /* 767px */
+@custom-media --tablets (max-width: 64rem); /* 1024px */
+@custom-media --min-laptops (min-width: 63.9375rem); /* 1023px */
+@custom-media --laptops (max-width: 80rem); /* 1280px */
+@custom-media --min-desktop (min-width: 79.9375rem); /* 1279px */
 ```
 
-Import `astro-pigment/styles/media.css` to use these in your own CSS.
+Import `astro-pigment/styles/media.css` to use these in your own CSS. The theme's own layout uses `--tablets` to collapse the rails into popovers and `--min-laptops` to hide the popover triggers, so matching those queries keeps custom CSS in step with the layout.
 
 ## Fonts
 
@@ -253,14 +265,23 @@ $themeSetting.get(); // "auto" | "light" | "dark"
 $resolvedTheme.get(); // "light" | "dark"
 cycleTheme(); // auto -> light -> dark -> auto
 
+// Theme color axes — what ThemePicker writes, read by the CSS variable overrides
+import { $hue, $saturation, DEFAULT_HUE, DEFAULT_SATURATION } from "astro-pigment/stores/theme";
+
+$hue.get(); // string, "0"-"360", default "180"
+$saturation.get(); // string, "0"-"100", default "50"
+
 // Media queries
-import { $prefersDarkScheme, $prefersReducedMotion } from "astro-pigment/stores/media";
+import { $prefersDarkScheme, $prefersReducedMotion, media } from "astro-pigment/stores/media";
 
 $prefersDarkScheme.get(); // boolean
 $prefersReducedMotion.get(); // boolean
+
+// Build a store for any media query
+const $isWide = media("(min-width: 64rem)");
 ```
 
-Both stores are powered by [nanostores](https://github.com/nanostores/nanostores). Theme preference persists to `localStorage`.
+Both stores are powered by [nanostores](https://github.com/nanostores/nanostores). Theme setting, hue, and saturation all persist to `localStorage`.
 
 ### Package manager store
 

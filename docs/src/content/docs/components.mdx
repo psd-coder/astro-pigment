@@ -1,7 +1,7 @@
 ---
 title: "Components"
 description: Core layout components and interactive playground components.
-order: 3
+order: 5
 ---
 
 ## Core
@@ -10,7 +10,7 @@ Import from `astro-pigment/components`:
 
 ### Layout
 
-Main page shell. Renders sticky header with navigation, sidebar slot, content area, footer, and code copy buttons. Includes ThemeToggle, ThemeScript, CodeBlockWrapper, and Search (when `search: true`, the default) automatically.
+Main page shell. Renders sticky header with navigation, both sidebar slots, content area, footer, and code copy buttons. Includes ThemeToggle, ThemeScript, CodeBlockWrapper, and Search (when `search: true`, the default) automatically.
 
 ```astro
 ---
@@ -26,18 +26,20 @@ import { Layout } from "astro-pigment/components";
 >
   <MyLogo slot="logo" />
   <meta slot="head-extra" name="robots" content="noindex" />
-  <TableOfContents slot="sidebar" headings={headings} />
+  <TableOfContents slot="sidebar-right" headings={headings} />
   <article class="prose"><slot /></article>
   <span slot="footer-extra">& Additional Credit</span>
 </Layout>
 ```
 
-Props: `title` (required), `navLinks?` (array of `{ href, label }`), `alternate?` (array of `{ type, title, href }` — renders `<link rel="alternate">` tags in `<head>` plus a visually-hidden hint at the top of main content when a `text/markdown` entry is present).
-Slots: `default`, `sidebar`, `logo`, `head-extra`, `footer-extra`.
+Props: `title` (required), `navLinks?` (array of `{ href, label, attrs? }`, where `attrs` is spread onto the rendered `<a>`), `alternate?` (array of `{ type, title, href }` — renders `<link rel="alternate">` tags in `<head>` plus a visually-hidden hint at the top of main content when a `text/markdown` entry is present).
+Slots: `default`, `sidebar`, `sidebar-right`, `logo`, `head-extra`, `footer-extra`. Each sidebar is rendered only when its slot produces content, so a conditionally-passed sidebar (`{cond && <Toc slot="sidebar" />}`) collapses the column when the condition is false.
+
+Below the laptop breakpoint the rails collapse into popovers. Layout scans the rendered sidebars for those popovers and renders their triggers as one floating `ButtonGroup` in the bottom-right corner — a hamburger for the menu, a dotted-list icon for the table of contents, or just the one that exists.
 
 ### TableOfContents
 
-Desktop sidebar with scroll-spy highlighting + mobile popover trigger. Both rendered from a single component.
+Scroll-spy outline plus its mobile popover, both rendered from a single component. Goes in the `sidebar-right` slot — the outline owns the right rail, and the left one is reserved for navigation between pages. Layout supplies the popover's floating trigger.
 
 ```astro
 ---
@@ -45,13 +47,17 @@ import { TableOfContents } from "astro-pigment/components";
 const headings = await getHeadings(); // from Astro content render
 ---
 
-<TableOfContents slot="sidebar" headings={headings} />
+<TableOfContents slot="sidebar-right" headings={headings} />
 ```
 
 Default `itemsSelector` is `"#content :is(h2, h3)[id]"`, targeting the `id="content"` article injected by the default page. Pass a custom selector if your layout differs:
 
 ```astro
-<TableOfContents slot="sidebar" headings={headings} itemsSelector="#my-content :is(h2, h3)[id]" />
+<TableOfContents
+  slot="sidebar-right"
+  headings={headings}
+  itemsSelector="#my-content :is(h2, h3)[id]"
+/>
 ```
 
 ### Button
@@ -64,12 +70,27 @@ import { Button } from "astro-pigment/components";
 ---
 
 <Button>Click me</Button>
-<Button square aria-label="Settings"><Icon name="list" /></Button>
+<Button square aria-label="Settings"><Icon name="hamburger" /></Button>
+```
+
+### ButtonGroup
+
+Joins adjacent `Button`s into one segmented control: shared borders collapse and only the outer corners stay rounded. Pass `aria-label` to name the group.
+
+```astro
+---
+import { Button, ButtonGroup, Icon } from "astro-pigment/components";
+---
+
+<ButtonGroup aria-label="Page actions">
+  <Button square aria-label="Copy page"><Icon name="copy" /></Button>
+  <Button square aria-label="View as markdown"><Icon name="markdown" /></Button>
+</ButtonGroup>
 ```
 
 ### Icon
 
-Built-in SVG icons: `check`, `chevron-left`, `close`, `copy`, `github`, `list`, `markdown`, `search`, `x`. Use `name="custom"` with a slot for your own SVG.
+Built-in SVG icons: `check`, `chevron-left`, `close`, `copy`, `github`, `hamburger`, `markdown`, `search`, `toc`, `x`. Use `name="custom"` with a slot for your own SVG.
 
 ```astro
 ---
@@ -110,6 +131,18 @@ import { ThemeToggle } from "astro-pigment/components";
 ### ThemeScript
 
 Inline script that prevents FOUC by setting `data-theme` before first paint. Included in Layout automatically.
+
+### ThemePicker
+
+Floating hue + saturation picker for dialling in theme colors interactively. Layout renders it when the integration's `themePicker: true` is set, so you only import it directly in a custom layout. Closing it copies `{ hue, saturation }` to the clipboard — put those in `theme` config and drop the flag. `ThemePickerScript` is the inline script applying the picked values before paint; Layout includes it alongside the picker.
+
+```astro
+---
+import { ThemePicker } from "astro-pigment/components";
+---
+
+<ThemePicker />
+```
 
 ### CodeBlockWrapper
 

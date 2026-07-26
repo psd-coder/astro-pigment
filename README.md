@@ -57,14 +57,59 @@ export default defineConfig({
 
 ```ts
 // src/content.config.ts
-import { defineDocsCollections } from "astro-pigment/content";
+import { defineDocsCollections, defineMenuCollection } from "astro-pigment/content";
 
-export const collections = defineDocsCollections();
+export const collections = {
+  ...defineDocsCollections(),
+  ...defineMenuCollection(), // optional: section menus, see below
+};
 ```
 
-Drop your `.md`/`.mdx` files in `src/content/docs/`. The integration injects `/[...slug]` automatically; pages render with the full layout, TOC, prev/next navigation, and edit-on-github link out of the box. Dark mode, sticky header, sidebar + mobile TOC, code copy buttons, favicons, webmanifest, sitemap, and LLM endpoints are all wired up automatically.
+Drop your `.md`/`.mdx` files in `src/content/docs/`. The integration injects `/[...slug]` automatically; pages render with the full layout, on-this-page rail, prev/next navigation, and edit-on-github link out of the box. Dark mode, sticky header, mobile popovers, code copy buttons, favicons, webmanifest, sitemap, and LLM endpoints are all wired up automatically.
 
 To render pages yourself, set `docs.renderDefaultPage: false` and create your own `src/pages/[...slug].astro`. Reuse the boilerplate via `getDocsStaticPaths` from `astro-pigment/utils/content`.
+
+### Page frontmatter
+
+| Field         | Type      | Default | Purpose                                             |
+| ------------- | --------- | ------- | --------------------------------------------------- |
+| `title`       | `string`  | —       | Page title (heading, `<title>`, search, nav)        |
+| `description` | `string`  | —       | Meta description and search summary                 |
+| `order`       | `number`  | —       | Global reading order (sort, prev/next, `llms.txt`)  |
+| `menu`        | `string`  | —       | Left column: id of a menu to render                 |
+| `toc`         | `boolean` | `true`  | Right column: whether the on-this-page rail renders |
+
+Each column is decided by its own field, so layout is per page: no `menu` and `toc: true` is a two-column prose page, `menu: "<id>"` adds the section nav on the left for three columns, and `toc: false` drops the right rail. Below the laptop breakpoint both rails collapse into popovers reached from a floating button group.
+
+A section's landing page is an ordinary `index` file inside its directory: `src/content/docs/api/index.mdx` serves at `/api`, mirroring the root `src/content/docs/index.mdx` → `/`. Astro strips the trailing `index` when deriving entry ids, so that file is the entry `api` — the same id `api.mdx` would get, so use one or the other.
+
+### Menu collection
+
+A menu is a reusable, flat section navigation defined once as JSON and attached to any number of pages. Register `defineMenuCollection()` (above), then drop files in `src/content/menu/` — the filename is the menu id, so `src/content/menu/api.json` is the menu `"api"`, referenced by a page's `menu: "api"`.
+
+```json
+{
+  "groups": [
+    { "label": "Overview", "href": "/api" },
+    {
+      "label": "Reference",
+      "items": [{ "title": "Page frontmatter", "href": "/api/page-frontmatter" }]
+    },
+    { "label": "Astro docs", "href": "https://docs.astro.build", "attrs": { "target": "_blank" } }
+  ]
+}
+```
+
+```ts
+type Menu = { groups: MenuGroup[] };
+type MenuGroup = { label: string | null; href?: string; attrs?: LinkAttrs; items?: MenuItem[] };
+type MenuItem = { title: string; href: string; attrs?: LinkAttrs };
+type LinkAttrs = Record<string, string | number | boolean>; // spread on the <a>, false drops it
+```
+
+A group heading with an `href` renders as a link (standalone when `items` is empty, a section landing when not); `label: null` renders its items flat with no heading. An `href` carrying a scheme or a leading `//` is external — used verbatim, never marked active. Everything else resolves against the site base. Menus are validated at build time, and a page pointing at a menu id that doesn't exist fails the build.
+
+The menu directory is fixed at `src/content/menu/` — unlike `docs.directory`, it isn't configurable. Menus render only through the built-in `/[...slug]` page; if you render pages yourself, you supply your own left sidebar.
 
 ### Pick theme colors (optional)
 
@@ -120,7 +165,11 @@ type DocsThemeConfig = {
   docs?: {
     directory?: string; // default: "src/content/docs"
     renderDefaultPage?: boolean; // default: true
-    navLinks?: Array<{ href: string; label: string }>;
+    navLinks?: Array<{
+      href: string;
+      label: string;
+      attrs?: Partial<HTMLAttributes<"a">>; // spread on the <a>
+    }>;
     extraEntries?: string; // path to module exporting ExtraEntry[] or () => Promise<ExtraEntry[]>
   };
   meta?: {
@@ -161,7 +210,7 @@ type DocsThemeConfig = {
 
 Import from `astro-pigment/components`:
 
-**Layout** -- full page shell: sticky header, sidebar, footer, code copy buttons. Config read from virtual module. Includes ThemeToggle, ThemeScript, CodeBlockWrapper automatically.
+**Layout** -- full page shell: sticky header, sidebars, footer, code copy buttons. Config read from virtual module. Includes ThemeToggle, ThemeScript, CodeBlockWrapper automatically.
 
 ```astro
 <Layout
@@ -172,18 +221,24 @@ Import from `astro-pigment/components`:
   ]}
 >
   <MyLogo slot="logo" />
-  <TableOfContents slot="sidebar" headings={headings} itemsSelector=".prose :is(h2, h3)[id]" />
+  <TableOfContents
+    slot="sidebar-right"
+    headings={headings}
+    itemsSelector=".prose :is(h2, h3)[id]"
+  />
   <article class="prose"><slot /></article>
   <span slot="footer-extra">& My Company</span>
 </Layout>
 ```
 
-Props: `title`, `navLinks?`, `alternate?` (array of `{ type, title, href }` — adds `<link rel="alternate">` to `<head>`, plus a visually-hidden hint at the top of main when a `text/markdown` entry is present). Slots: `default`, `sidebar`, `logo`, `head-extra`, `footer-extra`, `author-icon`.
+Props: `title`, `navLinks?` (array of `{ href, label, attrs? }`), `alternate?` (array of `{ type, title, href }` — adds `<link rel="alternate">` to `<head>`, plus a visually-hidden hint at the top of main when a `text/markdown` entry is present). Slots: `default`, `sidebar`, `sidebar-right`, `logo`, `head-extra`, `footer-extra`, `author-icon`.
 
-**TableOfContents** -- desktop sidebar with scroll-spy highlighting + mobile popover trigger. Both rendered from a single component.
+Each sidebar renders only when its slot produces content, so a conditionally-passed one (`{cond && <TableOfContents slot="sidebar-right" ... />}`) collapses the column when the condition is false. Below the laptop breakpoint the rails become popovers; Layout scans the rendered sidebars for them and places their triggers as one floating `ButtonGroup` in the bottom-right corner.
+
+**TableOfContents** -- scroll-spy sidebar plus its mobile popover, both rendered from a single component. Layout supplies the popover's floating trigger.
 
 ```astro
-<TableOfContents slot="sidebar" headings={headings} itemsSelector=".prose :is(h2, h3)[id]" />
+<TableOfContents slot="sidebar-right" headings={headings} itemsSelector=".prose :is(h2, h3)[id]" />
 ```
 
 **PageHeading** -- heading row with an optional "view as markdown" icon link. Pair with `getMarkdownAlternate` from `astro-pigment/utils/urls` to reuse the same href on `Layout`'s `alternate` prop; omit `href` to hide the icon.
@@ -203,10 +258,19 @@ const alt = getMarkdownAlternate("api");
 
 ```astro
 <Button>Click me</Button>
-<Button square aria-label="Menu"><Icon name="list" /></Button>
+<Button square aria-label="Menu"><Icon name="hamburger" /></Button>
 ```
 
-**Icon** -- built-in SVGs: `check`, `chevron-left`, `copy`, `github`, `list`, `markdown`, `x`. Use `name="custom"` + slot for your own.
+**ButtonGroup** -- joins adjacent `Button`s into one segmented control: shared borders collapse and only the outer corners stay rounded. Pass `aria-label` to name the group.
+
+```astro
+<ButtonGroup aria-label="Page actions">
+  <Button square aria-label="Copy page"><Icon name="copy" /></Button>
+  <Button square aria-label="View as markdown"><Icon name="markdown" /></Button>
+</ButtonGroup>
+```
+
+**Icon** -- built-in SVGs: `check`, `chevron-left`, `close`, `copy`, `github`, `hamburger`, `markdown`, `search`, `toc`, `x`. Use `name="custom"` + slot for your own.
 
 ```astro
 <Icon name="github" size={32} />
@@ -279,7 +343,8 @@ docsTheme({
 /* src/styles/custom.css */
 :root {
   --layout-width-override: 1280px; /* wider layout */
-  --layout-sidebar-width-override: 280px;
+  --layout-sidebar-width-override: 280px; /* left rail (section menu) */
+  --layout-sidebar-width-right-override: 240px; /* right on-this-page rail */
 }
 ```
 

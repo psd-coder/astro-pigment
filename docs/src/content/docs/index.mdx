@@ -63,14 +63,19 @@ export default defineConfig({
 
 ```ts
 // src/content.config.ts
-import { defineDocsCollections } from "astro-pigment/content";
+import { defineDocsCollections, defineMenuCollection } from "astro-pigment/content";
 
-export const collections = defineDocsCollections();
+export const collections = {
+  ...defineDocsCollections(),
+  ...defineMenuCollection(),
+};
 ```
 
-Drop `.md`/`.mdx` files into `src/content/docs/`. The integration injects `/[...slug]` automatically — pages render with the layout, TOC, prev/next navigation, and edit-on-github link out of the box. To render pages yourself, set `docs.renderDefaultPage: false` and create your own `src/pages/[...slug].astro` (reuse `getDocsStaticPaths` from `astro-pigment/utils/content` to skip the boilerplate).
+Drop `.md`/`.mdx` files into `src/content/docs/`. The integration injects `/[...slug]` automatically — pages render with the layout, on-this-page rail, prev/next navigation, and edit-on-github link out of the box. To render pages yourself, set `docs.renderDefaultPage: false` and create your own `src/pages/[...slug].astro` (reuse `getDocsStaticPaths` from `astro-pigment/utils/content` to skip the boilerplate).
 
-Dark mode, sticky header, sidebar + mobile TOC, code copy buttons, favicons, webmanifest, sitemap, LLM endpoints, and footer are all wired up automatically.
+Each page declares `title`, `description`, and `order` in its frontmatter, plus optional `menu` and `toc` that decide its columns — see [Page frontmatter](/api/page-frontmatter). `defineMenuCollection()` above registers `src/content/menu/`, where a [menu](/api/menu-collection) is the reusable section nav a page opts into with `menu: "<menu id>"`; skip it if you don't need one.
+
+Dark mode, sticky header, mobile popovers, code copy buttons, favicons, webmanifest, sitemap, LLM endpoints, and footer are all wired up automatically.
 
 ### 3. Pick theme colors (optional)
 
