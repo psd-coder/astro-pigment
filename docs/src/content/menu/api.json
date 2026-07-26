@@ -2,11 +2,27 @@
   "groups": [
     { "label": "Overview", "href": "/api" },
     {
-      "label": "Reference",
+      "label": "Authoring",
       "items": [
         { "title": "Page frontmatter", "href": "/api/page-frontmatter" },
         { "title": "Menu collection", "href": "/api/menu-collection" },
         { "title": "Components", "href": "/api/components" }
+      ]
+    },
+    {
+      "label": "Configuration",
+      "items": [
+        { "title": "Theming", "href": "/api/theming" },
+        { "title": "Stores & search", "href": "/api/stores" },
+        { "title": "Loaders & configs", "href": "/api/loaders-and-configs" }
+      ]
+    },
+    {
+      "label": "Deployment",
+      "items": [
+        { "title": "SEO & robots", "href": "/api/seo" },
+        { "title": "Social images", "href": "/api/social-images" },
+        { "title": "Markdown for agents", "href": "/api/markdown-for-agents" }
       ]
     }
   ]

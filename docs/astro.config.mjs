@@ -37,7 +37,7 @@ export default defineConfig({
       search: true,
       docs: {
         navLinks: [
-          { href: "/", label: "Overview" },
+          { href: "/", label: "Getting Started" },
           { href: "/api", label: "API" },
           { href: "/theme-preview", label: "Theme Preview" },
         ],

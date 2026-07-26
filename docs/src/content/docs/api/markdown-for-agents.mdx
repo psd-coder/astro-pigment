@@ -1,0 +1,106 @@
+---
+title: "Markdown for AI agents"
+description: Edge middleware that serves each page"s .md twin at the same URL via Accept negotiation.
+order: 11
+menu: "api"
+---
+
+import { InstallPackage } from "astro-pigment/components";
+
+Every doc page ships a `.md` twin (`/guide.md`), but agents that land on the HTML URL (`/guide`) don't know to ask for it. On a static deploy there's no server to negotiate, so the theme ships **edge middleware**: it runs at the CDN edge, and when a request prefers markdown it serves the prebuilt `.md` in place — same URL, `200`, `Content-Type: text/markdown`, `Vary: Accept`. Detection is provider-agnostic: it reads the standard `Accept` header, not AI-crawler User-Agents. Browsers (which send `text/html`) keep getting HTML.
+
+Why not just let them read the HTML? The rendered page carries a lot that isn't the documentation:
+
+- **Bytes.** An HTML page on this site runs 5-25x the size of its `.md` twin. The extra is nav, sidebar, footer, inline styles, and script tags: repeated on every page, and spent out of the context window your content needs.
+- **Structure.** Markdown states its own structure: heading levels, list items, code fences tagged with a language. In HTML an agent infers all of that from `div` nesting and class names, then guesses which regions are content and which are chrome.
+- **Code survives intact.** Syntax highlighting shreds each snippet into one span per token, so an agent lifting a command out of the HTML has to reassemble it first. The twin keeps it as a single fenced block.
+- **Components collapse to their meaning.** A tabbed `<InstallPackage>` ships all four package-manager commands in the markup, with only CSS marking which one is visible. The twin renders a labelled list instead, so an agent reads the choice rather than four interleaved commands.
+
+It's opt-in per host — add the entry file below and install its provider package (declared as optional peer dependencies of the theme, so you only pull in the one you use). Each entry assumes Astro's default `base: "/"`; for a custom base, use the `create*Middleware({ base })` factory.
+
+Each entry also **scopes** which requests reach the middleware, and that part isn't optional polish. The middleware runs per request and every host meters invocations, so unscoped you pay for `/og.png` and every hashed asset to reach a no-op. The core only negotiates paths whose last segment has no dot; each config below mirrors exactly that rule, so scoping never changes which pages negotiate — it only stops paying to reach a no-op.
+
+The config has to be a **literal in your own file**. Vercel and Netlify both read it statically at build time and neither follows a re-export: Vercel ignores the matcher and runs the middleware on every request, while Netlify never picks up the declaration at all. Both fail silently, so copy the config rather than re-exporting it.
+
+## Cloudflare Pages
+
+`functions/_middleware.ts`. No provider package needed; the prebuilt `.md` is served straight from the `ASSETS` binding.
+
+```ts
+// functions/_middleware.ts
+export { onRequest } from "astro-pigment/edge/cloudflare";
+```
+
+Cloudflare is the one host that can't express the rule directly — `_routes.json` takes globs, not regex — so the same rule has to be enumerated. Put it in `public/` and Astro copies it into the build output, where Pages reads it:
+
+```json
+// public/_routes.json
+{
+  "version": 1,
+  "include": ["/*"],
+  "exclude": ["/_astro/*", "/*.html", "/*.md", "/*.txt", "/*.xml", "/*.json", "/*.png"]
+}
+```
+
+Skip it and a root `_middleware.ts` matches every route, so nothing on the site counts as static any more — on the Workers free plan that drains one 100,000 requests/day budget shared across your whole account. `exclude` wins over `include`, and the two lists cap at 100 rules combined.
+
+Those extensions are whatever your build emits; `find dist -type f` lists them. This is the one spot where the rule can drift from your build: add a `.webp` and it silently starts invoking the middleware again, with no error to point at it.
+
+## Netlify
+
+`netlify/edge-functions/markdown.ts`. Netlify supplies the runtime; install `@netlify/edge-functions` for its types (needed only if you typecheck your edge functions locally):
+
+<InstallPackage pkg="@netlify/edge-functions" dev />
+
+```ts
+// netlify/edge-functions/markdown.ts
+import type { Config } from "@netlify/edge-functions";
+
+export { default } from "astro-pigment/edge/netlify";
+
+// Literal, not a re-export: Netlify skips a config that is renamed or re-exported,
+// and the function then never runs.
+export const config: Config = {
+  path: "/*",
+  excludedPattern: "/.*\\.[^/]*$",
+};
+```
+
+## Vercel
+
+`middleware.ts` at the project root. Requires `@vercel/functions` (used at runtime for the pass-through):
+
+<InstallPackage pkg="@vercel/functions" />
+
+```ts
+// middleware.ts
+export { default } from "astro-pigment/edge/vercel";
+
+// Literal, not a re-export: Vercel reads this statically and ignores anything it
+// cannot resolve at build time.
+export const config = {
+  matcher: ["/((?!.*\\.[^/]*$).*)"],
+};
+
+// custom base:
+// import { createVercelMiddleware } from "astro-pigment/edge/vercel";
+// export default createVercelMiddleware({ base: "/docs/" });
+```
+
+## Other hosts
+
+Deno Deploy, Cloudflare Workers with static assets, a custom Node/Bun server — wrap your existing static handler with the core helper:
+
+```ts
+import { negotiateMarkdown } from "astro-pigment/edge";
+
+export default {
+  fetch(request: Request, env: { ASSETS: { fetch: (r: Request) => Promise<Response> } }) {
+    return negotiateMarkdown(
+      request,
+      () => env.ASSETS.fetch(request), // your normal static-file response
+      { fetchAsset: (url) => env.ASSETS.fetch(new Request(url, request)) },
+    );
+  },
+};
+```
