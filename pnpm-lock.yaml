@@ -51,8 +51,8 @@ importers:
         specifier: ^1.50.0
         version: 1.50.0
       fuse.js:
-        specifier: 7.4.0-beta.1
-        version: 7.4.0-beta.1
+        specifier: ^7.5.0
+        version: 7.5.0
       github-slugger:
         specifier: ^2.0.0
         version: 2.0.0
@@ -1898,8 +1898,8 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  fuse.js@7.4.0-beta.1:
-    resolution: {integrity: sha512-INGljquAtVWoZrniukLaJv4zfmXEhNmq/HNuXVXiz9dpiW4Pwsu5Z09fwiuHb01DTTIwrBbBSjg8ZP+Bo0HCWA==}
+  fuse.js@7.5.0:
+    resolution: {integrity: sha512-sQtrEfA+ez/3G0cCZecF70oqpCRttCexYUG4mUrtWL49ULUzUyxokt5kyqwtKzj1270RaKih+hcP3qLcumccow==}
     engines: {node: '>=10'}
 
   get-stream@6.0.1:
@@ -4731,7 +4731,7 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  fuse.js@7.4.0-beta.1: {}
+  fuse.js@7.5.0: {}
 
   get-stream@6.0.1: {}
 
