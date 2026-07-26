@@ -1,3 +1,5 @@
+import { findTermRanges, tokenizeQuery } from "./tokenize";
+
 export const QUERY_PARAM = "q";
 
 const HIGHLIGHT_ID = "search-result";
@@ -33,22 +35,20 @@ export function applySearchHighlight() {
   const heading = anchor?.matches(HEADING_SELECTOR) ? anchor : anchor?.closest(HEADING_SELECTOR);
   const roots = heading ? getSectionElements(heading) : [document.body];
 
-  const lower = query.toLowerCase();
+  const terms = tokenizeQuery(query);
+  if (terms.length === 0) return;
+
   const ranges: Range[] = [];
 
   for (const root of roots) {
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     while (walker.nextNode()) {
       const node = walker.currentNode as Text;
-      const text = node.textContent?.toLowerCase() ?? "";
-      let start = 0;
-      let idx: number;
-      while ((idx = text.indexOf(lower, start)) !== -1) {
+      for (const [start, end] of findTermRanges(node.textContent ?? "", terms)) {
         const range = new Range();
-        range.setStart(node, idx);
-        range.setEnd(node, idx + query.length);
+        range.setStart(node, start);
+        range.setEnd(node, end);
         ranges.push(range);
-        start = idx + query.length;
       }
     }
   }

@@ -80,29 +80,25 @@ const { class: className, ...restProps } = Astro.props;
   import { QUERY_PARAM } from "./highlight";
   import SearchWorker from "./search-worker.ts?worker&inline";
   import styles from "./styles.module.css";
+  import { findTermRanges, tokenizeQuery } from "./tokenize";
   import type { ClientMessages, GroupedSearchResult, WorkerMessages } from "./types";
 
-  function highlightText(text: string, query: string): DocumentFragment {
+  function highlightText(text: string, terms: string[]): DocumentFragment {
     const fragment = document.createDocumentFragment();
     if (!text) return fragment;
 
-    const lower = text.toLowerCase();
-    const lowerQuery = query.toLowerCase();
     let cursor = 0;
 
-    while (cursor < text.length) {
-      const idx = lower.indexOf(lowerQuery, cursor);
-      if (idx === -1) {
-        fragment.append(text.slice(cursor));
-        break;
-      }
-      if (idx > cursor) fragment.append(text.slice(cursor, idx));
+    for (const [start, end] of findTermRanges(text, terms)) {
+      if (start > cursor) fragment.append(text.slice(cursor, start));
       const mark = document.createElement("mark");
       mark.className = String(styles.resultMark);
-      mark.textContent = text.slice(idx, idx + query.length);
+      mark.textContent = text.slice(start, end);
       fragment.append(mark);
-      cursor = idx + query.length;
+      cursor = end;
     }
+
+    if (cursor < text.length) fragment.append(text.slice(cursor));
 
     return fragment;
   }
@@ -191,6 +187,7 @@ const { class: className, ...restProps } = Astro.props;
         const queryLength = query.trim().length;
         const hasQuery = queryLength > 0;
         const hasResults = results.length > 0;
+        const terms = tokenizeQuery(query);
 
         if (hasQuery && queryLength < 2) {
           render(ctx.refs.resultsContainer, ctx.refs.tooShortTpl);
@@ -210,7 +207,7 @@ const { class: className, ...restProps } = Astro.props;
                   title.textContent = data.pageTitle;
                   renderList(blocks, ctx.refs.resultBlockTpl, {
                     data: data.blocks,
-                    key: (block) => block.heading,
+                    key: (block) => block.anchor,
                     update: (blockEl: HTMLAnchorElement, blockData) => {
                       const link = ctx.getElement(blockEl, "a");
                       const pageHref = getHref(data.pageId === "index" ? "" : data.pageId);
@@ -222,8 +219,8 @@ const { class: className, ...restProps } = Astro.props;
 
                       const heading = ctx.getElement(blockEl, "[data-heading]");
                       const snippet = ctx.getElement(blockEl, "[data-snippet]");
-                      heading.textContent = blockData.heading;
-                      snippet.replaceChildren(highlightText(blockData.snippet, query));
+                      heading.replaceChildren(highlightText(blockData.heading, terms));
+                      snippet.replaceChildren(highlightText(blockData.snippet, terms));
                     },
                   });
                 },
