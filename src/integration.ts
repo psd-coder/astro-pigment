@@ -1,3 +1,4 @@
+import { unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import type { AstroIntegration } from "astro";
@@ -327,22 +328,28 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
           ...(config.theme?.fonts !== false && { fonts: fonts() }),
           markdown: {
             shikiConfig,
-            ...gfmMarkdownConfig,
-            rehypePlugins: [
-              rehypeSlug,
-              [
-                rehypeAutolinkHeadings,
-                {
-                  behavior: "prepend",
-                  // Give the self-link an accessible name / anchor text via aria-label
-                  content: [],
-                  properties: (heading: HeadingNode) => ({
-                    className: ["anchor"],
-                    ariaLabel: `Section titled "${headingText(heading)}"`,
-                  }),
-                },
+            // Astro 7 defaults to the Sätteri processor, which ignores remark/rehype plugins.
+            // The theme's pipeline is built from remark/rehype, so opt back into unified and
+            // configure the pipeline on the processor itself (the top-level `markdown.*` plugin
+            // options are deprecated in Astro 7).
+            processor: unified({
+              ...gfmMarkdownConfig,
+              rehypePlugins: [
+                rehypeSlug,
+                [
+                  rehypeAutolinkHeadings,
+                  {
+                    behavior: "prepend",
+                    // Give the self-link an accessible name / anchor text via aria-label
+                    content: [],
+                    properties: (heading: HeadingNode) => ({
+                      className: ["anchor"],
+                      ariaLabel: `Section titled "${headingText(heading)}"`,
+                    }),
+                  },
+                ],
               ],
-            ],
+            }),
           },
           vite: {
             css: {
