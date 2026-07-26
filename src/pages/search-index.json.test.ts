@@ -72,4 +72,22 @@ describe("GET /search-index.json", () => {
     const index = await getIndex();
     expect(index.some((e) => e.pageId === "noindex")).toBe(false);
   });
+
+  it("splits an oversized section into chunks sharing one heading and anchor", async () => {
+    const long = Array.from({ length: 700 }, () => "word").join(" ");
+    fx.docs.push({
+      id: "long",
+      collection: "docs",
+      data: { title: "Long", description: "d", order: 5 },
+      body: `## Reference\n\n${long}`,
+    });
+
+    const chunks = (await getIndex()).filter((e) => e.pageId === "long");
+    expect(chunks.length).toBeGreaterThan(1);
+    expect(chunks.every((c) => c.heading === "Reference" && c.anchor === "reference")).toBe(true);
+    expect(chunks.every((c) => c.body.length <= 1000)).toBe(true);
+    expect(chunks.map((c) => c.body).join(" ")).toBe(long);
+
+    fx.docs.pop();
+  });
 });

@@ -6,6 +6,30 @@ import { getDocsCollection } from "../utils/content";
 import { splitMarkdownIntoSections } from "../utils/markdown";
 import { jsonResponse } from "../utils/response";
 
+// A whole reference section indexed as one block skews TF-IDF field norms and
+// yields snippets from anywhere in it; chunking keeps matches local to the text
+const MAX_BLOCK_CHARS = 1000;
+
+function chunkBody(body: string): string[] {
+  if (body.length <= MAX_BLOCK_CHARS) return [body];
+
+  const chunks: string[] = [];
+  let cursor = 0;
+
+  while (cursor < body.length) {
+    let end = Math.min(body.length, cursor + MAX_BLOCK_CHARS);
+    if (end < body.length) {
+      const space = body.lastIndexOf(" ", end);
+      if (space > cursor) end = space;
+    }
+    const chunk = body.slice(cursor, end).trim();
+    if (chunk) chunks.push(chunk);
+    cursor = end;
+  }
+
+  return chunks;
+}
+
 function buildSections(
   pageId: string,
   pageTitle: string,
@@ -27,14 +51,16 @@ function buildSections(
 
     if (!section.body && !section.heading) continue;
 
-    entries.push({
-      pageId,
-      pageTitle,
-      pageOrder,
-      heading: section.heading,
-      anchor,
-      body: section.body,
-    });
+    for (const chunk of section.body ? chunkBody(section.body) : [""]) {
+      entries.push({
+        pageId,
+        pageTitle,
+        pageOrder,
+        heading: section.heading,
+        anchor,
+        body: chunk,
+      });
+    }
   }
 
   return entries;
