@@ -1,4 +1,4 @@
-import { unified } from "@astrojs/markdown-remark";
+import { satteri, satteriHeadingIdsPlugin } from "@astrojs/markdown-satteri";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import type { AstroIntegration } from "astro";
@@ -7,14 +7,11 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import postcssPresetEnv from "postcss-preset-env";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeSlug from "rehype-slug";
 import { adaptiveCodeTheme } from "./themes/adaptive-code-theme";
 import type { DocsThemeConfig, SiteConfig } from "./types";
 import { generateScopedName, transitiveCssPlugin } from "./utils/cssModules";
 import { internalSourcemapNoiseFilter } from "./utils/devServer";
-import { headingText, type HeadingNode } from "./utils/headingAnchor";
-import { gfmMarkdownConfig } from "./utils/markdownConfig";
+import { headingAnchorPlugin } from "./utils/headingAnchor";
 import { fonts } from "./utils/fonts";
 import { getGithubUrl } from "./utils/github";
 import { isGenerated, resolveImageSource } from "./utils/ogResolve";
@@ -328,27 +325,11 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
           ...(config.theme?.fonts !== false && { fonts: fonts() }),
           markdown: {
             shikiConfig,
-            // Astro 7 defaults to the Sätteri processor, which ignores remark/rehype plugins.
-            // The theme's pipeline is built from remark/rehype, so opt back into unified and
-            // configure the pipeline on the processor itself (the top-level `markdown.*` plugin
-            // options are deprecated in Astro 7).
-            processor: unified({
-              ...gfmMarkdownConfig,
-              rehypePlugins: [
-                rehypeSlug,
-                [
-                  rehypeAutolinkHeadings,
-                  {
-                    behavior: "prepend",
-                    // Give the self-link an accessible name / anchor text via aria-label
-                    content: [],
-                    properties: (heading: HeadingNode) => ({
-                      className: ["anchor"],
-                      ariaLabel: `Section titled "${headingText(heading)}"`,
-                    }),
-                  },
-                ],
-              ],
+            processor: satteri({
+              // GFM (tables, strikethrough, task lists) and typography are native Sätteri
+              // features, so both apply to `.md` and `.mdx` with no extra plugins.
+              features: { gfm: true, smartPunctuation: true },
+              hastPlugins: [satteriHeadingIdsPlugin(), headingAnchorPlugin],
             }),
           },
           vite: {
