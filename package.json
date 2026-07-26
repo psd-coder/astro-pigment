@@ -124,7 +124,7 @@
     "@types/mdast": "^4.0.4",
     "@vercel/functions": "^3.7.6",
     "astro": "^6.1.5",
-    "nanostores": "^1.0.0",
+    "nanostores": "^1.4.1",
     "nanotags": "^0.15.2",
     "oxlint": "^1.59.0",
     "prettier": "^3.8.3",
