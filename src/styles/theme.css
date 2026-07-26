@@ -32,8 +32,12 @@
   --code-escape: oklch(51% 0.14 mod(calc(var(--theme-hue) + 196), 360));
   --code-operator: oklch(51% 0.14 mod(calc(var(--theme-hue) + 59), 360));
   --code-property: oklch(51% 0.14 mod(calc(var(--theme-hue) + 93), 360));
-  --code-comment: oklch(56% 0.03 mod(calc(var(--theme-hue) + 137), 360));
-  --code-text: oklch(40% 0.03 mod(calc(var(--theme-hue) + 137), 360));
+
+  /* Comment sits at the lightest lightness that still clears WCAG AA (4.5:1) against
+     --color-surface-4 at every hue and saturation; separation from --code-text comes
+     from pulling the text forward, not from dimming the comment past the AA floor. */
+  --code-comment: oklch(55% 0.03 mod(calc(var(--theme-hue) + 137), 360));
+  --code-text: oklch(30% 0.03 mod(calc(var(--theme-hue) + 137), 360));
   --spacing: 4px;
   --text-xxs: 0.625rem;
   --text-xs: 0.75rem;
@@ -75,8 +79,10 @@
   --code-escape: oklch(76% 0.08 mod(calc(var(--theme-hue) + 196), 360));
   --code-operator: oklch(72% 0.08 mod(calc(var(--theme-hue) + 59), 360));
   --code-property: oklch(74% 0.08 mod(calc(var(--theme-hue) + 93), 360));
+
+  /* Mirror of the light-theme reasoning: 60% is the darkest AA-safe comment here. */
   --code-comment: oklch(60% 0.03 mod(calc(var(--theme-hue) + 137), 360));
-  --code-text: oklch(83% 0.03 mod(calc(var(--theme-hue) + 137), 360));
+  --code-text: oklch(90% 0.03 mod(calc(var(--theme-hue) + 137), 360));
 
   color-scheme: dark;
 }
