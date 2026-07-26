@@ -57,8 +57,8 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0
       keyux:
-        specifier: ^0.11.3
-        version: 0.11.3
+        specifier: ^0.11.6
+        version: 0.11.6
       linkedom:
         specifier: ^0.18.12
         version: 0.18.12
@@ -1992,9 +1992,9 @@ packages:
     resolution: {integrity: sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==}
     hasBin: true
 
-  keyux@0.11.3:
-    resolution: {integrity: sha512-IzS9emdl1gazLhGvCcwy066WYeOJtoxuncDVIsKvvyZZXRmPwUusHuvvOd4bjT9qiN+kBc9ntP6CaKYM16qzPA==}
-    engines: {node: ^18.0.0 || >=20.0.0}
+  keyux@0.11.6:
+    resolution: {integrity: sha512-sibuRm9zix1VixIAk7KWr78eEpuA34F2wKaorP8vHnqLn7W8hZRBYlBDUUw37OCbnuXQhi61/bYhAiUnxXrhow==}
+    engines: {node: ^20.0.0 || ^22.0.0 || >=24.0.0}
 
   linebreak@1.1.0:
     resolution: {integrity: sha512-MHp03UImeVhB7XZtjd0E4n6+3xr5Dq/9xI/5FptGk5FrbDR3zagPa2DS6U8ks/3HjbKWG9Q1M2ufOzxV2qLYSQ==}
@@ -4871,7 +4871,7 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  keyux@0.11.3: {}
+  keyux@0.11.6: {}
 
   linebreak@1.1.0:
     dependencies:
