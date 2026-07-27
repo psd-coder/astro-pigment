@@ -79,7 +79,9 @@
     padding-left: calc(var(--spacing) * 5);
   }
 
-  /* Mobile version — MobilePopover owns the panel chrome, this is just its content. */
+  /* Mobile version — MobilePopover owns the panel chrome, this is just its content.
+     No guide line here: the panel is its own surface, so links drop the border and
+     the title drops the 1px it was clearing. */
   .popoverList {
     display: flex;
     flex: 1;
@@ -87,5 +89,13 @@
     gap: calc(var(--spacing) * 4);
 
     min-height: 0;
+
+    .title {
+      padding-left: calc(var(--spacing) * 2);
+    }
+
+    .link {
+      border-left: none;
+    }
   }
 }

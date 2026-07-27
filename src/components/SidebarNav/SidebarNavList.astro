@@ -37,7 +37,7 @@ const isActive = (link: { href?: string }) => link.href != null && isCurrentHref
         {group.items.length > 0 && (
           <ul class:list={[styles.list, group.label === null && styles.flatList]}>
             {group.items.map((item) => (
-              <li>
+              <li class={styles.listItem}>
                 <a
                   href={getHref(item.href)}
                   aria-current={isActive(item) ? "page" : undefined}
