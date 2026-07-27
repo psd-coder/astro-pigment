@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.20.1
+
+### Fixed
+
+- Drop the guide line from the ToC list in the mobile popover, and restore the missing list item indent in the sidebar nav list.
+
 ## 0.20.0
 
 ### Breaking
