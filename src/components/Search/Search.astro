@@ -74,7 +74,7 @@ const { class: className, ...restProps } = Astro.props;
   import { render, renderList } from "nanotags/render";
   import { createPostMessageTransport, createTypedChannel } from "typed-channel";
   import { attachRovingFocus } from "../../attachments/attachRovingFocus";
-  import { isEditableTarget } from "../../utils/dom";
+  import { isEditableTarget, matchesHotkey } from "../../utils/dom";
   import { createDebouncedStore } from "../../utils/nanostores";
   import { getHref } from "../../utils/urls";
   import { QUERY_PARAM } from "./highlight";
@@ -149,7 +149,7 @@ const { class: className, ...restProps } = Astro.props;
       // Trigger
       ctx.on(ctx.refs.trigger, "click", open);
       ctx.on(document, "keydown", (e: KeyboardEvent) => {
-        if (e.key === "/" && !ctx.refs.dialog.open && !isEditableTarget(e.target)) {
+        if (matchesHotkey(e, "/") && !ctx.refs.dialog.open && !isEditableTarget(e.target)) {
           e.preventDefault();
           open();
         }
