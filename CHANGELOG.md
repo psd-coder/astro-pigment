@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.20.2
+
+### Fixed
+
+- Make the search hotkey work on non-Latin keyboard layouts by matching the physical key as well as the printed character.
+
 ## 0.20.1
 
 ### Fixed
