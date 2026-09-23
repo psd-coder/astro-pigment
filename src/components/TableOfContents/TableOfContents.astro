@@ -2,7 +2,7 @@
 import { MobilePopover } from "../MobilePopover";
 import styles from "./styles.module.css";
 import List from "./List.astro";
-import { type Heading } from "./utils";
+import { getTocHeadings, type Heading } from "./utils";
 
 type Props = {
   headings: Heading[];
@@ -10,14 +10,23 @@ type Props = {
 };
 
 const { headings, itemsSelector = "#content :is(h2, h3)[id]" } = Astro.props;
+// A page with nothing to list still renders the host, so the right rail keeps its width and
+// the content column does not shift between pages that share a menu.
+const tocHeadings = getTocHeadings(headings);
 ---
 
 <x-toc items-selector={itemsSelector} class={styles.component}>
-  <List headings={headings} class={styles.sidebar} />
+  {
+    tocHeadings.length > 0 && (
+      <>
+        <List headings={tocHeadings} class={styles.sidebar} />
 
-  <MobilePopover popover="toc">
-    <List headings={headings} class={styles.popoverList} />
-  </MobilePopover>
+        <MobilePopover popover="toc">
+          <List headings={tocHeadings} class={styles.popoverList} />
+        </MobilePopover>
+      </>
+    )
+  }
 </x-toc>
 
 <script>

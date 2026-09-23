@@ -33,6 +33,8 @@ decided per page:
 | `"<menu id>"` | `true`  | menu        | page TOC     | 3       |
 | `"<menu id>"` | `false` | menu        | —            | 2       |
 
+A page with no `##` or `###` heading keeps its right column with `toc: true`, left empty, so its content lines up with the pages around it.
+
 - **Omitting `menu`** (the default) is a two-column prose page: content plus the
   on-this-page rail.
 - **`menu: "<menu id>"`** adds that [menu](/api/menu-collection) in the left

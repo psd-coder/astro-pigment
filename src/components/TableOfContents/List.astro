@@ -8,7 +8,6 @@ type Props = {
 };
 
 const { class: className, headings } = Astro.props;
-const filtered = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const currentPath = Astro.url.pathname;
 ---
 
@@ -16,7 +15,7 @@ const currentPath = Astro.url.pathname;
   <span class={styles.title}>On this page</span>
   <ul class={styles.list}>
     {
-      filtered.map((heading) => (
+      headings.map((heading) => (
         <li>
           <a
             href={`${currentPath}#${heading.slug}`}

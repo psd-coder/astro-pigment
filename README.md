@@ -242,7 +242,7 @@ Props: `title`, `navLinks?` (array of `{ href, label, attrs? }`), `alternate?` (
 
 Each sidebar renders only when its slot produces content, so a conditionally-passed one (`{cond && <TableOfContents slot="sidebar-right" ... />}`) collapses the column when the condition is false. Below the laptop breakpoint the rails become popovers; Layout scans the rendered sidebars for them and places their triggers as one floating `ButtonGroup` in the bottom-right corner.
 
-**TableOfContents** -- scroll-spy sidebar plus its mobile popover, both rendered from a single component. Layout supplies the popover's floating trigger.
+**TableOfContents** -- scroll-spy sidebar plus its mobile popover, both rendered from a single component. Layout supplies the popover's floating trigger. It lists `h2` and `h3` only. A page with neither keeps an empty right column, so content does not shift between pages, and gets no mobile outline button.
 
 ```astro
 <TableOfContents slot="sidebar-right" headings={headings} itemsSelector=".prose :is(h2, h3)[id]" />

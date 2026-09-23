@@ -40,7 +40,7 @@ Below the laptop breakpoint the rails collapse into popovers. Layout scans the r
 
 ### TableOfContents
 
-Scroll-spy outline plus its mobile popover, both rendered from a single component. Goes in the `sidebar-right` slot — the outline owns the right rail, and the left one is reserved for navigation between pages. Layout supplies the popover's floating trigger.
+Scroll-spy outline plus its mobile popover, both rendered from a single component. Goes in the `sidebar-right` slot — the outline owns the right rail, and the left one is reserved for navigation between pages. Layout supplies the popover's floating trigger. It lists `h2` and `h3` headings only. A page with none of them keeps the right column empty rather than dropping it, so the content column does not shift between pages that share a menu, and it gets no mobile outline button.
 
 ```astro
 ---
