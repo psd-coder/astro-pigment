@@ -210,6 +210,22 @@ const alt = getMarkdownAlternate("api");
 </Layout>
 ```
 
+### ThemeImage
+
+A pair of images where only the one matching the current color scheme is shown, e.g. screenshots taken in light and dark mode. Follows the theme toggle, not only the OS preference. Both images go through `astro:assets`, so they are optimized and keep their width and height.
+
+```astro
+---
+import { ThemeImage } from "astro-pigment/components";
+import screenshotLight from "../assets/screenshot-light.png";
+import screenshotDark from "../assets/screenshot-dark.png";
+---
+
+<ThemeImage light={screenshotLight} dark={screenshotDark} alt="The settings panel" />
+```
+
+Props: `light` (required), `dark` (required), `alt` (required), `class?`.
+
 ## Playground
 
 Import from `astro-pigment/components/playground`:

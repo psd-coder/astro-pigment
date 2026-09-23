@@ -1,0 +1,6 @@
+@layer docs-theme {
+  :global([data-theme="dark"]) .light,
+  :global(:root:not([data-theme="dark"])) .dark {
+    display: none;
+  }
+}

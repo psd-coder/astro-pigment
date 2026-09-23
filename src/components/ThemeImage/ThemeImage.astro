@@ -1,0 +1,17 @@
+---
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+import styles from "./styles.module.css";
+
+type Props = {
+  class?: string;
+  light: ImageMetadata;
+  dark: ImageMetadata;
+  alt: string;
+};
+
+const { class: className, light, dark, alt } = Astro.props;
+---
+
+<Image class:list={[styles.light, className]} src={light} alt={alt} />
+<Image class:list={[styles.dark, className]} src={dark} alt={alt} />

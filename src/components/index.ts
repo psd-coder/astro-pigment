@@ -10,3 +10,4 @@ export { CodeBlockWrapper } from "./CodeBlockWrapper";
 export { InstallPackage } from "./InstallPackage";
 export { PrevNextNav } from "./PrevNextNav";
 export { PageHeading } from "./PageHeading";
+export { ThemeImage } from "./ThemeImage";
