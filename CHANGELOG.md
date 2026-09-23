@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.20.3
+
+### Fixed
+
+- Keep the empty ToC rail on pages without h2/h3 headings, so the right column keeps its width and content no longer shifts between pages sharing a menu. The mobile outline button is skipped on such pages.
+
 ## 0.20.2
 
 ### Fixed
