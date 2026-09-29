@@ -84,8 +84,8 @@
     }
   },
   "dependencies": {
-    "@astrojs/markdown-satteri": "^0.3.4",
-    "@astrojs/mdx": "^7.0.3",
+    "@astrojs/markdown-satteri": "^0.4.2",
+    "@astrojs/mdx": "^8.0.2",
     "@astrojs/sitemap": "^3.7.4",
     "@codemirror/lang-css": "^6.3.1",
     "@codemirror/lang-html": "^6.4.12",
@@ -111,7 +111,7 @@
     "remark-parse": "^11.0.0",
     "remark-stringify": "^11.0.0",
     "satori": "^0.29.0",
-    "satteri": "^0.9.5",
+    "satteri": "^0.10.5",
     "typed-channel": "^0.10.1",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.1.0",
