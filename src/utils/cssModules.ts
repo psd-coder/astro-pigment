@@ -21,7 +21,7 @@ import { createHash } from "node:crypto";
 import { realpathSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { init as esModuleLexerInit, parse as parseImports } from "es-module-lexer";
+import { extractRelativeImports } from "./relativeImports";
 
 // ---------------------------------------------------------------------------
 // generateScopedName
@@ -126,18 +126,7 @@ async function collectTransitiveCssModules(opts: CollectCssOpts): Promise<void> 
     source = fm[1];
   }
 
-  // Use es-module-lexer for correct import extraction — handles comments,
-  // multiline imports, string literals, and re-exports without false positives.
-  await esModuleLexerInit;
-  const [imports] = parseImports(source);
-
-  for (const imp of imports) {
-    // imp.n is the resolved specifier string; undefined for dynamic non-string expressions.
-    const spec = imp.n;
-    if (!spec) continue;
-    // Only follow relative/absolute paths; skip bare specifiers (npm deps).
-    if (!spec.startsWith(".") && !spec.startsWith("/")) continue;
-
+  for (const spec of extractRelativeImports(source)) {
     const resolved = await resolve(spec, fileId);
     if (!resolved || resolved.external) continue;
     const id = resolved.id;
