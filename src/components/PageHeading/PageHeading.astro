@@ -13,25 +13,21 @@ const { class: className, title, back, href } = Astro.props;
 ---
 
 <div class:list={[styles.headingRow, className]}>
-  {
-    back && (
-      <a class={styles.backLink} href={back.href} aria-label={back.label}>
-        <Icon name="chevron-left" size={28} />
-      </a>
-    )
-  }
+  {back && (
+    <a class={styles.backLink} href={back.href} aria-label={back.label}>
+      <Icon name="chevron-left" size={28} />
+    </a>
+  )}
   <h1>{title}</h1>
-  {
-    href && (
-      <a
-        href={href}
-        target="_blank"
-        rel="noreferrer"
-        class={styles.mdLink}
-        aria-label="View as Markdown"
-      >
-        <Icon name="markdown" size={32} />
-      </a>
-    )
-  }
+  {href && (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      class={styles.mdLink}
+      aria-label="View as Markdown"
+    >
+      <Icon name="markdown" size={32} />
+    </a>
+  )}
 </div>

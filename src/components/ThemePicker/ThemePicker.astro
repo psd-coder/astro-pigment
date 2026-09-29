@@ -14,8 +14,11 @@ const { class: className, ...rest } = Astro.props;
     class={styles.trigger}
     type="button"
     aria-label="Open theme picker"
-    aria-expanded="false"></button>
-  <div data-ref="tooltip" class={styles.tooltip} role="status" aria-live="polite">Theme copied</div>
+    aria-expanded="false"
+  ></button>
+  <div data-ref="tooltip" class={styles.tooltip} role="status" aria-live="polite">
+    Theme copied
+  </div>
   <div class={styles.panel}>
     <div data-ref="ring" class={styles.ring}>
       <div
@@ -27,8 +30,7 @@ const { class: className, ...rest } = Astro.props;
         aria-valuemin="0"
         aria-valuemax="360"
         aria-valuenow="180"
-      >
-      </div>
+      ></div>
     </div>
     <button data-ref="close" class={styles.close} type="button" aria-label="Close theme picker">
       <Icon name="close" size={16} />
@@ -60,8 +62,7 @@ const { class: className, ...rest } = Astro.props;
       aria-valuemin="0"
       aria-valuemax="100"
       aria-valuenow="50"
-    >
-    </div>
+    ></div>
   </div>
   <script is:inline>
     var hue = localStorage.getItem("theme-hue");

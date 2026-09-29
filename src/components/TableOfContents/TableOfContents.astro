@@ -16,17 +16,15 @@ const tocHeadings = getTocHeadings(headings);
 ---
 
 <x-toc items-selector={itemsSelector} class={styles.component}>
-  {
-    tocHeadings.length > 0 && (
-      <>
-        <List headings={tocHeadings} class={styles.sidebar} />
+  {tocHeadings.length > 0 && (
+    <>
+      <List headings={tocHeadings} class={styles.sidebar} />
 
-        <MobilePopover popover="toc">
-          <List headings={tocHeadings} class={styles.popoverList} />
-        </MobilePopover>
-      </>
-    )
-  }
+      <MobilePopover popover="toc">
+        <List headings={tocHeadings} class={styles.popoverList} />
+      </MobilePopover>
+    </>
+  )}
 </x-toc>
 
 <script>

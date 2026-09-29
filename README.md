@@ -240,7 +240,9 @@ Import from `astro-pigment/components`:
     headings={headings}
     itemsSelector=".prose :is(h2, h3)[id]"
   />
-  <article class="prose"><slot /></article>
+  <article class="prose">
+    <slot />
+  </article>
   <span slot="footer-extra">& My Company</span>
 </Layout>
 ```
@@ -272,15 +274,21 @@ const alt = getMarkdownAlternate("api");
 
 ```astro
 <Button>Click me</Button>
-<Button square aria-label="Menu"><Icon name="hamburger" /></Button>
+<Button square aria-label="Menu">
+  <Icon name="hamburger" />
+</Button>
 ```
 
 **ButtonGroup** -- joins adjacent `Button`s into one segmented control: shared borders collapse and only the outer corners stay rounded. Pass `aria-label` to name the group.
 
 ```astro
 <ButtonGroup aria-label="Page actions">
-  <Button square aria-label="Copy page"><Icon name="copy" /></Button>
-  <Button square aria-label="View as markdown"><Icon name="markdown" /></Button>
+  <Button square aria-label="Copy page">
+    <Icon name="copy" />
+  </Button>
+  <Button square aria-label="View as markdown">
+    <Icon name="markdown" />
+  </Button>
 </ButtonGroup>
 ```
 
@@ -288,7 +296,9 @@ const alt = getMarkdownAlternate("api");
 
 ```astro
 <Icon name="github" size={32} />
-<Icon name="custom" label="Mastodon"><svg>...</svg></Icon>
+<Icon name="custom" label="Mastodon">
+  <svg>...</svg>
+</Icon>
 ```
 
 **Footer** -- license, GitHub, and author links from virtual config. Slot: `extra`. Included in Layout by default.
