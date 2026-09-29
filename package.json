@@ -112,7 +112,7 @@
     "remark-stringify": "^11.0.0",
     "satori": "^0.33.5",
     "satteri": "^0.10.5",
-    "typed-channel": "^0.10.1",
+    "typed-channel": "^0.11.0",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.1.0",
     "valibot": "^1.5.0",

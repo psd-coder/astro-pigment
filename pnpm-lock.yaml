@@ -96,8 +96,8 @@ importers:
         specifier: ^0.34.0
         version: 0.34.5
       typed-channel:
-        specifier: ^0.10.1
-        version: 0.10.1
+        specifier: ^0.11.0
+        version: 0.11.0
       unified:
         specifier: ^11.0.5
         version: 11.0.5
@@ -3137,8 +3137,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  typed-channel@0.10.1:
-    resolution: {integrity: sha512-8HoF3trBDc6uZfz4SA8PwTZ7CIyY25b4Kylfo8iOS+mzIXPis08Ku0ToUzB4aJu2qYvOeN52eXEgZnQnN4Q8wA==}
+  typed-channel@0.11.0:
+    resolution: {integrity: sha512-57MIWudnTnboed2kjbRgElHvsR57BYQgjYAvQvQvRSnSbVsnNf1mqiX+4LbAA4Ke/ngUMNgFhV0j5+rrEi+Lpw==}
 
   typescript@7.0.2:
     resolution: {integrity: sha512-8FYau96o3NKOhbjKi/qNvG/W5jhzxkbdm5sj9AbZ/5T5sWqn3hJgLfGx27sRKZWTvyzCP8dLRBTf5tBTSRVUNA==}
@@ -6424,7 +6424,7 @@ snapshots:
   tslib@2.8.1:
     optional: true
 
-  typed-channel@0.10.1: {}
+  typed-channel@0.11.0: {}
 
   typescript@7.0.2:
     optionalDependencies:
