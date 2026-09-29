@@ -64,6 +64,7 @@ declare module "virtual:pigment-config" {
     directory: string;
     navLinks: NavItem[];
   };
+  export const agentSkills: import("./utils/agentSkillsMarkdown").AgentSkillsConfig | null;
   export const meta: {
     lang: string;
     titleSuffix: string | false;

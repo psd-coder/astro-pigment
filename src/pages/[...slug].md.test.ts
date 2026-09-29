@@ -20,12 +20,26 @@ type Extra = {
 // The endpoint captures the filtered extra entries at module load, so these
 // fixtures are fixed for the whole file; tests vary only the requested slug.
 const fx = vi.hoisted(() => ({
+  agentSkills: {
+    owner: "acme",
+    repo: "kit",
+    skillsPath: "skills",
+    plugin: null,
+    agents: ["claude-code"],
+    skills: [{ name: "lint", description: "Lint the code." }],
+  },
   docs: [
     {
       id: "guide",
       collection: "docs",
       data: { title: "Guide", description: "d", order: 1 },
       body: "## Setup\n\nHi <Note>x</Note>",
+    },
+    {
+      id: "skills",
+      collection: "docs",
+      data: { title: "Skills", description: "d", order: 2 },
+      body: '## Install\n\n<AgentSkillsInstall />\n\n## Skills\n\n<AgentSkillsIndex />\n\n## Lint\n\n<AgentSkillsInstall skill="lint" />\n\nDone.',
     },
   ] as Doc[],
   extraEntries: [
@@ -40,6 +54,7 @@ const fx = vi.hoisted(() => ({
   ] as Extra[],
 }));
 
+vi.mock("virtual:pigment-config", () => ({ agentSkills: fx.agentSkills }));
 vi.mock("virtual:pigment-extra-entries", () => ({ extraEntries: fx.extraEntries }));
 vi.mock("astro:content", () => ({ getCollection: () => Promise.resolve(fx.docs) }));
 
@@ -58,6 +73,17 @@ describe("GET /[...slug].md", () => {
     expect(body).toContain("Hi");
     expect(body).toContain("x");
     expect(body).not.toContain("<Note>");
+  });
+
+  it("expands the agent skills components into commands and the skill list", async () => {
+    const body = await (await GET(ctx({ slug: "skills" }))).text();
+    expect(body).not.toContain("<AgentSkills");
+    expect(body).toContain("To install one skill, pass its name:");
+    expect(body).toContain("Install `lint` for your agent:");
+    expect(body).toContain("Install every skill for your agent:");
+    expect(body).toContain("gh skill install acme/kit --all --agent claude-code --scope user");
+    expect(body).toContain("Lint the code.");
+    expect(body).toContain("Done.");
   });
 
   it("serves an extra entry rendered as markdown", async () => {
@@ -80,6 +106,6 @@ describe("GET /[...slug].md", () => {
 describe("getStaticPaths for /[...slug].md", () => {
   it("emits paths for docs and llms-enabled extra entries only", async () => {
     const paths = await getStaticPaths({} as Parameters<typeof getStaticPaths>[0]);
-    expect(paths.map((p) => p.params.slug)).toEqual(["guide", "examples/counter"]);
+    expect(paths.map((p) => p.params.slug)).toEqual(["guide", "skills", "examples/counter"]);
   });
 });

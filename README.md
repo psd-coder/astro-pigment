@@ -9,6 +9,7 @@ An Astro documentation theme with dark mode, interactive playgrounds, and SEO en
 - **Theming**: set `theme.hue` and `theme.saturation` in config; all colors derive via OKLch
 - **Interactive playgrounds**: CodeMirror editor + sandboxed live preview with console capture
 - **LLM endpoints**: `/llms.txt` and `/llms-full.txt` auto-generated from your markdown content
+- **Agent Skills**: advertise the repo's skills to people and agents, with install commands for Claude Code, Codex, Cursor, Copilot, Gemini CLI and more
 - **Social cards**: auto-generated `/og.png` and Twitter card meta tags, with a built-in template, static PNG, or custom satori template (dedicated `meta.og.image.logo` recommended for best results)
 - **Auto-generated favicons**: provide one or two source icons, get favicon.ico, SVG, PNG, apple-touch-icon, and webmanifest
 - **robots.txt + sitemap**: served out of the box, sitemap URL resolved from site+base
@@ -179,6 +180,11 @@ type DocsThemeConfig = {
     }>;
     extraEntries?: string; // path to module exporting ExtraEntry[] or () => Promise<ExtraEntry[]>
   };
+  agentSkills?: {
+    directory?: string; // <name>/SKILL.md folders, default "skills"
+    plugin?: { name: string; marketplace: string }; // installed as name@marketplace
+    agents?: AgentId[]; // agents offered, default all
+  };
   meta?: {
     lang?: string; // <html lang>, default "en"
     titleSuffix?: string | false; // " | {suffix}" on sub-pages, default project.name
@@ -210,6 +216,7 @@ type DocsThemeConfig = {
 - Injects sitemap, `/robots.txt`, `/llms.txt`, `/llms-full.txt`, `/[slug].md` routes
 - Serves `/og.png` (built-in satori template by default) and emits full OG + Twitter card meta tags; `summary_large_image` card when an image resolves
 - Injects `/[...slug]` page rendering docs from the content collection (opt out with `docs.renderDefaultPage: false`)
+- When `agentSkills` is configured: validates each `SKILL.md` at build time and adds an Agent Skills section to `/llms.txt` and `/llms-full.txt`
 
 ## Components
 
@@ -277,7 +284,7 @@ const alt = getMarkdownAlternate("api");
 </ButtonGroup>
 ```
 
-**Icon** -- built-in SVGs: `check`, `chevron-left`, `close`, `copy`, `github`, `hamburger`, `markdown`, `search`, `toc`, `x`. Use `name="custom"` + slot for your own.
+**Icon** -- built-in SVGs: `check`, `chevron-down`, `chevron-left`, `close`, `copy`, `github`, `hamburger`, `markdown`, `search`, `toc`, `x`. Use `name="custom"` + slot for your own.
 
 ```astro
 <Icon name="github" size={32} />
@@ -297,6 +304,18 @@ const alt = getMarkdownAlternate("api");
 ```astro
 <InstallPackage pkg="nanotags nanostores" />
 <InstallPackage pkg="typescript" dev />
+```
+
+**AgentSkillsInstall** -- the command that installs the project's Agent Skills, with install-method tabs (npx plugins, the agent's plugin CLI, npx skills, gh skill, curl) and an agent select. `skill="<name>"` narrows it to one skill. Selection is shared by every panel and persists to localStorage; the page's `.md` twin lists every command.
+
+**AgentSkillsIndex** -- an "Available Skills" heading and the project's skills, each with its description, `SKILL.md` link and its own install panel.
+
+Both need the `agentSkills` option.
+
+```astro
+<AgentSkillsInstall />
+<AgentSkillsInstall skill="lint" />
+<AgentSkillsIndex />
 ```
 
 **PrevNextNav** -- previous/next page navigation.

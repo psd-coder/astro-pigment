@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { extraEntries } from "virtual:pigment-extra-entries";
-import { siteConfig } from "virtual:pigment-config";
+import { agentSkills, siteConfig } from "virtual:pigment-config";
+import { agentSkillsLlmsSection } from "../utils/agentSkillsMarkdown";
 import { getDocsCollection } from "../utils/content";
 import { extractSections, formatSections, markdownLinkItem } from "../utils/markdown";
 import { markdownResponse } from "../utils/response";
@@ -38,6 +39,7 @@ export const GET: APIRoute = async () => {
       "Complete documentation in a single file",
     ),
     "",
+    ...(agentSkills ? [agentSkillsLlmsSection(agentSkills), ""] : []),
     ...docSections,
     ...extraSections,
     "",

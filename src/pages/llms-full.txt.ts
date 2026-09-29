@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { extraEntries } from "virtual:pigment-extra-entries";
-import { siteConfig } from "virtual:pigment-config";
+import { agentSkills, siteConfig } from "virtual:pigment-config";
+import { agentSkillsComponents, agentSkillsLlmsSection } from "../utils/agentSkillsMarkdown";
 import { getDocsCollection } from "../utils/content";
 import {
   markdownLinkItem,
@@ -12,9 +13,10 @@ import { getHref } from "../utils/urls";
 
 export const GET: APIRoute = async () => {
   const docs = await getDocsCollection();
+  const components = agentSkillsComponents(agentSkills);
 
   const docSections = docs.map((doc) =>
-    [`# ${doc.data.title}`, "", stringifyCleanMarkdown(doc.body ?? "")].join("\n"),
+    [`# ${doc.data.title}`, "", stringifyCleanMarkdown(doc.body ?? "", components)].join("\n"),
   );
 
   const llmsExtra = extraEntries.filter((e) => e.llms !== false);
@@ -30,6 +32,7 @@ export const GET: APIRoute = async () => {
     "",
     siteConfig.project.description,
     "",
+    ...(agentSkills ? [agentSkillsLlmsSection(agentSkills), ""] : []),
     ...docSections,
     ...fullSections,
     ...(linkOnly.length > 0 ? ["", ...linkOnly] : []),

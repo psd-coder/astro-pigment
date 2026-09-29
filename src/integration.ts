@@ -13,8 +13,11 @@ import { generateScopedName, transitiveCssPlugin } from "./utils/cssModules";
 import { internalSourcemapNoiseFilter } from "./utils/devServer";
 import { headingAnchorPlugin } from "./utils/headingAnchor";
 import { fonts } from "./utils/fonts";
-import { getGithubUrl } from "./utils/github";
+import { AGENT_IDS } from "./utils/agentSkills";
+import type { AgentSkillsConfig } from "./utils/agentSkillsMarkdown";
+import { getGithubOwner, getGithubUrl } from "./utils/github";
 import { isGenerated, resolveImageSource } from "./utils/ogResolve";
+import { readSkills, repoRelativePath } from "./utils/skills";
 import { sanitizeInlineSvg } from "./utils/svg";
 import { deriveTwitterCreator } from "./utils/twitter";
 import { buildConfigModule, virtualReexportDefault } from "./utils/virtualModules";
@@ -46,6 +49,20 @@ function extractSiteConfig(config: DocsThemeConfig): SiteConfig {
     project: config.project,
     author: config.author,
     credits: config.credits,
+  };
+}
+
+function resolveAgentSkills(config: DocsThemeConfig, astroRoot: string): AgentSkillsConfig | null {
+  if (!config.agentSkills) return null;
+  const directory = path.resolve(astroRoot, config.agentSkills.directory ?? "skills");
+  const skills = readSkills(directory);
+  return {
+    owner: getGithubOwner(config.project.github),
+    repo: config.project.github.repository,
+    skillsPath: repoRelativePath(directory),
+    plugin: config.agentSkills.plugin ?? null,
+    agents: config.agentSkills.agents ?? AGENT_IDS,
+    skills,
   };
 }
 
@@ -143,6 +160,8 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
             })
           : `export const extraEntries = [];`;
 
+        const agentSkills = resolveAgentSkills(config, astroRoot);
+
         const logoFallback = config.logo ? path.resolve(astroRoot, config.logo) : null;
         const { name: projectName, description: projectDescription } = siteConfig.project;
 
@@ -211,6 +230,7 @@ export function createIntegration(config: DocsThemeConfig): AstroIntegration {
           robots: { contentSignal },
           theme: { hue: themeHue, saturation: themeSaturation },
           docs: { ...docsConfig, navLinks },
+          agentSkills,
           meta: {
             lang,
             titleSuffix,

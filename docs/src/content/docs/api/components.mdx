@@ -91,7 +91,7 @@ import { Button, ButtonGroup, Icon } from "astro-pigment/components";
 
 ### Icon
 
-Built-in SVG icons: `check`, `chevron-left`, `close`, `copy`, `github`, `hamburger`, `markdown`, `search`, `toc`, `x`. Use `name="custom"` with a slot for your own SVG.
+Built-in SVG icons: `check`, `chevron-down`, `chevron-left`, `close`, `copy`, `github`, `hamburger`, `markdown`, `search`, `toc`, `x`. Use `name="custom"` with a slot for your own SVG.
 
 ```astro
 ---
@@ -160,6 +160,18 @@ import { InstallPackage } from "astro-pigment/components";
 
 <InstallPackage pkg="nanotags nanostores" />
 <InstallPackage pkg="typescript" dev />
+```
+
+### AgentSkillsInstall / AgentSkillsIndex
+
+`AgentSkillsInstall` shows the command that installs the project's Agent Skills, per agent and install method; `skill="<name>"` narrows it to one skill. `AgentSkillsIndex` renders an "Available Skills" heading and lists the skills, each with its own install panel. Both need the `agentSkills` integration option; see [Agent skills](/api/agent-skills).
+
+```mdx
+import { AgentSkillsIndex, AgentSkillsInstall } from "astro-pigment/components";
+
+<AgentSkillsInstall />
+<AgentSkillsInstall skill="lint" />
+<AgentSkillsIndex />
 ```
 
 ### PrevNextNav

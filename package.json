@@ -115,7 +115,8 @@
     "typed-channel": "^0.10.1",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.1.0",
-    "valibot": "^1.4.2"
+    "valibot": "^1.4.2",
+    "yaml": "^2.9.1"
   },
   "devDependencies": {
     "@netlify/edge-functions": "^3.0.8",

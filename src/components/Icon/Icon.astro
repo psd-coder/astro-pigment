@@ -4,6 +4,7 @@ import type { HTMLAttributes } from "astro/types";
 type Props = HTMLAttributes<"svg"> & {
   name?:
     | "check"
+    | "chevron-down"
     | "chevron-left"
     | "close"
     | "copy"
@@ -38,6 +39,24 @@ const { name, size = 20, label, ...restProps } = Astro.props;
       {...restProps}
     >
       <polyline points="20 6 9 17 4 12" />
+    </svg>
+  )
+}
+{
+  name === "chevron-down" && (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      {...restProps}
+    >
+      <polyline points="6 9 12 15 18 9" />
     </svg>
   )
 }

@@ -1,5 +1,5 @@
 import type { APIContext } from "astro";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 type Doc = {
   id: string;
@@ -20,12 +20,20 @@ type Extra = {
 
 const fx = vi.hoisted(() => ({
   siteConfig: { project: { name: "Pigment", description: "A docs theme." } },
+  agentSkills: null as null | {
+    owner: string;
+    repo: string;
+    skillsPath: string | null;
+    plugin: null;
+    agents: ["claude-code"];
+    skills: Array<{ name: string; description: string }>;
+  },
   docs: [
     {
       id: "guide",
       collection: "docs",
       data: { title: "Guide", description: "d", order: 1 },
-      body: "## Setup\n\nInstall it.\n\n<Note>keep this</Note>",
+      body: "## Setup\n\nInstall it.\n\n<Note>keep this</Note>\n\n<AgentSkillsInstall />",
     },
   ] as Doc[],
   extraEntries: [
@@ -42,11 +50,20 @@ const fx = vi.hoisted(() => ({
   ] as Extra[],
 }));
 
-vi.mock("virtual:pigment-config", () => ({ siteConfig: fx.siteConfig }));
+vi.mock("virtual:pigment-config", () => ({
+  siteConfig: fx.siteConfig,
+  get agentSkills() {
+    return fx.agentSkills;
+  },
+}));
 vi.mock("virtual:pigment-extra-entries", () => ({ extraEntries: fx.extraEntries }));
 vi.mock("astro:content", () => ({ getCollection: () => Promise.resolve(fx.docs) }));
 
 const { GET } = await import("./llms-full.txt");
+
+afterEach(() => {
+  fx.agentSkills = null;
+});
 
 describe("GET /llms-full.txt", () => {
   it("inlines full doc bodies with MDX stripped", async () => {
@@ -75,5 +92,26 @@ describe("GET /llms-full.txt", () => {
   it("omits entries flagged llms: false entirely", async () => {
     const body = await (await GET({} as APIContext)).text();
     expect(body).not.toContain("Hidden");
+  });
+
+  it("drops <AgentSkillsInstall /> when agent skills are not configured", async () => {
+    const body = await (await GET({} as APIContext)).text();
+    expect(body).not.toContain("AgentSkills");
+    expect(body).not.toContain("## Agent Skills");
+  });
+
+  it("adds the skills section and expands <AgentSkillsInstall /> into commands", async () => {
+    fx.agentSkills = {
+      owner: "acme",
+      repo: "kit",
+      skillsPath: "skills",
+      plugin: null,
+      agents: ["claude-code"],
+      skills: [{ name: "lint", description: "Lint the code." }],
+    };
+    const body = await (await GET({} as APIContext)).text();
+    expect(body.indexOf("## Agent Skills")).toBeLessThan(body.indexOf("# Guide"));
+    expect(body).toContain("- Claude Code");
+    expect(body).toContain("npx skills add acme/kit --skill '*' -a claude-code -g");
   });
 });

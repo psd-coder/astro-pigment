@@ -1,0 +1,67 @@
+---
+title: "Agent skills"
+description: Tell readers and AI agents that the project ships Agent Skills, with install commands for every major coding agent.
+order: 12
+menu: "api"
+---
+
+When the project's GitHub repo ships [Agent Skills](https://agentskills.io) (folders with a `SKILL.md`), and optionally a plugin, the `agentSkills` option advertises them on the docs site. People get an `<AgentSkillsInstall />` panel with install commands for their agent and an `<AgentSkillsIndex />` list of the skills. Agents get an "Agent Skills" section in `llms.txt` and the full command list in the page's `.md` twin.
+
+## Setup
+
+```ts
+docsTheme({
+  project: {
+    // ...
+    github: { user: "acme", repository: "kit" }, // commands install from this repo
+  },
+  agentSkills: {
+    // Folder of <name>/SKILL.md skill folders, relative to the Astro root. Default: "skills".
+    directory: "../skills",
+    // Optional: a plugin from the repo's marketplace, installed as name@marketplace.
+    plugin: { name: "kit", marketplace: "acme" },
+    // Optional: agents offered, in order. Default: all of them.
+    // agents: ["claude-code", "codex", "cursor"],
+  },
+});
+```
+
+Every command installs from the GitHub repo, so the skills have to be pushed there. The build reads each `SKILL.md` and fails when its frontmatter breaks the [spec](https://agentskills.io/specification): `name` is lowercase letters, digits and single hyphens, at most 64 characters, and matches its folder; `description` is 1-1024 characters.
+
+The curl and `pi install` commands and the `SKILL.md` links need the folder's path inside the repo, which the integration gets from git. A build without git (from a tarball, say) leaves them out.
+
+## Components
+
+```mdx
+import { AgentSkillsIndex, AgentSkillsInstall } from "astro-pigment/components";
+
+<AgentSkillsInstall />
+
+<AgentSkillsIndex />
+```
+
+`<AgentSkillsInstall />` renders install-method tabs with an agent select at the end of the same row, and the command that installs everything for the chosen agent. Pass `skill="<name>"` to install that one skill instead; the plugin installers and `pi install` drop out, since they install everything. Every panel on the site shares the chosen agent and method, which persist to `localStorage`. All commands install at user scope.
+
+`<AgentSkillsIndex />` renders an "Available Skills" heading and lists each skill with its description, a link to its `SKILL.md` and its own install panel (`<AgentSkillsInstall skill="<name>" />`). It earns its place when the repo ships several skills; with one, the install panel is enough.
+
+| Agent          | Methods, recommended first                                |
+| -------------- | --------------------------------------------------------- |
+| Claude Code    | npx plugins, `claude plugin`, npx skills, gh skill, curl  |
+| Codex          | npx plugins, `codex plugin`, npx skills, gh skill, curl   |
+| Cursor         | npx plugins, npx skills, gh skill, curl                   |
+| GitHub Copilot | npx plugins, `copilot plugin`, npx skills, gh skill, curl |
+| VS Code        | npx plugins, npx skills, gh skill, curl                   |
+| Gemini CLI     | npx skills, gh skill, curl                                |
+| OpenCode       | npx skills, gh skill, curl                                |
+| Grok Build     | npx plugins, npx skills, gh skill, curl                   |
+| Pi             | `pi install` (all skills), npx skills, gh skill, curl     |
+
+- **npx plugins** runs the [`plugins`](https://www.npmjs.com/package/plugins) CLI, which installs the whole plugin through the agent's own plugin system. It and the `claude`, `codex` and `copilot` plugin commands appear only when `plugin` is set, and only for the install-all command.
+- **npx skills** runs the [`skills`](https://www.npmjs.com/package/skills) CLI, and **gh skill** the GitHub CLI (2.90 or later).
+- **curl** needs no tools: it unpacks the skills from the repo tarball into the agent's skills folder.
+- **pi install** treats the repo as a Pi package, so it appears only when the skills live in a `skills/` folder at the repo root.
+
+## What agents read
+
+- `llms.txt` and `llms-full.txt` get an `## Agent Skills` section with the install command, the agent ids, the plugin command when there is one, and each skill linked to its raw `SKILL.md`.
+- In a page's `.md` twin, `<AgentSkillsInstall />` becomes a list of every install command per agent (for one skill when `skill` is set), and `<AgentSkillsIndex />` an "Available Skills" section with the single-skill command and the skills.
