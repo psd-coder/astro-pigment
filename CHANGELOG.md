@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.21.0
+
+### Breaking
+
+- Astro 7.2.10 or newer is now required: the `astro` peer range moves from `^7.0.0` to `^7.2.10`, matching `@astrojs/mdx` 8.
+
+### Added
+
+- `agentSkills` config option advertising the Agent Skills shipped in the project's GitHub repo. It reads `<name>/SKILL.md` folders (default `skills`) at build time, validates them against the spec and adds an Agent Skills section to `llms.txt` and `llms-full.txt`. `AgentSkillsInstall` shows per-agent install commands for Claude Code, Codex, Cursor, Copilot, VS Code, Gemini CLI, OpenCode, Grok and Pi; `AgentSkillsIndex` lists every skill with its own panel. Markdown twins expand both into plain command lists.
+- `stringifyCleanMarkdown` in `astro-pigment/utils/markdown` takes an optional `ComponentMarkdown` map that renders JSX components as markdown in the twin from their string props.
+- `ThemeImage` component: takes `light` and `dark` images plus `alt` and shows the one matching the current theme.
+
+### Changed
+
+- Accept `@netlify/edge-functions` 4 as a peer alongside 3.
+
+### Fixed
+
+- Keep an image's aspect ratio when the reset's `max-inline-size` shrinks an `<img>` that has a `height` attribute.
+
 ## 0.20.3
 
 ### Fixed
