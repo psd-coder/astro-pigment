@@ -36,46 +36,44 @@ const defaultMethod = resolveInstallMethod(firstAgent.methods, "");
 
 <x-agent-skills-install class:list={[codePanelsStyles.wrapper, styles.root]} skill={skill}>
   <div class:list={[codePanelsStyles.tabs, styles.bar]}>
-    {
-      agents.map((agent, i) => (
-        <Tabs
-          value={agent.methods[0]?.id ?? ""}
-          class={styles.methods}
-          data-ref="methodTabs"
-          aria-label="Install method"
-          data-agent={agent.id}
-          hidden={i !== 0}
-        >
-          {agent.methods.map((method) => (
-            <Tab value={method.id} class={codePanelsStyles.tab}>
-              {method.label}
-            </Tab>
-          ))}
-        </Tabs>
-      ))
-    }
+    {agents.map((agent, i) => (
+      <Tabs
+        value={agent.methods[0]?.id ?? ""}
+        class={styles.methods}
+        data-ref="methodTabs"
+        aria-label="Install method"
+        data-agent={agent.id}
+        hidden={i !== 0}
+      >
+        {agent.methods.map((method) => (
+          <Tab value={method.id} class={codePanelsStyles.tab}>
+            {method.label}
+          </Tab>
+        ))}
+      </Tabs>
+    ))}
     <div class={styles.agent}>
       <select class={styles.agentSelect} data-ref="agentSelect" aria-label="Agent">
-        {agents.map((agent) => <option value={agent.id}>{agent.label}</option>)}
+        {agents.map((agent) => (
+          <option value={agent.id}>{agent.label}</option>
+        ))}
       </select>
       <Icon name="chevron-down" size={12} class={styles.chevron} aria-hidden="true" />
     </div>
   </div>
   <div class={styles.panel}>
-    {
-      agents.map((agent) =>
-        agent.methods.map((method) => (
-          <div
-            data-ref="commands"
-            data-agent={agent.id}
-            data-method={method.id}
-            hidden={agent !== firstAgent || method.id !== defaultMethod.id}
-          >
-            <Code code={method.command} lang="shellscript" theme={adaptiveCodeTheme} />
-          </div>
-        )),
-      )
-    }
+    {agents.map((agent) =>
+      agent.methods.map((method) => (
+        <div
+          data-ref="commands"
+          data-agent={agent.id}
+          data-method={method.id}
+          hidden={agent !== firstAgent || method.id !== defaultMethod.id}
+        >
+          <Code code={method.command} lang="shellscript" theme={adaptiveCodeTheme} />
+        </div>
+      )),
+    )}
   </div>
 </x-agent-skills-install>
 

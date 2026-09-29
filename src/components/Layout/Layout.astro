@@ -86,15 +86,15 @@ const resolvedDescription = description ?? siteConfig.project.description;
     <slot name="head-extra" />
   </head>
   <body class:list={[styles.container, showSidebar && showSidebarRight && styles.wideLayout]}>
-    {
-      mdAbsoluteUrl && (
-        <div class="visually-hidden" aria-hidden="true">
-          A Markdown version of this page is available at {mdAbsoluteUrl} — optimized for AI and LLM
-          tools.
-        </div>
-      )
-    }
-    <a href="#main-content" class={styles.skipLink}>Skip to main content</a>
+    {mdAbsoluteUrl && (
+      <div class="visually-hidden" aria-hidden="true">
+        A Markdown version of this page is available at {mdAbsoluteUrl} — optimized for AI and LLM
+        tools.
+      </div>
+    )}
+    <a href="#main-content" class={styles.skipLink}>
+      Skip to main content
+    </a>
     <x-sticky-header role="banner">
       <nav class:list={styles.nav}>
         <a
@@ -105,31 +105,27 @@ const resolvedDescription = description ?? siteConfig.project.description;
           transition:animate="initial"
         >
           <slot name="logo">
-            {
-              logo ? (
-                <Fragment set:html={logo} />
-              ) : (
-                <span class={styles.logoText}>{siteConfig.project.name}</span>
-              )
-            }
+            {logo ? (
+              <Fragment set:html={logo} />
+            ) : (
+              <span class={styles.logoText}>{siteConfig.project.name}</span>
+            )}
           </slot>
         </a>
-        {
-          navLinks.length > 0 && (
-            <div class:list={[styles.links, styles.primaryNav]} role="menubar" focusgroup="wrap">
-              {navLinks.map((item) => (
-                <a
-                  role="menuitem"
-                  href={getHref(item.href)}
-                  class:list={[styles.link, isActiveHref(Astro, item.href) && styles.active]}
-                  {...item.attrs}
-                >
-                  {item.label}
-                </a>
-              ))}
-            </div>
-          )
-        }
+        {navLinks.length > 0 && (
+          <div class:list={[styles.links, styles.primaryNav]} role="menubar" focusgroup="wrap">
+            {navLinks.map((item) => (
+              <a
+                role="menuitem"
+                href={getHref(item.href)}
+                class:list={[styles.link, isActiveHref(Astro, item.href) && styles.active]}
+                {...item.attrs}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+        )}
         <div
           class:list={[styles.links, styles.extraNav]}
           role="menubar"
@@ -139,22 +135,20 @@ const resolvedDescription = description ?? siteConfig.project.description;
         >
           {search && <Search role="menuitem" />}
           <ThemeToggle role="menuitem" />
-          {
-            author && (
-              <a
-                href={author.url}
-                class:list={[styles.link, styles.square]}
-                aria-label={author.name}
-                role="menuitem"
-              >
-                {author.icon ? (
-                  <Fragment set:html={author.icon} />
-                ) : author.url.includes("x.com") ? (
-                  <Icon name="x" />
-                ) : null}
-              </a>
-            )
-          }
+          {author && (
+            <a
+              href={author.url}
+              class:list={[styles.link, styles.square]}
+              aria-label={author.name}
+              role="menuitem"
+            >
+              {author.icon ? (
+                <Fragment set:html={author.icon} />
+              ) : author.url.includes("x.com") ? (
+                <Icon name="x" />
+              ) : null}
+            </a>
+          )}
           <a
             href={githubUrl}
             class:list={[styles.link, styles.square]}
@@ -167,44 +161,36 @@ const resolvedDescription = description ?? siteConfig.project.description;
       </nav>
     </x-sticky-header>
     <div class={styles.main}>
-      {
-        showSidebar && (
-          <aside
-            class={styles.sidebar}
-            transition:name="pigment-sidebar"
-            transition:animate="initial"
-          >
-            <Fragment set:html={sidebarHtml} />
-          </aside>
-        )
-      }
+      {showSidebar && (
+        <aside
+          class={styles.sidebar}
+          transition:name="pigment-sidebar"
+          transition:animate="initial"
+        >
+          <Fragment set:html={sidebarHtml} />
+        </aside>
+      )}
       <main id="main-content" class={styles.content}>
         <slot />
       </main>
-      {
-        showSidebarRight && (
-          <aside class={styles.sidebarRight}>
-            <Fragment set:html={sidebarRightHtml} />
-          </aside>
-        )
-      }
+      {showSidebarRight && (
+        <aside class={styles.sidebarRight}>
+          <Fragment set:html={sidebarRightHtml} />
+        </aside>
+      )}
     </div>
     <Footer class={styles.footer}>
       <slot name="footer-extra" slot="extra" />
     </Footer>
-    {
-      (hasMobileNav || hasMobileToc) && (
-        <LayoutMobileTriggers nav={hasMobileNav} toc={hasMobileToc} />
-      )
-    }
+    {(hasMobileNav || hasMobileToc) && (
+      <LayoutMobileTriggers nav={hasMobileNav} toc={hasMobileToc} />
+    )}
     <CodeBlockWrapper />
-    {
-      themePicker && (
-        <ThemePicker
-          class:list={[styles.themePicker, hasMobileNav && hasMobileToc && styles.shifted]}
-        />
-      )
-    }
+    {themePicker && (
+      <ThemePicker
+        class:list={[styles.themePicker, hasMobileNav && hasMobileToc && styles.shifted]}
+      />
+    )}
   </body>
 </html>
 <script>

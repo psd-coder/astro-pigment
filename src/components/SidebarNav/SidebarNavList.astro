@@ -18,41 +18,39 @@ const isActive = (link: { href?: string }) => link.href != null && isCurrentHref
   data-sidebar-nav-rail={rail ? "" : undefined}
   aria-label="Section navigation"
 >
-  {
-    groups.map((group) => (
-      <div class={styles.group}>
-        {group.label !== null &&
-          (group.href != null ? (
-            <a
-              href={getHref(group.href)}
-              aria-current={isActive(group) ? "page" : undefined}
-              class:list={[styles.link, isActive(group) && styles.active]}
-              {...group.attrs}
-            >
-              {group.label}
-            </a>
-          ) : (
-            <span class={styles.groupTitle}>{group.label}</span>
+  {groups.map((group) => (
+    <div class={styles.group}>
+      {group.label !== null &&
+        (group.href != null ? (
+          <a
+            href={getHref(group.href)}
+            aria-current={isActive(group) ? "page" : undefined}
+            class:list={[styles.link, isActive(group) && styles.active]}
+            {...group.attrs}
+          >
+            {group.label}
+          </a>
+        ) : (
+          <span class={styles.groupTitle}>{group.label}</span>
+        ))}
+      {group.items.length > 0 && (
+        <ul class:list={[styles.list, group.label === null && styles.flatList]}>
+          {group.items.map((item) => (
+            <li class={styles.listItem}>
+              <a
+                href={getHref(item.href)}
+                aria-current={isActive(item) ? "page" : undefined}
+                class:list={[styles.link, isActive(item) && styles.active]}
+                {...item.attrs}
+              >
+                {item.title}
+              </a>
+            </li>
           ))}
-        {group.items.length > 0 && (
-          <ul class:list={[styles.list, group.label === null && styles.flatList]}>
-            {group.items.map((item) => (
-              <li class={styles.listItem}>
-                <a
-                  href={getHref(item.href)}
-                  aria-current={isActive(item) ? "page" : undefined}
-                  class:list={[styles.link, isActive(item) && styles.active]}
-                  {...item.attrs}
-                >
-                  {item.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    ))
-  }
+        </ul>
+      )}
+    </div>
+  ))}
 </nav>
 
 <script>

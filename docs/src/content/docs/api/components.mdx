@@ -28,7 +28,9 @@ import { Layout } from "astro-pigment/components";
   <MyLogo slot="logo" />
   <meta slot="head-extra" name="robots" content="noindex" />
   <TableOfContents slot="sidebar-right" headings={headings} />
-  <article class="prose"><slot /></article>
+  <article class="prose">
+    <slot />
+  </article>
   <span slot="footer-extra">& Additional Credit</span>
 </Layout>
 ```
@@ -71,7 +73,9 @@ import { Button } from "astro-pigment/components";
 ---
 
 <Button>Click me</Button>
-<Button square aria-label="Settings"><Icon name="hamburger" /></Button>
+<Button square aria-label="Settings">
+  <Icon name="hamburger" />
+</Button>
 ```
 
 ### ButtonGroup
@@ -84,8 +88,12 @@ import { Button, ButtonGroup, Icon } from "astro-pigment/components";
 ---
 
 <ButtonGroup aria-label="Page actions">
-  <Button square aria-label="Copy page"><Icon name="copy" /></Button>
-  <Button square aria-label="View as markdown"><Icon name="markdown" /></Button>
+  <Button square aria-label="Copy page">
+    <Icon name="copy" />
+  </Button>
+  <Button square aria-label="View as markdown">
+    <Icon name="markdown" />
+  </Button>
 </ButtonGroup>
 ```
 
@@ -101,7 +109,9 @@ import { Icon } from "astro-pigment/components";
 <Icon name="github" />
 <Icon name="github" size={32} />
 <Icon name="custom" label="Mastodon">
-  <svg viewBox="0 0 24 24"><path d="..."></path></svg>
+  <svg viewBox="0 0 24 24">
+    <path d="..."></path>
+  </svg>
 </Icon>
 ```
 
@@ -218,7 +228,9 @@ const alt = getMarkdownAlternate("api");
 
 <Layout title="API Reference" alternate={[alt]}>
   <PageHeading title="API Reference" href={alt.href} />
-  <article class="prose"><slot /></article>
+  <article class="prose">
+    <slot />
+  </article>
 </Layout>
 ```
 
