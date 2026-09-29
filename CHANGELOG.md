@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.21.1
+
+### Fixed
+
+- `astro build` no longer crashes on `/og.png` with `ReferenceError: __dirname is not defined` when satori does not resolve from the project root (pnpm's default isolated `node_modules`). satori 0.33 added a HarfBuzz dependency whose loader breaks once bundled into the prerender chunk ([vercel/satori#791](https://github.com/vercel/satori/issues/791)), so satori is pinned to 0.32.
+
 ## 0.21.0
 
 ### Breaking
