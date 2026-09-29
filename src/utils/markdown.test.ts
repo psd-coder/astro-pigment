@@ -49,6 +49,25 @@ describe("stringifyCleanMarkdown", () => {
     expect(out).toContain("# Heading");
   });
 
+  it("replaces a component with its given markdown", () => {
+    const out = stringifyCleanMarkdown("Before\n\n<AgentSkillsInstall />\n\nAfter", {
+      AgentSkillsInstall: () => "- `npx skills add acme/kit`",
+    });
+    expect(out).toBe("Before\n\n- `npx skills add acme/kit`\n\nAfter\n");
+  });
+
+  it("passes a component's string props to its markdown", () => {
+    const out = stringifyCleanMarkdown('<AgentSkillsInstall skill="lint" count={2} />', {
+      AgentSkillsInstall: (props) => `Props: ${Object.entries(props).join("; ")}`,
+    });
+    expect(out).toBe("Props: skill,lint\n");
+  });
+
+  it("drops a self-closing component that has no markdown", () => {
+    const out = stringifyCleanMarkdown("Before\n\n<AgentSkillsInstall />\n\nAfter", {});
+    expect(out).toBe("Before\n\nAfter\n");
+  });
+
   it("expands <InstallPackage> to a command per package manager", () => {
     const out = stringifyCleanMarkdown('<InstallPackage pkg="astro-pigment nanostores" />');
     expect(out).toContain("Install `astro-pigment nanostores`:");

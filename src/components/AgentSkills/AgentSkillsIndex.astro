@@ -1,0 +1,34 @@
+---
+import { agentSkills } from "virtual:pigment-config";
+import { skillFileUrl } from "../../utils/agentSkills";
+import AgentSkillsInstall from "./AgentSkillsInstall.astro";
+import styles from "./styles.module.css";
+
+if (!agentSkills) {
+  throw new Error(
+    "[astro-pigment] <AgentSkillsIndex /> needs the `agentSkills` integration option.",
+  );
+}
+---
+
+<h3 id="available-skills">Available Skills</h3>
+<ul class={styles.skills}>
+  {
+    agentSkills.skills.map(({ name, description }) => {
+      const url = skillFileUrl(agentSkills, name, "blob");
+      return (
+        <li class={styles.skill}>
+          {url ? (
+            <a href={url} class={styles.name}>
+              <code>{name}</code>
+            </a>
+          ) : (
+            <code class={styles.name}>{name}</code>
+          )}
+          <p class={styles.description}>{description}</p>
+          <AgentSkillsInstall skill={name} />
+        </li>
+      );
+    })
+  }
+</ul>

@@ -8,8 +8,8 @@ menu: "api"
 The rest of this section covers the features that config turns on:
 [Theming](/api/theming), [Stores & search](/api/stores),
 [Loaders & exportable configs](/api/loaders-and-configs),
-[SEO & robots](/api/seo), [Social images](/api/social-images), and
-[Markdown for AI agents](/api/markdown-for-agents). For authoring pages, see
+[SEO & robots](/api/seo), [Social images](/api/social-images),
+[Markdown for AI agents](/api/markdown-for-agents), and [Agent skills](/api/agent-skills). For authoring pages, see
 [Page frontmatter](/api/page-frontmatter), [Menu collection](/api/menu-collection),
 and [Components](/api/components).
 
@@ -70,6 +70,10 @@ docsTheme({
   // Optional: robots.txt Content-Signal directive (contentsignal.org). Each flag
   // maps to yes/no in the "User-agent: *" block. All default to true.
   // robots: { contentSignal: { search: true, aiTrain: false, aiInput: false } },
+
+  // Optional: advertise Agent Skills shipped in the GitHub repo. Adds an "Agent Skills"
+  // section to llms.txt and feeds <AgentSkillsInstall /> and <AgentSkillsIndex />. See /api/agent-skills.
+  // agentSkills: { directory: "skills", plugin: { name: "kit", marketplace: "acme" } },
 
   // Optional: theme tokens. Hue feeds CSS variables and the auto OG template.
   theme: {
@@ -149,3 +153,4 @@ docsTheme({
 11. Always serves `/robots.txt` (permissive, with a `Content-Signal:` directive and `Sitemap:` pointing at `/sitemap-index.xml`)
 12. Always serves `/og.png` (built-in template by default, or whatever `meta.og.image` specifies) and emits `<meta property="og:image">` at 1200x630
 13. Twitter falls back to the OG image; emits `summary_large_image` Twitter card tags. Override with `meta.twitter.image` to use a different mode/path
+14. When `agentSkills` is configured: validates each `SKILL.md` at build time and adds an **Agent Skills** section to `llms.txt` and `llms-full.txt`

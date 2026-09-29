@@ -13,6 +13,7 @@ export const shikiThemes = {
 
 export { fonts } from "./utils/fonts";
 export type {
+  AgentId,
   DocsThemeConfig,
   SiteConfig,
   NavItem,

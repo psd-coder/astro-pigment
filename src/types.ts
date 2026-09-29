@@ -1,7 +1,11 @@
 import type { HTMLAttributes } from "astro/types";
+import type { AgentId } from "./utils/agentSkills";
+
+export type { AgentId };
 
 export type IconName =
   | "check"
+  | "chevron-down"
   | "chevron-left"
   | "copy"
   | "github"
@@ -135,6 +139,19 @@ export type DocsThemeConfig = SiteConfig & {
      * Entries are included in search index, llms.txt, and llms-full.txt.
      */
     extraEntries?: string;
+  };
+  /**
+   * Advertise Agent Skills shipped in the project's GitHub repo. Adds an "Agent Skills"
+   * section to llms.txt and feeds the `<AgentSkillsInstall />` and
+   * `<AgentSkillsIndex />` components.
+   */
+  agentSkills?: {
+    /** Folder of `<name>/SKILL.md` skill folders, relative to project root. Default: "skills". */
+    directory?: string;
+    /** Plugin in the repo's marketplace, installed as `name@marketplace`. */
+    plugin?: { name: string; marketplace: string };
+    /** Agents offered, in order. Default: all supported agents. */
+    agents?: AgentId[];
   };
   meta?: {
     /** HTML lang attribute. Default: "en". */

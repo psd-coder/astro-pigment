@@ -8,6 +8,7 @@ export { ThemePicker, ThemePickerScript } from "./ThemePicker";
 export { TableOfContents } from "./TableOfContents";
 export { CodeBlockWrapper } from "./CodeBlockWrapper";
 export { InstallPackage } from "./InstallPackage";
+export { AgentSkillsIndex, AgentSkillsInstall } from "./AgentSkills";
 export { PrevNextNav } from "./PrevNextNav";
 export { PageHeading } from "./PageHeading";
 export { ThemeImage } from "./ThemeImage";

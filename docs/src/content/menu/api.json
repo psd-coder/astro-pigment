@@ -22,7 +22,8 @@
       "items": [
         { "title": "SEO & robots", "href": "/api/seo" },
         { "title": "Social images", "href": "/api/social-images" },
-        { "title": "Markdown for agents", "href": "/api/markdown-for-agents" }
+        { "title": "Markdown for agents", "href": "/api/markdown-for-agents" },
+        { "title": "Agent skills", "href": "/api/agent-skills" }
       ]
     }
   ]

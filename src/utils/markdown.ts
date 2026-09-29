@@ -71,12 +71,39 @@ function installPackageNodes(node: unknown): RootContent[] | undefined {
   return [intro, list];
 }
 
-function stripMdxNodes(tree: Root): void {
+/**
+ * Renders a JSX flow component as markdown in the twin, keyed by component name. Gets the
+ * component's string-valued props; expression props are not evaluated.
+ */
+export type ComponentMarkdown = Record<string, (props: Record<string, string>) => string>;
+
+function componentNodes(
+  node: Root | RootContent,
+  components: ComponentMarkdown,
+): RootContent[] | undefined {
+  if (node.type !== "mdxJsxFlowElement" || !node.name) return undefined;
+  const render = components[node.name];
+  if (!render) return undefined;
+  const props: Record<string, string> = {};
+  for (const attr of node.attributes) {
+    if (attr.type === "mdxJsxAttribute" && typeof attr.value === "string") {
+      props[attr.name] = attr.value;
+    }
+  }
+  return parser.parse(render(props)).children;
+}
+
+function stripMdxNodes(tree: Root, components: ComponentMarkdown = {}): void {
   visit(tree, (node, index, parent) => {
     if (!parent || index === undefined) return undefined;
     if (DROP.has(node.type)) {
       parent.children.splice(index, 1);
       return [SKIP, index];
+    }
+    const replacement = componentNodes(node, components);
+    if (replacement) {
+      parent.children.splice(index, 1, ...replacement);
+      return [SKIP, index + replacement.length];
     }
     const installNodes = installPackageNodes(node);
     if (installNodes) {
@@ -118,9 +145,9 @@ function nodesToPlainText(nodes: RootContent[]): string {
     .trim();
 }
 
-export function stringifyCleanMarkdown(body: string): string {
+export function stringifyCleanMarkdown(body: string, components?: ComponentMarkdown): string {
   const tree = parser.parse(body);
-  stripMdxNodes(tree);
+  stripMdxNodes(tree, components);
   return String(stringifier.stringify(tree));
 }
 

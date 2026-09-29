@@ -2,7 +2,7 @@ import type { SiteConfig } from "../types";
 
 type GithubConfig = SiteConfig["project"]["github"];
 
-function getGithubOwner(github: GithubConfig): string {
+export function getGithubOwner(github: GithubConfig): string {
   return github.user ?? github.organization ?? "";
 }
 
