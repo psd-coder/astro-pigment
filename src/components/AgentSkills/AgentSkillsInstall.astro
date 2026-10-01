@@ -5,7 +5,12 @@ import { codePanelsStyles } from "../CodePanels";
 import { Icon } from "../Icon";
 import Tab from "../Tabs/Tab.astro";
 import Tabs from "../Tabs/Tabs.astro";
-import { getAgent, installMethods, resolveInstallMethod } from "../../utils/agentSkills";
+import {
+  getAgent,
+  INSTALL_SCOPES,
+  installMethods,
+  resolveInstallMethod,
+} from "../../utils/agentSkills";
 import { adaptiveCodeTheme } from "../../themes/adaptive-code-theme";
 import styles from "./styles.module.css";
 
@@ -25,50 +30,67 @@ if (skill !== undefined && !agentSkills.skills.some(({ name }) => name === skill
   throw new Error(`[astro-pigment] <AgentSkillsInstall /> got unknown skill "${skill}".`);
 }
 
-const agents = agentSkills.agents.map((id) => ({
-  ...getAgent(id),
-  methods: installMethods(id, agentSkills, skill ?? null),
-}));
-const [firstAgent] = agents;
-if (!firstAgent) throw new Error("[astro-pigment] agentSkills.agents must not be empty.");
-const defaultMethod = resolveInstallMethod(firstAgent.methods, "");
+const scopeLabels = { user: "Global", project: "Project" };
+
+const variants = agentSkills.agents.flatMap((id) =>
+  INSTALL_SCOPES.map((scope) => ({
+    agent: getAgent(id),
+    scope,
+    methods: installMethods(id, agentSkills, skill ?? null, scope),
+  })),
+);
+const [defaultVariant] = variants;
+if (!defaultVariant) throw new Error("[astro-pigment] agentSkills.agents must not be empty.");
+const defaultMethod = resolveInstallMethod(defaultVariant.methods, "");
 ---
 
 <x-agent-skills-install class:list={[codePanelsStyles.wrapper, styles.root]} skill={skill}>
   <div class:list={[codePanelsStyles.tabs, styles.bar]}>
-    {agents.map((agent, i) => (
+    {variants.map((variant) => (
       <Tabs
-        value={agent.methods[0]?.id ?? ""}
+        value={variant.methods[0]?.id ?? ""}
         class={styles.methods}
         data-ref="methodTabs"
         aria-label="Install method"
-        data-agent={agent.id}
-        hidden={i !== 0}
+        data-agent={variant.agent.id}
+        data-scope={variant.scope}
+        hidden={variant !== defaultVariant}
       >
-        {agent.methods.map((method) => (
+        {variant.methods.map((method) => (
           <Tab value={method.id} class={codePanelsStyles.tab}>
             {method.label}
           </Tab>
         ))}
       </Tabs>
     ))}
-    <div class={styles.agent}>
-      <select class={styles.agentSelect} data-ref="agentSelect" aria-label="Agent">
-        {agents.map((agent) => (
-          <option value={agent.id}>{agent.label}</option>
-        ))}
-      </select>
-      <Icon name="chevron-down" size={12} class={styles.chevron} aria-hidden="true" />
+    <div class={styles.selects}>
+      <div class:list={[styles.selectWrapper, styles.scope]}>
+        <select class={styles.select} data-ref="scopeSelect" aria-label="Install scope">
+          {INSTALL_SCOPES.map((scope) => (
+            <option value={scope}>{scopeLabels[scope]}</option>
+          ))}
+        </select>
+        <Icon name="chevron-down" size={12} class={styles.chevron} aria-hidden="true" />
+      </div>
+      <div class={styles.selectWrapper}>
+        <select class={styles.select} data-ref="agentSelect" aria-label="Agent">
+          {agentSkills.agents.map((id) => (
+            <option value={id}>{getAgent(id).label}</option>
+          ))}
+        </select>
+        <Icon name="chevron-down" size={12} class={styles.chevron} aria-hidden="true" />
+      </div>
     </div>
   </div>
   <div class={styles.panel}>
-    {agents.map((agent) =>
-      agent.methods.map((method) => (
+    {variants.map((variant) =>
+      variant.methods.map((method) => (
         <div
           data-ref="commands"
-          data-agent={agent.id}
+          data-agent={variant.agent.id}
+          data-scope={variant.scope}
           data-method={method.id}
-          hidden={agent !== firstAgent || method.id !== defaultMethod.id}
+          hidden={variant !== defaultVariant || method.id !== defaultMethod.id}
         >
           <Code code={method.command} lang="shellscript" theme={adaptiveCodeTheme} />
         </div>

@@ -40,28 +40,30 @@ import { AgentSkillsIndex, AgentSkillsInstall } from "astro-pigment/components";
 <AgentSkillsIndex />
 ```
 
-`<AgentSkillsInstall />` renders install-method tabs with an agent select at the end of the same row, and the command that installs everything for the chosen agent. Pass `skill="<name>"` to install that one skill instead; the plugin installers and `pi install` drop out, since they install everything. Every panel on the site shares the chosen agent and method, which persist to `localStorage`. All commands install at user scope.
+`<AgentSkillsInstall />` renders install-method tabs with scope and agent selects at the end of the same row, and the command that installs everything for the chosen agent. Pass `skill="<name>"` to install that one skill instead; the plugin installers and `pi install` drop out, since they install everything. Every panel on the site shares the chosen scope, agent and method, which persist to `localStorage`.
+
+The scope select switches between Global (the default, user scope in the CLIs: the agent's home folder, available in every project) and Project (the current repo, so the team gets the skills on checkout). Only methods that can install into a project stay under Project: npx plugins and the `codex` and `copilot` plugin commands always install globally, so they drop out.
 
 `<AgentSkillsIndex />` renders an "Available Skills" heading and lists each skill with its description, a link to its `SKILL.md` and its own install panel (`<AgentSkillsInstall skill="<name>" />`). It earns its place when the repo ships several skills; with one, the install panel is enough.
 
-| Agent          | Methods, recommended first                                |
-| -------------- | --------------------------------------------------------- |
-| Claude Code    | npx plugins, `claude plugin`, npx skills, gh skill, curl  |
-| Codex          | npx plugins, `codex plugin`, npx skills, gh skill, curl   |
-| Cursor         | npx plugins, npx skills, gh skill, curl                   |
-| GitHub Copilot | npx plugins, `copilot plugin`, npx skills, gh skill, curl |
-| VS Code        | npx plugins, npx skills, gh skill, curl                   |
-| Gemini CLI     | npx skills, gh skill, curl                                |
-| OpenCode       | npx skills, gh skill, curl                                |
-| Grok Build     | npx plugins, npx skills, gh skill, curl                   |
-| Pi             | `pi install` (all skills), npx skills, gh skill, curl     |
+| Agent          | Global, recommended first                                 | Project, recommended first                            |
+| -------------- | --------------------------------------------------------- | ----------------------------------------------------- |
+| Claude Code    | npx plugins, `claude plugin`, npx skills, gh skill, curl  | `claude plugin`, npx skills, gh skill, curl           |
+| Codex          | npx plugins, `codex plugin`, npx skills, gh skill, curl   | npx skills, gh skill, curl                            |
+| Cursor         | npx plugins, npx skills, gh skill, curl                   | npx skills, gh skill, curl                            |
+| GitHub Copilot | npx plugins, `copilot plugin`, npx skills, gh skill, curl | npx skills, gh skill, curl                            |
+| VS Code        | npx plugins, npx skills, gh skill, curl                   | npx skills, gh skill, curl                            |
+| Gemini CLI     | npx skills, gh skill, curl                                | npx skills, gh skill, curl                            |
+| OpenCode       | npx skills, gh skill, curl                                | npx skills, gh skill, curl                            |
+| Grok Build     | npx plugins, npx skills, gh skill, curl                   | npx skills, gh skill, curl                            |
+| Pi             | `pi install` (all skills), npx skills, gh skill, curl     | `pi install` (all skills), npx skills, gh skill, curl |
 
 - **npx plugins** runs the [`plugins`](https://www.npmjs.com/package/plugins) CLI, which installs the whole plugin through the agent's own plugin system. It and the `claude`, `codex` and `copilot` plugin commands appear only when `plugin` is set, and only for the install-all command.
 - **npx skills** runs the [`skills`](https://www.npmjs.com/package/skills) CLI, and **gh skill** the GitHub CLI (2.90 or later).
-- **curl** needs no tools: it unpacks the skills from the repo tarball into the agent's skills folder.
+- **curl** needs no tools: it unpacks the skills from the repo tarball into the agent's skills folder. At project scope that is `.claude/skills`, `.grok/skills` or `.pi/skills` for Claude Code, Grok Build and Pi, and the shared `.agents/skills` for the rest.
 - **pi install** treats the repo as a Pi package, so it appears only when the skills live in a `skills/` folder at the repo root.
 
 ## What agents read
 
 - `llms.txt` and `llms-full.txt` get an `## Agent Skills` section with the install command, the agent ids, the plugin command when there is one, and each skill linked to its raw `SKILL.md`.
-- In a page's `.md` twin, `<AgentSkillsInstall />` becomes a list of every install command per agent (for one skill when `skill` is set), and `<AgentSkillsIndex />` an "Available Skills" section with the single-skill command and the skills.
+- In a page's `.md` twin, `<AgentSkillsInstall />` becomes a list of every install command per agent and scope (for one skill when `skill` is set), and `<AgentSkillsIndex />` an "Available Skills" section with the single-skill command and the skills.

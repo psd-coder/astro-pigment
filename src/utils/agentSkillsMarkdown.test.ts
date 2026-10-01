@@ -30,7 +30,8 @@ describe("agentSkillsLlmsSection", () => {
           "where `<agent>` is one of `claude-code`, `github-copilot`.",
         "",
         "To install one skill, pass its name: `npx skills add acme/kit --skill <name> -a <agent> -g` " +
-          "or `gh skill install acme/kit <name> --agent <agent> --scope user`.",
+          "or `gh skill install acme/kit <name> --agent <agent> --scope user`. " +
+          "Drop `-g`, or pass `--scope project`, to install into the current project instead.",
         "",
         "- [format](https://raw.githubusercontent.com/acme/kit/HEAD/skills/format/SKILL.md): Format the code.",
         "- [lint](https://raw.githubusercontent.com/acme/kit/HEAD/skills/lint/SKILL.md): Lint the code.",
@@ -61,7 +62,7 @@ describe("agentSkillsLlmsSection", () => {
 });
 
 describe("agentSkillsInstallMarkdown", () => {
-  it("lists every method per configured agent", () => {
+  it("lists every method per configured agent and scope", () => {
     const md = agentSkillsInstallMarkdown({
       ...config,
       plugin: { name: "kit", marketplace: "acme" },
@@ -71,13 +72,24 @@ describe("agentSkillsInstallMarkdown", () => {
         "Install every skill for your agent:",
         "",
         "- Claude Code",
-        "  - npx plugins: `npx plugins add acme/kit --target claude-code`",
-        "  - claude plugin: `claude plugin marketplace add acme/kit && claude plugin install kit@acme`",
-        "  - npx skills: `npx skills add acme/kit --skill '*' -a claude-code -g`",
-        "  - gh skill: `gh skill install acme/kit --all --agent claude-code --scope user`",
+        "  - user scope",
+        "    - npx plugins: `npx plugins add acme/kit --target claude-code`",
+        "    - claude plugin: `claude plugin marketplace add acme/kit && claude plugin install kit@acme`",
+        "    - npx skills: `npx skills add acme/kit --skill '*' -a claude-code -g`",
+        "    - gh skill: `gh skill install acme/kit --all --agent claude-code --scope user`",
       ].join("\n"),
     );
-    expect(md).toContain("- VS Code\n  - npx plugins: `npx plugins add acme/kit --target vscode`");
+    expect(md).toContain(
+      [
+        "  - project scope",
+        "    - claude plugin: `claude plugin marketplace add acme/kit --scope project && " +
+          "claude plugin install kit@acme --scope project`",
+        "    - npx skills: `npx skills add acme/kit --skill '*' -a claude-code`",
+      ].join("\n"),
+    );
+    expect(md).toContain(
+      "- VS Code\n  - user scope\n    - npx plugins: `npx plugins add acme/kit --target vscode`",
+    );
     expect(md).not.toContain("- Codex");
     expect(md).not.toContain("Lint the code.");
   });
@@ -91,7 +103,7 @@ describe("agentSkillsInstallMarkdown for one skill", () => {
     );
     expect(md).toContain("Install `lint` for your agent:");
     expect(md).toContain(
-      "  - npx skills: `npx skills add acme/kit --skill lint -a claude-code -g`",
+      "    - npx skills: `npx skills add acme/kit --skill lint -a claude-code -g`",
     );
     expect(md).not.toContain("npx plugins");
   });

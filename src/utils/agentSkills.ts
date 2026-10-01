@@ -1,20 +1,20 @@
-// Agent ids, target flags and user-scope skill dirs come from each vendor's docs, the
-// `skills` CLI agent table, `gh skill install --help` and the `plugins` CLI targets.
+// Agent ids, target flags and skill dirs come from each vendor's docs, the `skills` CLI agent
+// table, `gh skill install --help` and the `plugins` CLI targets.
 // See docs/research/agent-skills-discovery.md.
 export const AGENTS = [
   {
     id: "claude-code",
     label: "Claude Code",
     skillsCli: "claude-code",
-    dir: "~/.claude/skills",
+    dirs: { user: "~/.claude/skills", project: ".claude/skills" },
     pluginsTarget: "claude-code",
-    pluginCli: { bin: "claude", install: "install" },
+    pluginCli: { bin: "claude", install: "install", projectScope: true },
   },
   {
     id: "codex",
     label: "Codex",
     skillsCli: "codex",
-    dir: "~/.agents/skills",
+    dirs: { user: "~/.agents/skills", project: ".agents/skills" },
     pluginsTarget: "codex",
     pluginCli: { bin: "codex", install: "add" },
   },
@@ -22,14 +22,14 @@ export const AGENTS = [
     id: "cursor",
     label: "Cursor",
     skillsCli: "cursor",
-    dir: "~/.cursor/skills",
+    dirs: { user: "~/.cursor/skills", project: ".agents/skills" },
     pluginsTarget: "cursor",
   },
   {
     id: "github-copilot",
     label: "GitHub Copilot",
     skillsCli: "github-copilot",
-    dir: "~/.copilot/skills",
+    dirs: { user: "~/.copilot/skills", project: ".agents/skills" },
     pluginsTarget: "github-copilot",
     pluginCli: { bin: "copilot", install: "install" },
   },
@@ -38,33 +38,33 @@ export const AGENTS = [
     id: "vscode",
     label: "VS Code",
     skillsCli: "github-copilot",
-    dir: "~/.copilot/skills",
+    dirs: { user: "~/.copilot/skills", project: ".agents/skills" },
     pluginsTarget: "vscode",
   },
   {
     id: "gemini-cli",
     label: "Gemini CLI",
     skillsCli: "gemini-cli",
-    dir: "~/.gemini/skills",
+    dirs: { user: "~/.gemini/skills", project: ".agents/skills" },
   },
   {
     id: "opencode",
     label: "OpenCode",
     skillsCli: "opencode",
-    dir: "~/.config/opencode/skills",
+    dirs: { user: "~/.config/opencode/skills", project: ".agents/skills" },
   },
   {
     id: "grok",
     label: "Grok Build",
     skillsCli: "grok",
-    dir: "~/.grok/skills",
+    dirs: { user: "~/.grok/skills", project: ".grok/skills" },
     pluginsTarget: "grok",
   },
   {
     id: "pi",
     label: "Pi",
     skillsCli: "pi",
-    dir: "~/.agents/skills",
+    dirs: { user: "~/.agents/skills", project: ".pi/skills" },
     piPackage: true,
   },
 ] as const;
@@ -85,6 +85,10 @@ export const INSTALL_METHODS = [
 
 export type InstallMethodId = (typeof INSTALL_METHODS)[number];
 
+export const INSTALL_SCOPES = ["user", "project"] as const;
+
+export type InstallScope = (typeof INSTALL_SCOPES)[number];
+
 export type AgentSkillsSource = {
   owner: string;
   repo: string;
@@ -104,11 +108,17 @@ export function getAgent(id: AgentId): Agent {
   return agent;
 }
 
-function curlCommand(agent: Agent, source: AgentSkillsSource, skill: InstallSkill): string | null {
+function curlCommand(
+  agent: Agent,
+  source: AgentSkillsSource,
+  skill: InstallSkill,
+  scope: InstallScope,
+): string | null {
   if (source.skillsPath === null) return null;
   const member = [`${source.repo}-HEAD`, ...source.skillsPath.split("/").filter(Boolean)];
   if (skill !== null) member.push(skill);
-  const dir = skill === null ? agent.dir : `${agent.dir}/${skill}`;
+  const root = agent.dirs[scope];
+  const dir = skill === null ? root : `${root}/${skill}`;
   const tarball = `https://codeload.github.com/${source.owner}/${source.repo}/tar.gz/HEAD`;
   return (
     `mkdir -p ${dir} && curl -fsSL ${tarball} | ` +
@@ -121,12 +131,14 @@ function piInstallCommand(
   agent: Agent,
   source: AgentSkillsSource,
   skill: InstallSkill,
+  scope: InstallScope,
 ): InstallMethod | null {
   if (!("piPackage" in agent) || skill !== null || source.skillsPath !== "skills") return null;
+  const local = scope === "project" ? " -l" : "";
   return {
     id: "pi-install",
     label: "pi install",
-    command: `pi install git:github.com/${source.owner}/${source.repo}`,
+    command: `pi install git:github.com/${source.owner}/${source.repo}${local}`,
   };
 }
 
@@ -135,50 +147,57 @@ export function installMethods(
   agentId: AgentId,
   source: AgentSkillsSource,
   skill: InstallSkill,
+  scope: InstallScope = "user",
 ): InstallMethod[] {
   const agent = getAgent(agentId);
   const slug = `${source.owner}/${source.repo}`;
   const methods: InstallMethod[] = [];
 
   if (source.plugin && skill === null) {
-    if ("pluginsTarget" in agent) {
+    // `npx plugins` writes user config for every target, whatever its --scope.
+    if ("pluginsTarget" in agent && scope === "user") {
       methods.push({
         id: "npx-plugins",
         label: "npx plugins",
         command: `npx plugins add ${slug} --target ${agent.pluginsTarget}`,
       });
     }
-    if ("pluginCli" in agent) {
+    if ("pluginCli" in agent && (scope === "user" || "projectScope" in agent.pluginCli)) {
       const { bin, install } = agent.pluginCli;
       const { name, marketplace } = source.plugin;
+      const flag = scope === "project" ? " --scope project" : "";
       methods.push({
         id: "plugin-cli",
         label: `${bin} plugin`,
-        command: `${bin} plugin marketplace add ${slug}\n${bin} plugin ${install} ${name}@${marketplace}`,
+        command:
+          `${bin} plugin marketplace add ${slug}${flag}\n` +
+          `${bin} plugin ${install} ${name}@${marketplace}${flag}`,
       });
     }
   }
 
-  const piInstall = piInstallCommand(agent, source, skill);
+  const piInstall = piInstallCommand(agent, source, skill, scope);
   if (piInstall) methods.push(piInstall);
 
   methods.push(
     {
       id: "npx-skills",
       label: "npx skills",
-      command: `npx skills add ${slug} --skill ${skill ?? "'*'"} -a ${agent.skillsCli} -g`,
+      command:
+        `npx skills add ${slug} --skill ${skill ?? "'*'"} -a ${agent.skillsCli}` +
+        (scope === "user" ? " -g" : ""),
     },
     {
       id: "gh-skill",
       label: "gh skill",
       command:
         skill === null
-          ? `gh skill install ${slug} --all --agent ${agent.skillsCli} --scope user`
-          : `gh skill install ${slug} ${skill} --agent ${agent.skillsCli} --scope user`,
+          ? `gh skill install ${slug} --all --agent ${agent.skillsCli} --scope ${scope}`
+          : `gh skill install ${slug} ${skill} --agent ${agent.skillsCli} --scope ${scope}`,
     },
   );
 
-  const curl = curlCommand(agent, source, skill);
+  const curl = curlCommand(agent, source, skill, scope);
   if (curl) methods.push({ id: "curl", label: "curl", command: curl });
 
   return methods;

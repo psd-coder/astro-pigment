@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   AGENT_IDS,
   type AgentSkillsSource,
+  INSTALL_SCOPES,
   installMethods,
   resolveInstallMethod,
   skillFileUrl,
@@ -124,10 +125,50 @@ describe("installMethods", () => {
     );
   });
 
+  it("keeps only project-scoped installers at project scope", () => {
+    expect(installMethods("claude-code", source, null, "project").map((m) => m.id)).toEqual([
+      "plugin-cli",
+      "npx-skills",
+      "gh-skill",
+      "curl",
+    ]);
+    expect(installMethods("codex", source, null, "project").map((m) => m.id)).toEqual([
+      "npx-skills",
+      "gh-skill",
+      "curl",
+    ]);
+    expect(installMethods("vscode", source, null, "project").map((m) => m.id)).not.toContain(
+      "npx-plugins",
+    );
+  });
+
+  it("builds project-scope commands", () => {
+    expect(commands("claude-code", source, null, "project")).toEqual({
+      "plugin-cli":
+        "claude plugin marketplace add acme/kit --scope project\n" +
+        "claude plugin install kit@acme --scope project",
+      "npx-skills": "npx skills add acme/kit --skill '*' -a claude-code",
+      "gh-skill": "gh skill install acme/kit --all --agent claude-code --scope project",
+      curl:
+        "mkdir -p .claude/skills && curl -fsSL https://codeload.github.com/acme/kit/tar.gz/HEAD | " +
+        "tar -xz -C .claude/skills --strip-components=2 kit-HEAD/skills",
+    });
+    expect(commands("cursor", skillsOnly, "lint", "project")).toMatchObject({
+      "gh-skill": "gh skill install acme/kit lint --agent cursor --scope project",
+      curl: expect.stringContaining("mkdir -p .agents/skills/lint &&"),
+    });
+    expect(commands("pi", skillsOnly, null, "project")["pi-install"]).toBe(
+      "pi install git:github.com/acme/kit -l",
+    );
+  });
+
   it("gives every agent at least the two skill CLIs", () => {
     for (const id of AGENT_IDS) {
-      const ids = installMethods(id, { ...skillsOnly, skillsPath: null }, "lint").map((m) => m.id);
-      expect(ids).toEqual(expect.arrayContaining(["npx-skills", "gh-skill"]));
+      for (const scope of INSTALL_SCOPES) {
+        const unknown = { ...skillsOnly, skillsPath: null };
+        const ids = installMethods(id, unknown, "lint", scope).map((m) => m.id);
+        expect(ids).toEqual(expect.arrayContaining(["npx-skills", "gh-skill"]));
+      }
     }
   });
 });
