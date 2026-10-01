@@ -17,16 +17,29 @@
     }
   }
 
-  .agent {
-    position: relative;
+  .selects {
     display: flex;
     flex-shrink: 0;
     max-width: 60%;
+  }
+
+  .selectWrapper {
+    position: relative;
+    display: flex;
+    min-width: 0;
     border-left: 1px solid var(--color-border);
+
+    &:last-child .select {
+      border-radius: 0 var(--radius-md) 0 0;
+    }
+  }
+
+  .scope {
+    flex-shrink: 0;
   }
 
   /* appearance: none, or Safari keeps its native control and ignores font and colors */
-  .agentSelect {
+  .select {
     cursor: pointer;
 
     overflow: hidden;
@@ -35,7 +48,6 @@
     margin: 0;
     padding: 0 calc(var(--spacing) * 7) 0 calc(var(--spacing) * 4);
     border: none;
-    border-radius: 0 var(--radius-md) 0 0;
 
     font-family: var(--font-mono);
     font-size: var(--text-xs);

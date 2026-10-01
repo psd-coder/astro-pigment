@@ -2,6 +2,7 @@ import {
   type AgentId,
   type AgentSkillsSource,
   getAgent,
+  INSTALL_SCOPES,
   installMethods,
   skillFileUrl,
 } from "./agentSkills";
@@ -30,7 +31,8 @@ function singleSkillLine(config: AgentSkillsConfig): string {
   const slug = `${config.owner}/${config.repo}`;
   return (
     `To install one skill, pass its name: \`npx skills add ${slug} --skill <name> -a <agent> -g\` ` +
-    `or \`gh skill install ${slug} <name> --agent <agent> --scope user\`.`
+    `or \`gh skill install ${slug} <name> --agent <agent> --scope user\`. ` +
+    "Drop `-g`, or pass `--scope project`, to install into the current project instead."
   );
 }
 
@@ -65,7 +67,12 @@ export function agentSkillsInstallMarkdown(
 ): string {
   const agentBlocks = config.agents.flatMap((id) => [
     `- ${getAgent(id).label}`,
-    ...installMethods(id, config, skill).map((m) => `  - ${m.label}: ${inlineCommand(m.command)}`),
+    ...INSTALL_SCOPES.flatMap((scope) => [
+      `  - ${scope} scope`,
+      ...installMethods(id, config, skill, scope).map(
+        (m) => `    - ${m.label}: ${inlineCommand(m.command)}`,
+      ),
+    ]),
   ]);
   const intro =
     skill === null ? "Install every skill for your agent:" : `Install \`${skill}\` for your agent:`;
