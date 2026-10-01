@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.22.0
+
+### Added
+
+- `AgentSkillsInstall` gets a scope select next to the agent select: Global (default, user scope) or Project (the current repo). Project scope keeps only installers that honor it (`claude plugin --scope project`, `pi install -l`, `npx skills` without `-g`, `gh skill --scope project` and curl into the project skills folder); npx plugins and the `codex` and `copilot` plugin commands always install per user, so they drop out. The chosen scope is shared across panels and persists to `localStorage`, and the markdown twin lists commands per agent and scope.
+
 ## 0.21.1
 
 ### Fixed
